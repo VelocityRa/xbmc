@@ -69,7 +69,7 @@ void CPortMapper::ProcessPeripherals()
   for (auto& joystick : joysticks)
   {
     auto itConnectedPort = newPortMap.find(joystick.get());
-    auto itDisconnectedPort = m_portMap.find(joystick);
+    auto itDisconnectedPort = m_portMap.find(joystick.get());
 
     IInputHandler* newHandler = itConnectedPort != newPortMap.end() ? itConnectedPort->second : nullptr;
     IInputHandler* oldHandler = itDisconnectedPort != m_portMap.end() ? itDisconnectedPort->second->InputHandler() : nullptr;
@@ -96,7 +96,7 @@ void CPortMapper::ProcessPeripherals()
 
           newPort->RegisterInput(joystick.get());
 
-          m_portMap.insert(std::make_pair(std::move(joystick), std::move(newPort)));
+          m_portMap.insert(std::make_pair(joystick.get(), std::move(newPort)));
         }
       }
     }

@@ -20,13 +20,13 @@
 #pragma once
 
 #include "PortTypes.h"
-#include "peripherals/PeripheralTypes.h"
 #include "utils/Observer.h"
 
 #include <map>
 
 namespace PERIPHERALS
 {
+  class CPeripheral;
   class CPeripherals;
 }
 
@@ -53,7 +53,7 @@ namespace GAME
     CPortManager &m_portManager;
 
     // Port paremters
-    std::map<PERIPHERALS::PeripheralPtr, PortPtr> m_portMap;
+    std::map<PERIPHERALS::CPeripheral*, PortPtr> m_portMap;
   };
 }
 }
