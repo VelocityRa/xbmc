@@ -136,6 +136,7 @@ cmake_install.cmake
 /addons/xbmc.addon/addon.xml
 /addons/xbmc.json/addon.xml
 /addons/kodi.guilib/addon.xml
+/addons/kodi.binary.instance.shaderpreset/addon.xml
 /addons/audiodecoder.*
 /addons/visualization.*
 /addons/screensaver.*
@@ -508,3 +509,15 @@ exclude_dll.txt
 
 #certificates
 /system/certs/
+
+tools/windows/prepare-binary-addons-dev\.bat
+
+cmake/scripts/common/AddonHelpers\.cmake
+
+addons/kodi\.binary\.global\.general/addon\.xml
+
+addons/
+
+cmake/
+
+tools/
