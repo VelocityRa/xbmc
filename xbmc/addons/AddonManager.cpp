@@ -1286,9 +1286,8 @@ bool CAddonMgr::EnabledOnSync(const std::string& id)
     {
       switch (addon->Type())
       {
+      case ADDON_SHADERDLL:
       case ADDON_GAMEDLL:
-        bEnabled = true;
-        break;
       case ADDON_GAME_CONTROLLER:
         bEnabled = true;
         break;

@@ -88,6 +88,7 @@ const std::set<TYPE> lookAndFeelTypes = {
 
 const std::set<TYPE> gameTypes = {
   ADDON_GAME_CONTROLLER,
+  ADDON_SHADERDLL,
   ADDON_GAMEDLL,
   ADDON_GAME,
   ADDON_RESOURCE_GAMES,
@@ -142,7 +143,8 @@ static bool IsGameSupportAddon(const AddonPtr& addon)
 {
   return addon->Type() == ADDON_GAMEDLL &&
          !std::static_pointer_cast<GAME::CGameClient>(addon)->SupportsPath() &&
-         !std::static_pointer_cast<GAME::CGameClient>(addon)->SupportsStandalone();
+         !std::static_pointer_cast<GAME::CGameClient>(addon)->SupportsStandalone() ||
+         addon->Type() == ADDON_SHADERDLL;
 }
 
 static bool IsGameAddon(const AddonPtr& addon)

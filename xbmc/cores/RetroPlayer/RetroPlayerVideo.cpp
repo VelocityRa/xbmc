@@ -32,6 +32,10 @@
 #include "cores/VideoPlayer/TimingConstants.h"
 #include "utils/log.h"
 
+//#include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
+#include "VideoShaderPreset.h"
+//#include "ServiceBroker.h"
+
 #include <atomic> //! @todo
 
 using namespace KODI;
@@ -59,6 +63,35 @@ CRetroPlayerVideo::~CRetroPlayerVideo()
 bool CRetroPlayerVideo::OpenPixelStream(AVPixelFormat pixfmt, unsigned int width, unsigned int height, double framerate, unsigned int orientationDeg)
 {
   CLog::Log(LOGINFO, "RetroPlayerVideo: Creating video stream with pixel format: %i, %dx%d", pixfmt, width, height);
+  /*
+  ADDON::BinaryAddonBaseList addonInfos;
+  CServiceBroker::GetBinaryAddonManager().GetAddonInfos(addonInfos, true, ADDON::ADDON_SHADERDLL);
+  auto shaderPresetAddon = new SHADERPRESET::CShaderPresetAddon(addonInfos.at(2));
+  shaderPresetAddon->CreateAddon();
+
+  auto configCgp = shaderPresetAddon->ConfigFileNew("C:\\Users\\Nikos\\Downloads\\common-shaders-master\\dithering\\cbod_v1.cgp");
+
+  video_shader_* video_shader = static_cast<video_shader_*>(calloc(1, sizeof(*video_shader)));
+
+  auto status = shaderPresetAddon->VideoShaderReadCgp(configCgp, video_shader);
+
+  video_shader;
+  
+  free(video_shader);
+  shaderPresetAddon->DestroyAddon();
+  shaderPresetAddon = nullptr;
+  */
+
+  auto video_shader = SHADERPRESET::CVideoShaderPreset("C:\\Users\\Nikos\\Downloads\\common-shaders-master\\dithering\\cbod_v1.cgp");
+  auto video_shader2 = SHADERPRESET::CVideoShaderPreset("C:\\Users\\Nikos\\Downloads\\common-shaders-master\\dithering\\mdapt.cgp");
+  video_shader;
+  video_shader2;
+
+  //CLog::Log(LOGINFO, "TESTING {%d}", video_shader.passes);
+  // CLog::Log(LOGINFO, "TESTING {%d}", video_shader2.passes);
+
+
+
 
   m_framerate = framerate;
   m_orientation = orientationDeg;

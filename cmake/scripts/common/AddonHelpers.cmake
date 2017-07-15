@@ -52,15 +52,15 @@ macro (build_addon target prefix libs)
     # Read used headers from addon, needed to identitfy used kodi addon interface headers
     if(${prefix}_HEADERS)
       # Add the used header files defined with CMakeLists.txt from addon itself
-      if(${prefix}_HEADERS MATCHES ${PROJECT_SOURCE_DIR})
+      #if(${prefix}_HEADERS MATCHES ${PROJECT_SOURCE_DIR})
         # include path name already complete
-        list(APPEND USED_SOURCES ${${prefix}_HEADERS})
-      else()
+      #  list(APPEND USED_SOURCES ${${prefix}_HEADERS})
+      #else()
         # add the complete include path to begin 
         foreach(hdr_file ${${prefix}_HEADERS})
           list(APPEND USED_SOURCES ${PROJECT_SOURCE_DIR}/${hdr_file})
         endforeach()
-      endif()
+      #endif()
     else()
       list(LENGTH ${prefix}_SOURCES _length)
       if(${_length} GREATER 1)
@@ -75,15 +75,15 @@ macro (build_addon target prefix libs)
     endif()
 
     # Add the used source files defined with CMakeLists.txt from addon itself
-    if(${prefix}_SOURCES MATCHES ${PROJECT_SOURCE_DIR})
+    #if(${prefix}_SOURCES MATCHES ${PROJECT_SOURCE_DIR})
       # include path name already complete
-      list(APPEND USED_SOURCES ${${prefix}_SOURCES})
-    else()
+    #  list(APPEND USED_SOURCES ${${prefix}_SOURCES})
+    #else()
       # add the complete include path to begin 
       foreach(src_file ${${prefix}_SOURCES})
         list(APPEND USED_SOURCES ${PROJECT_SOURCE_DIR}/${src_file})
       endforeach()
-    endif()
+    #endif()
     
     # Set defines used in addon.xml.in and read from versions.h to set add-on
     # version parts automatically
