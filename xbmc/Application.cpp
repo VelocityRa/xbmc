@@ -75,6 +75,7 @@
 #include "filesystem/SpecialProtocol.h"
 #include "filesystem/DllLibCurl.h"
 #include "filesystem/PluginDirectory.h"
+#include "games/GameUtils.h"
 #include "utils/SystemInfo.h"
 #include "utils/TimeUtils.h"
 #include "GUILargeTextureManager.h"
@@ -217,6 +218,7 @@
 #include "pictures/GUIWindowSlideShow.h"
 #include "windows/GUIWindowLoginScreen.h"
 
+using namespace KODI;
 using namespace ADDON;
 using namespace XFILE;
 #ifdef HAS_DVD_DRIVE
@@ -234,12 +236,12 @@ using namespace JSONRPC;
 using namespace ANNOUNCEMENT;
 using namespace PVR;
 using namespace PERIPHERALS;
-using namespace KODI::MESSAGING;
+using namespace MESSAGING;
 using namespace ActiveAE;
 
 using namespace XbmcThreads;
 
-using KODI::MESSAGING::HELPERS::DialogResponse;
+using MESSAGING::HELPERS::DialogResponse;
 
 #define MAX_FFWD_SPEED 5
 
@@ -3155,6 +3157,17 @@ PlayBackRet CApplication::PlayFile(CFileItem item, const std::string& player, bo
   // Ensure the MIME type has been retrieved for http:// and shout:// streams
   if (item.GetMimeType().empty())
     item.FillInMimeType();
+
+  // When playing a game, set the game client that we'll use to open the game
+  // Currently this may prompt the user, the goal is to figure this out silently
+  if (item.IsGame())
+  {
+    if (!GAME::CGameUtils::FillInGameClient(item, true))
+    {
+      CLog::Log(LOGINFO, "CApplication: Failed to select a game client, aborting playback");
+      return PLAYBACK_FAIL;
+    }
+  }
 
   if (!bRestart)
   {
