@@ -20,6 +20,8 @@
 #pragma once
 
 #include "games/addons/GameClientCallbacks.h"
+#include "cores/RetroPlayer/rendering/RPRenderManager.h"
+#include "cores/RetroPlayer/rendering/VideoShaderManager.h"
 //#include "threads/Thread.h"
 
 #include <memory>
@@ -39,7 +41,7 @@ namespace RETRO
                             //protected CThread
   {
   public:
-    CRetroPlayerVideo(CRenderManager& m_renderManager, CProcessInfo& m_processInfo, CDVDClock &clock);
+    CRetroPlayerVideo(CRPRenderManager& m_renderManager, CProcessInfo& m_processInfo, CDVDClock &clock);
 
     ~CRetroPlayerVideo() override;
 
@@ -61,7 +63,7 @@ namespace RETRO
     void SendPicture(VideoPicture& picture);
 
     // Construction parameters
-    CRenderManager& m_renderManager;
+    CRPRenderManager& m_renderManager;
     CProcessInfo&   m_processInfo;
     CDVDClock       &m_clock;
 

@@ -55,8 +55,7 @@ const char* CShaderPresetAddon::GetLibraryBasePath()
 
 config_file_t_ *CShaderPresetAddon::ConfigFileNew(const char *path)
 {
-  GetLibraryBasePath();
-  m_strConfigPath = URIUtils::AddFileToFolder(m_strLibraryPath, path);
+  m_strConfigPath = URIUtils::AddFileToFolder(GetLibraryBasePath(), path);
   m_strConfigBasePath = URIUtils::GetBasePath(m_strConfigPath);
   return m_struct.toAddon.config_file_new(&m_struct, m_strConfigPath.c_str(), m_strConfigBasePath.c_str());
 }

@@ -31,10 +31,10 @@ namespace SHADERPRESET
   {
   public:
     virtual ~IVideoShaderPreset() = default;
-    
+
     /**
      * \brief Perform initialization of the object
-     *        Implementation may choose to perform it if the object is 
+     *        Implementation may choose to perform it if the object is
      *        used without having this having been called.
      * \return True on successful initialization, false on failed.
      */
@@ -57,7 +57,7 @@ namespace SHADERPRESET
 
     /**
     * \brief Reads a shader preset already parsed in a config_file_t_
-    *        and loads its state to the object. What this state is 
+    *        and loads its state to the object. What this state is
     *        is implementation specific.
     * \param presetConf Configuration file of the preset file that's been parsed.
     * \return True if successfully read, false on failure.
@@ -73,7 +73,14 @@ namespace SHADERPRESET
     */
     virtual bool ReadPresetString(std::string presetString) = 0;
 
-
+    /**
+    * ShaderPresetResolveParameters:
+    *
+    * Resolves all shader parameters belonging to shaders.
+    *
+    * Returns: True if successful, otherwise false false.
+    **/
+    virtual bool ResolveParameters() = 0;
     // virtual bool WritePresetFile(conf_file_t* presetConf) = 0;
   };
 } // namespace SHADERPRESET
