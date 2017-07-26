@@ -43,13 +43,18 @@ namespace GAME
   private:
     struct VideoFilterProperties
     {
-      int stringIndex;
-      ESCALINGMETHOD scalingMethod;
+      std::string path;
+      int nameIndex;
+      int categoryIndex;
+      int descriptionIndex;
     };
 
     std::vector<VideoFilterProperties> m_videoFilters;
 
-    static const std::vector<VideoFilterProperties> m_allVideoFilters;
+    static std::string GetLocalizedString(uint32_t code);
+
+    // relative path of currently loaded shader preset
+    std::string m_shaderPresetPath;
   };
 }
 }

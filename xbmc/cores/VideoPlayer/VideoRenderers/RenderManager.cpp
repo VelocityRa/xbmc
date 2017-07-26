@@ -175,14 +175,14 @@ bool CRenderManager::Configure(const VideoPicture& picture, float fps, unsigned 
   return true;
 }
 
-bool CRenderManager::Configure()
+bool CRenderManager::Configure(bool resetRenderer)
 {
   // lock all interfaces
   CSingleLock lock(m_statelock);
   CSingleLock lock2(m_presentlock);
   CSingleLock lock3(m_datalock);
 
-  if (m_pRenderer)
+  if (resetRenderer && m_pRenderer)
   {
     DeleteRenderer();
   }

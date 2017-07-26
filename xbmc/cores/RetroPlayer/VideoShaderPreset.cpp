@@ -39,7 +39,9 @@ CVideoShaderPreset::CVideoShaderPreset()
 CVideoShaderPreset::CVideoShaderPreset(std::string presetPath)
 {
   if (Init())
+  {
     ReadPresetFile(presetPath);
+  }
 }
 
 bool CVideoShaderPreset::Init()
@@ -70,16 +72,18 @@ void CVideoShaderPreset::Destroy()
     shaderPresetAddon->DestroyAddon();
     shaderPresetAddon.reset();
   }
+  free(m_config);
+  free(m_videoShader);
 }
 
 // TODO: Don't die in flames if the file doesn't exist
 bool CVideoShaderPreset::ReadPresetFile(std::string presetPath)
 {
-  config_file_t_* conf = shaderPresetAddon->ConfigFileNew(presetPath.c_str());
-  if (!conf)
+  m_config = shaderPresetAddon->ConfigFileNew(presetPath.c_str());
+  if (!m_config)
     return false;
-  bool result = ReadPresetConfig(conf);
-  FreeConfigFile(conf);
+  bool result = ReadPresetConfig(m_config);
+  ResolveParameters();
   return result;
 }
 
@@ -87,34 +91,24 @@ bool CVideoShaderPreset::ReadPresetConfig(config_file_t_* conf)
 {
   if (!shaderPresetAddon) return false;
 
-  video_shader_* new_shader = static_cast<video_shader_*>(calloc(1, sizeof(video_shader_)));
+  m_videoShader = static_cast<video_shader_*>(calloc(1, sizeof(video_shader_)));
 
-  auto readResult = shaderPresetAddon->ShaderPresetRead(conf, new_shader);
+  auto readResult = shaderPresetAddon->ShaderPresetRead(conf, m_videoShader);
 
   if (readResult)
   {
-    // Copy over every field
-    type = new_shader->type;
-//    modern = new_shader->modern;
-//    strcpy_s(prefix, 64, new_shader->prefix);
-    m_Passes = new_shader->passes;
-    memcpy(m_Pass, new_shader->pass, GFX_MAX_SHADERS * sizeof video_shader_pass_);
-    m_Luts = new_shader->luts;
-    memcpy(m_Lut, new_shader->lut, GFX_MAX_TEXTURES * sizeof video_shader_lut_);
-    m_NumParameters = new_shader->num_parameters;
-    memcpy(m_Parameters, new_shader->parameters, GFX_MAX_PARAMETERS * sizeof video_shader_parameter_);
-    m_Variables = new_shader->variables;
-    memcpy(m_Variable, new_shader->variable, GFX_MAX_VARIABLES * sizeof state_tracker_uniform_info_);
-//    strcpy_s(script_path, PATH_MAX_LENGTH, new_shader->script_path);
-//    script = new_shader->script;
-//    strcpy_s(script_class, 512, new_shader->script_class);
-    m_FeedbackPass = new_shader->feedback_pass;
+    // Copy over every field we want except parameters, these are resolved and copied elsewhere
+    type = m_videoShader->type;
+    m_Passes = m_videoShader->passes;
+    memcpy(m_Pass, m_videoShader->pass, GFX_MAX_SHADERS * sizeof video_shader_pass_);
+    m_Luts = m_videoShader->luts;
+    memcpy(m_Lut, m_videoShader->lut, GFX_MAX_TEXTURES * sizeof video_shader_lut_);
+    m_Variables = m_videoShader->variables;
+    memcpy(m_Variable, m_videoShader->variable, GFX_MAX_VARIABLES * sizeof state_tracker_uniform_info_);
+    m_FeedbackPass = m_videoShader->feedback_pass;
 
     CLog::Log(LOGINFO, "Shader Preset Addon: Read shader preset %s", conf->path);
   }
-
-  // Free new_shader (we copied the data we need, or parsing failed)
-  free(new_shader);
 
   return readResult;
 }
@@ -127,11 +121,12 @@ bool CVideoShaderPreset::ReadPresetString(std::string presetString)
   return result;
 }
 
-const char* CVideoShaderPreset::GetLibraryBasePath()
+bool CVideoShaderPreset::ResolveParameters()
 {
-  if (Init())
-    return shaderPresetAddon->GetLibraryBasePath();
-  return "";
+  bool resolveResult = shaderPresetAddon->ShaderPresetResolveParameters(m_config, m_videoShader);
+  m_NumParameters = m_videoShader->num_parameters;
+  memcpy(m_Parameters, m_videoShader->parameters, GFX_MAX_PARAMETERS * sizeof video_shader_parameter_);
+  return resolveResult;
 }
 
 CVideoShaderPreset::~CVideoShaderPreset()
