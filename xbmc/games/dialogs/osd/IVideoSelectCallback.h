@@ -20,6 +20,7 @@
 #pragma once
 
 #include "cores/IPlayer.h"
+#include <string>
 
 namespace KODI
 {
@@ -34,6 +35,7 @@ namespace GAME
     virtual bool SupportsRenderFeature(ERENDERFEATURE feature) = 0;
     virtual void SetRenderViewMode(ViewMode mode) = 0;
     virtual void SetScalingMethod(ESCALINGMETHOD scalingMethod) = 0;
+    virtual void SetShaderPreset(const std::string& shaderPresetPath) = 0;
   };
 }
 }

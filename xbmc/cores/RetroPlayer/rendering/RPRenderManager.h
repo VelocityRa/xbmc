@@ -33,11 +33,18 @@ namespace RETRO
     CRPRenderManager(CDVDClock &clock, IRenderMsg *player);
     ~CRPRenderManager() override = default;
 
+    void PreInit();
+    void CreateRenderer();
+    bool Configure();
+    bool Configure(const VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers = 0);
+    void FrameMove();
+
     // Implementation of IVideoSelectCallback
     bool SupportsScalingMethod(ESCALINGMETHOD method) override;
     bool SupportsRenderFeature(ERENDERFEATURE feature) override;
     void SetRenderViewMode(ViewMode mode) override;
     void SetScalingMethod(ESCALINGMETHOD method) override;
+    void SetShaderPreset(const std::string& shaderPresetPath) override;
   };
 }
 }

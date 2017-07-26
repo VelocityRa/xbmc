@@ -165,7 +165,7 @@ protected:
 
 
 template <class Class, class Result, class Cookie>
-class CallbackHandler : public Callback<Result, Cookie>
+class CallbackHandler : public ::Callback<Result, Cookie>
 {
 public:
   typedef Result (Class::*MethodPtr)(Cookie);

@@ -74,10 +74,10 @@ protected:
   CD3DEffect   m_effect;
   CD3DTexture* m_target{ nullptr };
 
+  CD3DBuffer m_ib;
 private:
   void SetTarget(CD3DTexture* target);
   CD3DBuffer m_vb;
-  CD3DBuffer m_ib;
   unsigned int m_vbsize;
   unsigned int m_vertsize;
   Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;

@@ -179,6 +179,7 @@ public:
   bool SetResources(LPCSTR handle, ID3D11ShaderResourceView** ppSRViews, size_t count);
   bool SetConstantBuffer(LPCSTR handle, ID3D11Buffer *buffer);
   bool SetScalar(LPCSTR handle, float value);
+  void AddIncludePath(const std::string& includePath);
   bool Begin(UINT *passes, DWORD flags);
   bool BeginPass(UINT pass);
   bool EndPass();
@@ -201,6 +202,7 @@ private:
   ID3DX11EffectTechnique* m_techniquie;
   ID3DX11EffectPass*      m_currentPass;
   DefinesMap              m_defines;
+  std::vector<std::string> m_includePaths;
 };
 
 class CD3DBuffer : public ID3DResource
@@ -240,6 +242,7 @@ public:
 
   bool Create(const std::wstring& vertexFile, D3D11_INPUT_ELEMENT_DESC* vertexLayout, unsigned int vertexLayoutSize);
   bool Create(const void* code, size_t codeLength, D3D11_INPUT_ELEMENT_DESC* vertexLayout, unsigned int vertexLayoutSize);
+  bool Create(ID3DBlob* code, D3D11_INPUT_ELEMENT_DESC* vertexLayout, unsigned int vertexLayoutSize);
   void ReleaseShader();
   void BindShader();
   void UnbindShader();
@@ -268,6 +271,7 @@ public:
 
   bool Create(const std::wstring& wstrFile);
   bool Create(const void* code, size_t codeLength);
+  bool Create(ID3DBlob* code);
   void ReleaseShader();
   void BindShader();
   void UnbindShader();

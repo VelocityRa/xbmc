@@ -37,6 +37,7 @@ namespace SHADERPRESET
   {
   //private:
   public:
+    // todo: probably don't need that
     enum rarch_shader_type_ type;
 
     unsigned m_Passes;
@@ -60,7 +61,6 @@ namespace SHADERPRESET
     static std::unique_ptr<CShaderPresetAddon> shaderPresetAddon;
     explicit CVideoShaderPreset();
     explicit CVideoShaderPreset(std::string presetPath);
-    // TODO: Constructor for CFile
 
     // Initializes CShaderPresetAddon instance that's used for calling the add-on's functions
     bool Init() override;
@@ -69,13 +69,15 @@ namespace SHADERPRESET
     bool ReadPresetFile(std::string presetPath) override;
     bool ReadPresetConfig(config_file_t_* presetConf) override;
     bool ReadPresetString(std::string presetString) override;
+    bool ResolveParameters() override;
     // bool WritePresetFile(config_file_t_* presetConf) override;  // TODO?: preset file writing
-
-    const char* GetLibraryBasePath();
 
     ~CVideoShaderPreset() override;
 
   protected:
      static void FreeConfigFile(config_file_t_* conf);
+  private:
+    config_file_t_* m_config;
+    video_shader_* m_videoShader;
   };
 } // namespace SHADERPRESET

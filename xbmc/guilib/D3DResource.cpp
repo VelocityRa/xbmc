@@ -23,6 +23,7 @@
 #include "GUIShaderDX.h"
 #include "system.h"
 #include "utils/log.h"
+#include "utils/URIUtils.h"
 #include "windowing/WindowingFactory.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -394,7 +395,7 @@ void CD3DTexture::SaveTexture()
       // copy contents to new texture
       pContext->CopyResource(texture, m_texture);
     }
-    else 
+    else
       texture = m_texture;
 
     // read data from texture
@@ -559,6 +560,7 @@ CD3DEffect::CD3DEffect()
   m_effect = nullptr;
   m_techniquie = nullptr;
   m_currentPass = nullptr;
+  m_includePaths.push_back("special://xbmc/system/shaders/");
 }
 
 CD3DEffect::~CD3DEffect()
@@ -602,15 +604,38 @@ void CD3DEffect::OnCreateDevice()
 HRESULT CD3DEffect::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes)
 {
   XFILE::CFile includeFile;
+  bool found = false;
+  std::string fileName;
 
-  std::string fileName("special://xbmc/system/shaders/");
-  fileName.append(pFileName);
-
-  if (!includeFile.Open(fileName))
+  for (const auto& includePath : m_includePaths)
   {
-    CLog::Log(LOGERROR, "%s: Could not open 3DLUT file: %s", __FUNCTION__, fileName.c_str());
+    fileName = includePath;
+    std::string includeURL = "";
+    size_t endOfURL = 0;
+    if (URIUtils::IsURL(includePath))
+    {
+      endOfURL = includePath.find(":") + 3;   // include "://"
+      includeURL = includePath.substr(0, endOfURL);
+      fileName.erase(0, endOfURL);
+    }
+
+    fileName = URIUtils::CanonicalizePath(
+      URIUtils::AddFileToFolder(fileName, pFileName));
+    fileName.insert(0, includeURL);
+
+    if (includeFile.Open(fileName))
+    {
+      found = true;
+      break;
+    }
+  }
+  if (!found)
+  {
+    CLog::Log(LOGERROR, "%s: Could not open include file: %s", __FUNCTION__, fileName.c_str());
     return E_FAIL;
   }
+
+  m_includePaths.push_back(URIUtils::GetBasePath(fileName));
 
   int64_t length = includeFile.GetLength();
   void *pData = malloc(length);
@@ -706,6 +731,12 @@ bool CD3DEffect::SetScalar(LPCSTR handle, float value)
 
   return false;
 }
+
+void CD3DEffect::AddIncludePath(const std::string& includePath)
+{
+  m_includePaths.push_back(includePath);
+}
+
 
 bool CD3DEffect::Begin(UINT *passes, DWORD flags)
 {
@@ -1040,6 +1071,34 @@ bool CD3DVertexShader::Create(const void* code, size_t codeLength, D3D11_INPUT_E
   return m_inited;
 }
 
+bool CD3DVertexShader::Create(ID3DBlob* code, D3D11_INPUT_ELEMENT_DESC* vertexLayout, unsigned int vertexLayoutSize)
+{
+  ReleaseShader();
+
+  ID3D11Device* pDevice = g_Windowing.Get3D11Device();
+
+  if (!pDevice)
+    return false;
+
+  m_VSBuffer = code;
+  if (vertexLayout && vertexLayoutSize)
+  {
+    m_vertexLayoutSize = vertexLayoutSize;
+    m_vertexLayout = new D3D11_INPUT_ELEMENT_DESC[vertexLayoutSize];
+    for (unsigned int i = 0; i < vertexLayoutSize; ++i)
+      m_vertexLayout[i] = vertexLayout[i];
+  }
+  else
+    return false;
+
+  m_inited = CreateInternal();
+
+  if (m_inited)
+    g_Windowing.Register(this);
+
+  return m_inited;
+}
+
 bool CD3DVertexShader::CreateInternal()
 {
   ID3D11Device* pDevice = g_Windowing.Get3D11Device();
@@ -1165,6 +1224,25 @@ bool CD3DPixelShader::Create(const void* code, size_t codeLength)
     CLog::Log(LOGERROR, __FUNCTION__ " - Failed to load the vertex shader.");
     return false;
   }
+
+  m_inited = CreateInternal();
+
+  if (m_inited)
+    g_Windowing.Register(this);
+
+  return m_inited;
+}
+
+bool CD3DPixelShader::Create(ID3DBlob* code)
+{
+  ReleaseShader();
+
+  ID3D11Device* pDevice = g_Windowing.Get3D11Device();
+
+  if (!pDevice)
+    return false;
+
+  m_PSBuffer = code;
 
   m_inited = CreateInternal();
 
