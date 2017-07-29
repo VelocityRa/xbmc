@@ -212,10 +212,7 @@ void CRetroPlayer::Pause()
   if (m_gameClient)
   {
     m_gameClient->GetPlayback()->PauseUnpause();
-    m_audio->Enable(m_gameClient->GetPlayback()->GetSpeed() == 1.0);
-
-    if (m_gameClient->GetPlayback()->GetSpeed() != 0.0)
-      CloseOSD();
+    OnSpeedChange(m_gameClient->GetPlayback()->GetSpeed());
   }
 }
 
@@ -431,6 +428,7 @@ void CRetroPlayer::FrameMove()
       {
         m_priorSpeed = m_gameClient->GetPlayback()->GetSpeed();
         m_gameClient->GetPlayback()->SetSpeed(0.0);
+        OnSpeedChange(0.0);
         m_state = State::BACKGROUND;
       }
       break;
@@ -440,7 +438,10 @@ void CRetroPlayer::FrameMove()
       if (bFullscreen)
       {
         if (m_gameClient->GetPlayback()->GetSpeed() == 0.0)
+        {
           m_gameClient->GetPlayback()->SetSpeed(m_priorSpeed);
+          OnSpeedChange(m_priorSpeed);
+        }
         m_state = State::FULLSCREEN;
       }
       break;
