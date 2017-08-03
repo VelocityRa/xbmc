@@ -232,15 +232,15 @@ extern "C"
 
     /* Loads a config file. Returns NULL if file doesn't exist.
      * NULL path will create an empty config file. */
-    config_file_t_* (_cdecl* config_file_new)(const AddonInstance_ShaderPreset* addonInstance,
+    config_file_t_* (*config_file_new)(const AddonInstance_ShaderPreset* addonInstance,
       const char *path, const char *basePath);
 
     /* Load a config file from a string. */
-    config_file_t_* (_cdecl* config_file_new_from_string)(const AddonInstance_ShaderPreset* addonInstance,
+    config_file_t_* (*config_file_new_from_string)(const AddonInstance_ShaderPreset* addonInstance,
       const char *from_string);
 
     /* Frees config file. */
-    void (_cdecl* config_file_free)(const AddonInstance_ShaderPreset* addonInstance,
+    void (*config_file_free)(const AddonInstance_ShaderPreset* addonInstance,
       config_file_t_ *conf);
 
     /// =============================
@@ -248,22 +248,22 @@ extern "C"
 
     /// ==== video_shader_PARSE =====
 
-    bool (_cdecl* video_shader_read_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance,
+    bool (*video_shader_read_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance,
       config_file_t_ *conf, struct video_shader_ *shader);
 
-    void (_cdecl* video_shader_write_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance,
+    void (*video_shader_write_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance,
       config_file_t_ *conf, struct video_shader_ *shader);
 
-    void (_cdecl* video_shader_resolve_relative)(const AddonInstance_ShaderPreset* addonInstance,
+    void (*video_shader_resolve_relative)(const AddonInstance_ShaderPreset* addonInstance,
       struct video_shader_ *shader, const char *ref_path);
 
-    bool (_cdecl* video_shader_resolve_current_parameters)(const AddonInstance_ShaderPreset* addonInstance,
+    bool (*video_shader_resolve_current_parameters)(const AddonInstance_ShaderPreset* addonInstance,
       config_file_t_ *conf, struct video_shader_ *shader);
 
-    bool (_cdecl* video_shader_resolve_parameters)(const AddonInstance_ShaderPreset* addonInstance,
+    bool (*video_shader_resolve_parameters)(const AddonInstance_ShaderPreset* addonInstance,
       config_file_t_ *conf, struct video_shader_ *shader);
 
-    enum rarch_shader_type_ (_cdecl* video_shader_parse_type)(const AddonInstance_ShaderPreset* addonInstance,
+    enum rarch_shader_type_ (*video_shader_parse_type)(const AddonInstance_ShaderPreset* addonInstance,
       const char *path, enum rarch_shader_type_ fallback);
 
     /// =============================
