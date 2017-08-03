@@ -98,13 +98,13 @@ bool CVideoShaderPreset::ReadPresetConfig(config_file_t_* conf)
 //    modern = new_shader->modern;
 //    strcpy_s(prefix, 64, new_shader->prefix);
     m_Passes = new_shader->passes;
-    memcpy(m_Pass, new_shader->pass, GFX_MAX_SHADERS * sizeof video_shader_pass_);
+    memcpy(m_Pass, new_shader->pass, GFX_MAX_SHADERS * sizeof(video_shader_pass_));
     m_Luts = new_shader->luts;
-    memcpy(m_Lut, new_shader->lut, GFX_MAX_TEXTURES * sizeof video_shader_lut_);
+    memcpy(m_Lut, new_shader->lut, GFX_MAX_TEXTURES * sizeof(video_shader_lut_));
     m_NumParameters = new_shader->num_parameters;
-    memcpy(m_Parameters, new_shader->parameters, GFX_MAX_PARAMETERS * sizeof video_shader_parameter_);
+    memcpy(m_Parameters, new_shader->parameters, GFX_MAX_PARAMETERS * sizeof(video_shader_parameter_));
     m_Variables = new_shader->variables;
-    memcpy(m_Variable, new_shader->variable, GFX_MAX_VARIABLES * sizeof state_tracker_uniform_info_);
+    memcpy(m_Variable, new_shader->variable, GFX_MAX_VARIABLES * sizeof(state_tracker_uniform_info_));
 //    strcpy_s(script_path, PATH_MAX_LENGTH, new_shader->script_path);
 //    script = new_shader->script;
 //    strcpy_s(script_class, 512, new_shader->script_class);
