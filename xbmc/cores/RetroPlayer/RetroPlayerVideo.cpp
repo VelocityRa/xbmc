@@ -71,7 +71,14 @@ bool CRetroPlayerVideo::OpenPixelStream(AVPixelFormat pixfmt, unsigned int width
   m_pixelConverter.reset(new CPixelConverter);
 #endif
 
-  if (m_pixelConverter->Open(pixfmt, AV_PIX_FMT_YUV420P, width, height))
+  //! @todo
+#if defined(TARGET_WINDOWS)
+  AVPixelFormat targetFmt = AV_PIX_FMT_BGRA;
+#else
+  AVPixelFormat targetFmt = AV_PIX_FMT_YUV420P;
+#endif
+
+  if (m_pixelConverter->Open(pixfmt, targetFmt, width, height))
   {
     //! @todo
     //m_processInfo.SetVideoPixelFormat(CDVDVideoCodecFFmpeg::GetPixelFormatName(pixfmt));
@@ -118,7 +125,7 @@ void CRetroPlayerVideo::AddData(const uint8_t* data, unsigned int size)
 {
   VideoPicture picture;
 
-  if (GetPicture(data, size, picture))
+  if (GetPicture(data, size, picture) && picture.videoBuffer != nullptr)
   {
     picture.pts = m_clock.GetClock(); // Show immediately
     picture.iDuration = DVD_SEC_TO_TIME(1.0 / m_framerate);

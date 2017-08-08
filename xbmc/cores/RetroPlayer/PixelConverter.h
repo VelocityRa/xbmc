@@ -24,6 +24,7 @@
 #include <memory>
 #include <stdint.h>
 
+class CPixelBufferPoolRGB;
 class CPixelBufferPoolFFmpeg;
 struct AVFrame;
 struct VideoPicture;
@@ -43,11 +44,15 @@ public:
 
 protected:
   bool AllocateBuffers(AVFrame *pFrame) const;
+  void AllocateRgbBuffer(uint8_t **pData, size_t size) const;
 
   AVPixelFormat m_targetFormat;
   unsigned int m_width;
   unsigned int m_height;
   SwsContext* m_swsContext;
   AVFrame *m_pFrame;
-  std::shared_ptr<CPixelBufferPoolFFmpeg> m_pixelBufferPool;
+  uint8_t *m_pData = nullptr;
+  size_t m_dataSize = 0;
+  std::shared_ptr<CPixelBufferPoolRGB> m_pixelBufferPoolRGB;
+  std::shared_ptr<CPixelBufferPoolFFmpeg> m_pixelBufferPoolFFmpeg;
 };
