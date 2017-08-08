@@ -33,9 +33,127 @@ extern "C"
 #include "libavutil/frame.h"
 }
 
+#include <cstring>
+
 //------------------------------------------------------------------------------
 // Video Buffers
 //------------------------------------------------------------------------------
+
+class CPixelBufferRGB : public CVideoBuffer
+{
+public:
+  CPixelBufferRGB(IVideoBufferPool &pool, int id);
+  ~CPixelBufferRGB() override;
+  virtual void GetPlanes(uint8_t*(&planes)[YuvImage::MAX_PLANES]) override;
+  virtual void GetStrides(int(&strides)[YuvImage::MAX_PLANES]) override;
+
+  void SetRef(uint8_t *frame, size_t size, AVPixelFormat format);
+  void Unref();
+
+protected:
+  uint8_t *m_pFrame = nullptr;
+  size_t m_size = 0;
+};
+
+CPixelBufferRGB::CPixelBufferRGB(IVideoBufferPool &pool, int id) :
+  CVideoBuffer(id)
+{
+}
+
+CPixelBufferRGB::~CPixelBufferRGB()
+{
+  delete[] m_pFrame;
+}
+
+void CPixelBufferRGB::GetPlanes(uint8_t*(&planes)[YuvImage::MAX_PLANES])
+{
+  planes[0] = m_pFrame;
+}
+
+void CPixelBufferRGB::GetStrides(int(&strides)[YuvImage::MAX_PLANES])
+{
+  strides[0] = m_size;
+}
+
+void CPixelBufferRGB::SetRef(uint8_t *frame, size_t size, AVPixelFormat format)
+{
+  delete[] m_pFrame;
+
+  m_pFrame = frame;
+  m_size = size;
+  m_pixFormat = format;
+}
+
+void CPixelBufferRGB::Unref()
+{
+  delete[] m_pFrame;
+  m_pFrame = nullptr;
+}
+
+//------------------------------------------------------------------------------
+
+class CPixelBufferPoolRGB : public IVideoBufferPool
+{
+public:
+  ~CPixelBufferPoolRGB() override;
+  virtual void Return(int id) override;
+  virtual CVideoBuffer* Get() override;
+
+protected:
+  CCriticalSection m_critSection;
+  std::vector<CPixelBufferRGB*> m_all;
+  std::deque<int> m_used;
+  std::deque<int> m_free;
+};
+
+CPixelBufferPoolRGB::~CPixelBufferPoolRGB()
+{
+  for (auto buf : m_all)
+    delete buf;
+}
+
+CVideoBuffer* CPixelBufferPoolRGB::Get()
+{
+  CSingleLock lock(m_critSection);
+
+  CPixelBufferRGB *buf = nullptr;
+  if (!m_free.empty())
+  {
+    int idx = m_free.front();
+    m_free.pop_front();
+    m_used.push_back(idx);
+    buf = m_all[idx];
+  }
+  else
+  {
+    int id = m_all.size();
+    buf = new CPixelBufferRGB(*this, id);
+    m_all.push_back(buf);
+    m_used.push_back(id);
+  }
+
+  buf->Acquire(GetPtr());
+  return buf;
+}
+
+void CPixelBufferPoolRGB::Return(int id)
+{
+  CSingleLock lock(m_critSection);
+
+  m_all[id]->Unref();
+  auto it = m_used.begin();
+  while (it != m_used.end())
+  {
+    if (*it == id)
+    {
+      m_used.erase(it);
+      break;
+    }
+    else
+      ++it;
+  }
+  m_free.push_back(id);
+}
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //! @todo Remove dependence on VideoPlayer
@@ -168,18 +286,22 @@ CPixelConverter::CPixelConverter() :
   m_height(0),
   m_swsContext(nullptr),
   m_pFrame(nullptr),
-  m_pixelBufferPool(std::make_shared<CPixelBufferPoolFFmpeg>())
+  m_pixelBufferPoolRGB(std::make_shared<CPixelBufferPoolRGB>()),
+  m_pixelBufferPoolFFmpeg(std::make_shared<CPixelBufferPoolFFmpeg>())
 {
 }
 
 bool CPixelConverter::Open(AVPixelFormat pixfmt, AVPixelFormat targetfmt, unsigned int width, unsigned int height)
 {
-  if (pixfmt == targetfmt || width == 0 || height == 0)
+  if (width == 0 || height == 0)
     return false;
 
   m_targetFormat = targetfmt;
   m_width = width;
   m_height = height;
+
+  if (pixfmt == targetfmt)
+    return true; // Nothing to do
 
   m_swsContext = sws_getContext(width, height, pixfmt,
                                 width, height, targetfmt,
@@ -211,35 +333,54 @@ void CPixelConverter::Dispose()
     sws_freeContext(m_swsContext);
     m_swsContext = nullptr;
   }
+
+  delete[] m_pData;
 }
 
 bool CPixelConverter::Decode(const uint8_t* pData, unsigned int size)
 {
-  if (pData == nullptr || size == 0 || m_swsContext == nullptr)
+  if (pData == nullptr || size == 0)
     return false;
 
-  if (!AllocateBuffers(m_pFrame))
-    return false;
+  if (!m_swsContext)
+  {
+    AllocateRgbBuffer(&m_pData, size);
 
-  uint8_t* dataMutable = const_cast<uint8_t*>(pData);
+    std::memcpy(m_pData, pData, size);
+    m_dataSize = size;
+  }
+  else
+  {
+    if (!AllocateBuffers(m_pFrame))
+      return false;
 
-  const int stride = size / m_height;
+    uint8_t* dataMutable = const_cast<uint8_t*>(pData);
 
-  uint8_t* src[] =       { dataMutable,         0,                   0,                   0 };
-  int      srcStride[] = { stride,              0,                   0,                   0 };
-  uint8_t* dst[] =       { m_pFrame->data[0],     m_pFrame->data[1],     m_pFrame->data[2],     0 };
-  int      dstStride[] = { m_pFrame->linesize[0], m_pFrame->linesize[1], m_pFrame->linesize[2], 0 };
+    const int stride = size / m_height;
 
-  sws_scale(m_swsContext, src, srcStride, 0, m_height, dst, dstStride);
+    uint8_t* src[] =       { dataMutable,         0,                   0,                   0 };
+    int      srcStride[] = { stride,              0,                   0,                   0 };
+    uint8_t* dst[] =       { m_pFrame->data[0],     m_pFrame->data[1],     m_pFrame->data[2],     0 };
+    int      dstStride[] = { m_pFrame->linesize[0], m_pFrame->linesize[1], m_pFrame->linesize[2], 0 };
+
+    sws_scale(m_swsContext, src, srcStride, 0, m_height, dst, dstStride);
+  }
 
   return true;
 }
 
 void CPixelConverter::GetPicture(VideoPicture& dvdVideoPicture)
 {
-  if (m_pFrame != nullptr)
+  if (m_pData != nullptr)
   {
-    CPixelBufferFFmpeg *buffer = dynamic_cast<CPixelBufferFFmpeg*>(m_pixelBufferPool->Get());
+    CPixelBufferRGB *buffer = static_cast<CPixelBufferRGB*>(m_pixelBufferPoolRGB->Get());
+    buffer->SetRef(m_pData, m_dataSize, m_targetFormat);
+    m_pData = nullptr;
+    dvdVideoPicture.videoBuffer = buffer;
+  }
+  else if (m_pFrame != nullptr)
+  {
+    CPixelBufferFFmpeg *buffer = static_cast<CPixelBufferFFmpeg*>(m_pixelBufferPoolFFmpeg->Get());
     buffer->SetRef(m_pFrame);
     dvdVideoPicture.videoBuffer = buffer;
   }
@@ -268,4 +409,10 @@ bool CPixelConverter::AllocateBuffers(AVFrame *pFrame) const
   }
 
   return true;
+}
+
+void CPixelConverter::AllocateRgbBuffer(uint8_t **pData, size_t size) const
+{
+  delete[] *pData;
+  *pData = new uint8_t[size];
 }
