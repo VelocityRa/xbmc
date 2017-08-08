@@ -96,12 +96,16 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 {
-  std::string presetToSet = m_videoFilters[index].path;
-  bool presetChanged = m_shaderPresetPath != presetToSet;
-  if (presetChanged && index < m_videoFilters.size() && m_callback != nullptr)
+  if (index < m_videoFilters.size() && m_callback != nullptr)
   {
-    m_callback->SetShaderPreset(presetToSet);
-    m_shaderPresetPath = presetToSet;
+    const std::string &presetToSet = m_videoFilters[index].path;
+    bool presetChanged = (m_shaderPresetPath != presetToSet);
+
+    if (presetChanged)
+    {
+      m_callback->SetShaderPreset(presetToSet);
+      m_shaderPresetPath = presetToSet;
+    }
   }
 }
 
