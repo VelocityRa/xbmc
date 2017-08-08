@@ -83,9 +83,10 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
     //item->SetProperty("game.videofilter", CVariant{ videoFilter.scalingMethod });
 
     auto localizedName = GetLocalizedString(videoFilter.nameIndex);
-    auto localizedCategory = GetLocalizedString(videoFilter.categoryIndex); // TODO
+    auto localizedCategory = GetLocalizedString(videoFilter.categoryIndex);
 
     CFileItemPtr item = std::make_shared<CFileItem>(localizedName);
+    item->SetLabel2(localizedCategory);
 
     items.Add(std::move(item));
   }
