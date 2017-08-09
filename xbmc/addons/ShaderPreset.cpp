@@ -94,3 +94,8 @@ bool CShaderPresetAddon::ShaderPresetResolveParameters(config_file_t_ *conf, vid
 {
   return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, conf, shader);
 }
+
+void CShaderPresetAddon::VideoShaderFree(video_shader_ *shader)
+{
+  return m_struct.toAddon.video_shader_free(&m_struct, shader);
+}

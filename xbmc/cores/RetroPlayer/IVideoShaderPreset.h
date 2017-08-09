@@ -74,6 +74,12 @@ namespace SHADERPRESET
     virtual bool ReadPresetString(std::string presetString) = 0;
 
     /**
+    * \brief Frees all state related to shader
+    * \param shader Object to free.
+    */
+    virtual void FreePresetFile(video_shader_* shader) = 0;
+
+    /**
     * ShaderPresetResolveParameters:
     *
     * Resolves all shader parameters belonging to shaders.

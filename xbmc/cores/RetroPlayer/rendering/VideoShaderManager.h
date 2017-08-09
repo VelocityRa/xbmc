@@ -89,8 +89,6 @@ private:
   ID3D11SamplerState* m_pSampNearest;
   // Linear sampler
   ID3D11SamplerState* m_pSampLinear;
-<<<<<<< HEAD
-=======
 
   struct ShaderLUT
   {
@@ -98,5 +96,4 @@ private:
     std::string path;
     ID3D11SamplerState* sampler;
   };
->>>>>>> RetroPlayer: Shader Renderer
 };
