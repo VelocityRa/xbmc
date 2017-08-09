@@ -74,8 +74,6 @@ void CVideoShaderPreset::Destroy()
     shaderPresetAddon->DestroyAddon();
     shaderPresetAddon.reset();
   }
-  free(m_config);
-  free(m_videoShader);
 }
 
 // TODO: Don't die in flames if the file doesn't exist

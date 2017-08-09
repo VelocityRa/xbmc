@@ -120,8 +120,9 @@ namespace SHADERPRESET
    **/
   bool ShaderPresetResolveParameters(config_file_t_ *conf,
     struct video_shader_ *shader);
+    void VideoShaderFree(video_shader_* shader);
 
-  /**
+    /**
   * GetLibraryBasePath:
   * @brief Returns the full/absolute path of the dynamic library file.
   *

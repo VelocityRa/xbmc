@@ -69,6 +69,7 @@ namespace SHADERPRESET
     bool ReadPresetFile(std::string presetPath) override;
     bool ReadPresetConfig(config_file_t_* presetConf) override;
     bool ReadPresetString(std::string presetString) override;
+    void FreePresetFile(video_shader_* shader) override;
     bool ResolveParameters() override;
     // bool WritePresetFile(config_file_t_* presetConf) override;  // TODO?: preset file writing
 
