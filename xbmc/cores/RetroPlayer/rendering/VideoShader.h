@@ -22,6 +22,7 @@
 #include "guilib/D3DResource.h"
 #include "VideoRenderers/VideoShaders/WinVideoFilter.h"
 #include "VideoShaderManager.h"
+#include "VideoShaderLUT.h"
 
 using namespace SHADER;
 
