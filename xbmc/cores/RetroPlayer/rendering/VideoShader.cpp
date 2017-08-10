@@ -22,7 +22,7 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
-#include "VideoShaderManager.h"
+#include "Application.h"
 
 using namespace SHADER;
 
@@ -107,8 +107,7 @@ void CVideoShader::PrepareParameters(CD3DTexture* texture, CRect sourceRect, CPo
     m_sourceRect = sourceRect;
     for (size_t i = 0; i < 4; ++i)
       m_dest[i] = dest[i];
-    m_outputSize.x = texture->GetWidth();
-    m_outputSize.y = texture->GetHeight();
+    m_outputSize = { texture->GetWidth(), texture->GetHeight() } ;
 
     CUSTOMVERTEX* v;
     CVideoShader::LockVertexBuffer(reinterpret_cast<void**>(&v));
@@ -145,6 +144,7 @@ void CVideoShader::PrepareParameters(CD3DTexture* texture, CRect sourceRect, CPo
     SetViewPort(viewPort);
     UpdateInputBuffer();
   }
+  UpdateInputBuffer();
 }
 
 void CVideoShader::SetShaderParameters(CD3DTexture* texture)
@@ -218,11 +218,12 @@ void CVideoShader::UpdateInputBuffer()
 
 CVideoShader::cbInput CVideoShader::GetInputData()
 {
+
   cbInput input = {
     { m_videoSize },   // video_size
     { m_textureSize }, // texture_size
     { m_outputSize },  // output_size
-    { 0 },             // TODO: frame_count
+    { g_application.GetTime() * 60 },             // TODO: frame_count
     { 1 }              // frame_direction
   };
   return input;

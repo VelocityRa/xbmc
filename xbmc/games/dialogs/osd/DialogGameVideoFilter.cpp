@@ -96,6 +96,7 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
     CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(16316)); // "Auto"
     items.Add(std::move(item));
   }
+  //items.Add(CFileItem("special://xbmcbinaddons/game.shader.presets/libretro/hlsl/", true));
 }
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
@@ -115,15 +116,12 @@ void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 
 unsigned int CDialogGameVideoFilter::GetFocusedItem() const
 {
-  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
-
   for (unsigned int i = 0; i < m_videoFilters.size(); i++)
   {
-    //const ESCALINGMETHOD scalingMethod = m_videoFilters[i].scalingMethod;
-    //if (scalingMethod == gameSettings.ScalingMethod())
-    //  return i;
+    std::string preset = m_callback->GetShaderPreset();
+    if (preset == m_videoFilters[i].path)
+       return i;
   }
-
   return 0;
 }
 

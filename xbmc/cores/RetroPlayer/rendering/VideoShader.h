@@ -58,14 +58,6 @@ protected:
   bool CreateBuffers();
 
 private:
-  struct cbInput
-  {
-    XMFLOAT2 video_size;
-    XMFLOAT2 texture_size;
-    XMFLOAT2 output_size;
-    float frame_count;
-    float frame_direction;
-  };
   struct CUSTOMVERTEX {
     FLOAT x, y, z;
     FLOAT tu, tv;   // Texture coordinates
@@ -76,24 +68,8 @@ private:
   // Currently loaded shader's relative path
   std::string m_shaderPath;
 
-  // Holds the data bount to the input cbuffer (cbInput here)
-  ID3D11Buffer* m_pInputBuffer;
-
   // Projection matrix
   XMFLOAT4X4 m_MVP;
-
-  // Size of the viewport
-  // cbInput's 'output_size'
-  float2 m_outputSize;
-
-  // Size of the actual source video data (ie. 160x144 for the Game Boy)
-  // cbInput's 'video_size'
-  float2 m_videoSize;
-
-  // The size of the texture itself
-  // Power-of-two sized.
-  // cbInput's 'texture_size'
-  float2 m_textureSize;
 
   // Array of shader parameters
   ShaderParameters m_shaderParameters;
@@ -103,10 +79,4 @@ private:
 
   // Look-up textures that the shader uses
   std::vector<ShaderLUT> m_luts;
-
-  CRect m_sourceRect;
-  CPoint m_dest[4];
-
-private:
-  cbInput GetInputData();
 };

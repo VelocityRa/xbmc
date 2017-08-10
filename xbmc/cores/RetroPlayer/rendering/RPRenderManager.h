@@ -48,6 +48,7 @@ namespace RETRO
     ESCALINGMETHOD GetScalingMethod() override;
     void SetScalingMethod(ESCALINGMETHOD scalingMethod) override;
     void SetShaderPreset(const std::string& shaderPresetPath) override;
+    const std::string& GetShaderPreset() override;
   };
 }
 }

@@ -106,13 +106,25 @@ bool CVideoShaderManager::Update()
     }
 
     if (!CreateSamplers())
+    {
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to create samplers. Disabling video shaders.");
+      DisposeVideoShaders();
       return false;
+    }
 
     if (!CreateShaderTextures())
+    {
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: a shader texture failed to init. Disabling video shaders.");
+      DisposeVideoShaders();
       return false;
+    }
 
     if (!CreateShaders())
+    {
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize. Disabling video shaders.");
+      DisposeVideoShaders();
       return false;
+    }
   }
 
   if (m_pVideoShaders.size() > 0 || m_pShaderTextures.size() > 0)
@@ -158,10 +170,10 @@ bool CVideoShaderManager::CreateShaders()
   auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
   auto numParameters = std::min(m_pPreset->m_NumParameters, static_cast<unsigned>(GFX_MAX_PARAMETERS));
   auto textureSize = GetOptimalTextureSize(m_videoSize);
-  // TODO:
+  // TODO: bad!
   auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/libretro/hlsl", m_videoShaderPath);
 
-  // todo: pass specific?
+  // todo: is this pass specific?
   std::vector<ShaderLUT> passLUTs;
   for(unsigned i = 0; i < m_pPreset->m_Luts; ++i)
   {
@@ -171,8 +183,10 @@ bool CVideoShaderManager::CreateShaders()
     CDXTexture* lutTexture(CreateLUTexture(lutStruct, presetDirectory));
 
     if (!lutSampler || !lutTexture)
-      return false;
-
+    {
+      delete lutSampler;
+      delete lutTexture;
+    }
     passLUTs.emplace_back(lutStruct.id, lutStruct.path, lutSampler, lutTexture);
   }
 
@@ -226,11 +240,39 @@ bool CVideoShaderManager::CreateSamplers()
   return true;
 }
 
+ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter_* parameters,
+   unsigned numParameters, const std::string& sourceStr) const
+{
+   std::regex rgx("#pragma parameter ([a-zA-Z_][a-zA-Z0-9_]{0,31})");
+   std::smatch matches;
+
+   std::vector<std::string> validParams;
+   std::string::const_iterator searchStart(sourceStr.cbegin());
+   while (regex_search(searchStart, sourceStr.cend(), matches, rgx))
+   {
+      validParams.push_back(matches[1].str());
+      searchStart += matches.position() + matches.length();
+   }
+
+   ShaderParameters matchParams;
+   for (const auto& match : validParams)   // for each param found in the source code
+      for (unsigned i = 0; i < numParameters; ++i)  // for each param found in the preset file
+         if (match == parameters[i].id)  // if they match
+         {
+            // The add-on has already handled parsing and overwriting default
+            // parameter values from the preset file. The final value we
+            // should use is in the 'current' field.
+            matchParams[match] = parameters[i].current;
+            break;
+         }
+
+   return matchParams;
+}
+
 void CVideoShaderManager::DisposeVideoShaders()
 {
   m_pVideoShaders.clear();
   m_pShaderTextures.clear();
-  //m_pPreset.reset();
 }
 
 CD3DTexture* CVideoShaderManager::GetFirstTexture()
@@ -245,13 +287,10 @@ void CVideoShaderManager::UpdateViewPort()
   CRect viewPort;
   g_Windowing.GetViewPort(viewPort);
 
-  unsigned curWidth = static_cast<unsigned>(viewPort.Width());
-  unsigned curHeight = static_cast<unsigned>(viewPort.Height());
-  if (curWidth != m_viewPortSize.x || curHeight != m_viewPortSize.y)
+  float2 currentViewPortSize = { viewPort.Width(), viewPort.Height() };
+  if (currentViewPortSize != m_viewPortSize)
   {
-    m_viewPortSize.x = curWidth;
-    m_viewPortSize.y = curHeight;
-
+    m_viewPortSize = currentViewPortSize;
     CreateShaderTextures();
   }
 }
@@ -261,10 +300,4 @@ bool CVideoShaderManager::SetShaderPreset(const std::string shaderPresetPath)
   m_videoShaderPath = shaderPresetPath;
   m_bPresetNeedsUpdate = true;
   return Update();
-}
-
-void CVideoShaderManager::SetVideoSize(unsigned videoWidth, unsigned videoHeight)
-{
-  m_videoSize.x = videoWidth;
-  m_videoSize.y = videoHeight;
 }
