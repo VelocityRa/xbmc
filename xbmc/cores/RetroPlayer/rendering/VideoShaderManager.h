@@ -19,72 +19,16 @@
  *
  */
 
-#include "cores/RetroPlayer/VideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaderUtils.h"
 
 #include <memory>
 #include "guilib/Texture.h"
-
-namespace SHADER
-{
-  typedef std::map<std::string, float> ShaderParameters;
-
-  struct ShaderLUT
-  {
-    std::string id;
-    std::string path;
-    std::unique_ptr<ID3D11SamplerState> sampler;
-    std::unique_ptr<CDXTexture> texture;
-
-    ShaderLUT() {}
-    ShaderLUT(std::string id_, std::string path_,
-      ID3D11SamplerState* sampler_,
-      CDXTexture* texture_)
-      : id(id_), path(path_)
-    {
-      sampler.reset(sampler_);
-      texture.reset(texture_);
-    }
-    ~ShaderLUT()
-    {
-      auto pSampler = sampler.release();
-      SAFE_RELEASE(pSampler);
-      if (texture)
-        texture.reset();
-    }
-    ShaderLUT(const ShaderLUT& other)
-    {
-      id = other.id;
-      path = other.path;
-      sampler.reset(std::move(other.sampler.get()));
-      texture.reset(std::move(other.texture.get()));
-    }
-    ShaderLUT& operator=(const ShaderLUT& rhs)
-    {
-      ShaderLUT tmp(rhs);
-      std::swap(id, tmp.id);
-      std::swap(path, tmp.path);
-      std::swap(sampler, tmp.sampler);
-      std::swap(texture, tmp.texture);
-      return *this;
-    }
-  };
-
-  struct float2
-  {
-    float2() : x(0), y(0) {}
-    float2(float x_, float y_) : x(x_), y(y_) {}
-    float2(int x_, int y_) : x(x_), y(y_) {}
-    float2(unsigned int x_, unsigned int y_) : x(x_), y(y_) {}
-
-    operator XMFLOAT2() const { return XMFLOAT2(static_cast<float>(x), static_cast<float>(y)); }
-
-    float x, y;
-  };
-}
+#include "cores/RetroPlayer/VideoShaderPreset.h"
 
 using namespace SHADER;
 
 class CVideoShader;
+struct video_shader_parameter_;
 
 // TODO: renderer independence
 class CVideoShaderManager
@@ -105,11 +49,6 @@ private:
     unsigned numParameters, const std::string& sourceStr);
   bool CreateShaders();
   bool CreateSamplers();
-  ID3D11SamplerState* CreateLUTSampler(const video_shader_lut_& lut);
-  CDXTexture* CreateLUTexture(const video_shader_lut_& lut);
-  // Returns smallest possible power-of-two sized texture
-  float2 GetOptimalTextureSize(float2 videoSize);
-  static D3D11_TEXTURE_ADDRESS_MODE TranslateWrapType(gfx_wrap_type_ wrap);
   void UpdateViewPort();
   void DisposeVideoShaders();
 
