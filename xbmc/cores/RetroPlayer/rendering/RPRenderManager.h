@@ -45,6 +45,7 @@ namespace RETRO
     void SetRenderViewMode(ViewMode mode) override;
     void SetScalingMethod(ESCALINGMETHOD method) override;
     void SetShaderPreset(const std::string& shaderPresetPath) override;
+    const std::string& GetShaderPreset() override;
   };
 }
 }

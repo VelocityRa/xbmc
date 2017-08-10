@@ -60,9 +60,12 @@ ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut_ lut)
 
 CDXTexture* SHADER::CreateLUTexture(const video_shader_lut_ lut, const std::string& presetDirectory)
 {
-  const std::string& texturePath = URIUtils::CanonicalizePath(
-    URIUtils::AddFileToFolder(presetDirectory, lut.path)
-  );
+  const std::string& texturePath =
+    URIUtils::AddFileToFolder(
+      URIUtils::CanonicalizePath(
+        URIUtils::GetBasePath(
+        presetDirectory)),
+    lut.path);
 
   CDXTexture* texture = static_cast<CDXTexture*>(CDXTexture::LoadFromFile(texturePath));
   if (!texture)

@@ -36,6 +36,7 @@ namespace GAME
     virtual void SetRenderViewMode(ViewMode mode) = 0;
     virtual void SetScalingMethod(ESCALINGMETHOD scalingMethod) = 0;
     virtual void SetShaderPreset(const std::string& shaderPresetPath) = 0;
+    virtual const std::string& GetShaderPreset() = 0;
   };
 }
 }

@@ -72,11 +72,11 @@ bool CRetroPlayerVideo::OpenPixelStream(AVPixelFormat pixfmt, unsigned int width
 #endif
 
   //! @todo
-#if defined(TARGET_WINDOWS)
-  AVPixelFormat targetFmt = AV_PIX_FMT_BGRA;
-#else
+//#if defined(TARGET_WINDOWS)
+//  AVPixelFormat targetFmt = AV_PIX_FMT_BGRA;
+//#else
   AVPixelFormat targetFmt = AV_PIX_FMT_YUV420P;
-#endif
+//#endif
 
   if (m_pixelConverter->Open(pixfmt, targetFmt, width, height))
   {

@@ -37,6 +37,7 @@ namespace GAME
     virtual unsigned int GetTimeMs() const override { return 0; }
     virtual unsigned int GetTotalTimeMs() const override { return 0; }
     virtual unsigned int GetCacheTimeMs() const override { return 0; }
+    virtual uint64_t GetTotalFrameCount() const override { return 0; }
     virtual void SeekTimeMs(unsigned int timeMs) override { }
     virtual double GetSpeed() const override { return 1.0; }
     virtual void SetSpeed(double speedFactor) override { }

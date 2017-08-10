@@ -73,7 +73,8 @@ private:
    * \param presetPath Relative path to preset file
    */
 public:
-  void SetShaderPreset(const std::string presetPath);
+   const std::string& GetShaderPreset();
+   void SetShaderPreset(const std::string presetPath);
 
 private:
   void UpdateVideoShaders();

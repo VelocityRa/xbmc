@@ -70,6 +70,7 @@ void CRPWinRenderer::Render(DWORD flags, CD3DTexture* target)
     RenderPS(target);
     break;
   case RENDER_SW:
+     // TODO: This isn't really needed, the same render method (RenderPS) should be used here too
     CWinRenderer::RenderSW(target);
     break;
   default:
@@ -149,25 +150,20 @@ void CRPWinRenderer::SetShaderPreset(const std::string presetPath)
   m_videoShaderPath = presetPath;
   if (m_shaderManager)
   {
-    bool result = m_shaderManager->SetShaderPreset(m_videoShaderPath);
-    if (!result)
-    {
-      // something went wrong, disable video shaders
-      // m_shadersNeedUpdate = false;
-      // m_shaderManager.reset();
-    }
+    m_shaderManager->SetShaderPreset(m_videoShaderPath);
   }
 }
-
+const std::string& CRPWinRenderer::GetShaderPreset()
+{
+   return m_videoShaderPath;
+}
 void CRPWinRenderer::UpdateVideoShaders()
 {
   if (!m_shaderManager && m_shadersNeedUpdate)
   {
     m_shadersNeedUpdate = false;
 
-    if (m_isShaderManagerReady)
-      m_shaderManager->SetShaderPreset(m_videoShaderPath);
-    else
+    if (!m_isShaderManagerReady)
     {
       auto sourceWidth = static_cast<unsigned>(m_sourceRect.Width());
       auto sourceHeight = static_cast<unsigned>(m_sourceRect.Height());

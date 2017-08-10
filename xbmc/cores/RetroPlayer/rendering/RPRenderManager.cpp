@@ -197,9 +197,19 @@ void CRPRenderManager::SetScalingMethod(ESCALINGMETHOD method)
   videoSettings.m_ScalingMethod = method;
 }
 
+// TODO: Avoid casting by adding SetShaderPreset method to BaseRenderer
 void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
 {
   CRPWinRenderer* winRenderer = nullptr;
   if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_pRenderer)))
     winRenderer->SetShaderPreset(shaderPresetPath);
+}
+
+// TODO: Avoid casting by adding GetShaderPreset method to BaseRenderer
+const std::string& CRPRenderManager::GetShaderPreset()
+{
+   CRPWinRenderer* winRenderer = nullptr;
+   if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_pRenderer)))
+      return winRenderer->GetShaderPreset();
+   return "";
 }

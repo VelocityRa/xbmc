@@ -23,6 +23,7 @@
 #include <string>
 #include "system.h"
 #include "VideoShaderUtils.h"
+#include "guilib/Texture.h"
 
 struct video_shader_lut_;
 enum gfx_wrap_type_;
@@ -37,10 +38,8 @@ namespace SHADER
     std::unique_ptr<ID3D11SamplerState> sampler;
     std::unique_ptr<CDXTexture> texture;
 
-    ShaderLUT() {}
-    ShaderLUT(std::string id_, std::string path_,
-      ID3D11SamplerState* sampler_,
-      CDXTexture* texture_)
+    ShaderLUT() : id(""), path(""), sampler(nullptr), texture(nullptr) {}
+    ShaderLUT(std::string id_, std::string path_, ID3D11SamplerState* sampler_, CDXTexture* texture_)
       : id(id_), path(path_)
     {
       sampler.reset(sampler_);
@@ -50,8 +49,6 @@ namespace SHADER
     {
       auto pSampler = sampler.release();
       SAFE_RELEASE(pSampler);
-      if (texture)
-        texture.reset();
     }
     ShaderLUT(const ShaderLUT& other)
     {
@@ -73,6 +70,7 @@ namespace SHADER
 
   ID3D11SamplerState* CreateLUTSampler(const video_shader_lut_ lut);
   CDXTexture* CreateLUTexture(const video_shader_lut_ lut, const std::string& presetDirectory);
+
   // Returns smallest possible power-of-two sized texture
   float2 GetOptimalTextureSize(float2 videoSize);
   D3D11_TEXTURE_ADDRESS_MODE TranslateWrapType(const gfx_wrap_type_ wrap);
