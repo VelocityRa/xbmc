@@ -698,6 +698,17 @@ bool CD3DEffect::SetTexture(LPCSTR handle, CD3DTexture &texture)
   return false;
 }
 
+bool CD3DEffect::SetTexture(LPCSTR handle, ID3D11ShaderResourceView* resourceView)
+{
+  if (m_effect)
+  {
+    ID3DX11EffectShaderResourceVariable* var = m_effect->GetVariableByName(handle)->AsShaderResource();
+    if (var->IsValid())
+      return SUCCEEDED(var->SetResource(resourceView));
+  }
+  return false;
+}
+
 bool CD3DEffect::SetResources(LPCSTR handle, ID3D11ShaderResourceView** ppSRViews, size_t count)
 {
   if (m_effect)

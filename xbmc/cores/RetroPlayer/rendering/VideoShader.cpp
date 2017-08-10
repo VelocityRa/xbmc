@@ -38,7 +38,7 @@ CVideoShader::~CVideoShader()
 }
 
 bool CVideoShader::Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
-  ID3D11SamplerState* sampler, float2 videoSize, float2 textureSize)
+  ID3D11SamplerState* sampler, std::vector<ShaderLUT> luts, float2 videoSize, float2 textureSize)
 {
   m_shaderSource = shaderSource;
   m_shaderPath = shaderPath;
@@ -46,6 +46,7 @@ bool CVideoShader::Create(const std::string& shaderSource, const std::string& sh
   m_pSampler = sampler;
   m_videoSize = videoSize;
   m_textureSize = textureSize;
+  m_luts = std::move(luts);
 
   DefinesMap defines;
 
@@ -66,7 +67,8 @@ bool CVideoShader::Create(const std::string& shaderSource, const std::string& sh
   D3D11_INPUT_ELEMENT_DESC layout[] =
   {
     { "SV_POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
   };
 
   if (!CVideoShader::CreateInputLayout(layout, ARRAYSIZE(layout)))
@@ -154,6 +156,8 @@ void CVideoShader::SetShaderParameters(CD3DTexture* texture)
   m_effect.SetMatrix("modelViewProj", &m_MVP);
   for (const auto& param : m_shaderParameters)
     m_effect.SetFloatArray(param.first.c_str(), &param.second, 1);
+  for (const auto& lut : m_luts)
+    m_effect.SetTexture(lut.id.c_str(), lut.texture->GetShaderResource());
 }
 
 bool CVideoShader::CreateBuffers()
