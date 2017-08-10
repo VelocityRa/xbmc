@@ -46,7 +46,7 @@ public:
   CVideoShader();
   virtual ~CVideoShader();
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
-    ID3D11SamplerState* sampler, float2 videoSize, float2 textureSize);
+    ID3D11SamplerState* sampler, std::vector<ShaderLUT> luts, float2 videoSize, float2 textureSize);
   void Render(CRect sourceRect, CPoint dest[], CD3DTexture* texture, CD3DTexture *target);
   void SetViewPort(const CRect& viewPort);
 
@@ -99,6 +99,9 @@ private:
 
   // Sampler state
   ID3D11SamplerState* m_pSampler;
+
+  // Look-up textures that the shader uses
+  std::vector<ShaderLUT> m_luts;
 
   CRect m_sourceRect;
   CPoint m_dest[4];

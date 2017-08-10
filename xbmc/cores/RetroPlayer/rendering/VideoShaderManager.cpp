@@ -155,8 +155,24 @@ bool CVideoShaderManager::CreateShaders()
 {
   auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
   auto numParameters = std::min(m_pPreset->m_NumParameters, static_cast<unsigned>(GFX_MAX_PARAMETERS));
-
   auto textureSize = GetOptimalTextureSize(m_videoSize);
+
+  // todo: pass specific?
+  std::vector<ShaderLUT> passLUTs;
+  for(unsigned i = 0; i < m_pPreset->m_Luts; ++i)
+  {
+    video_shader_lut_& lutStruct = m_pPreset->m_Lut[i];
+
+    ID3D11SamplerState* lutSampler(CreateLUTSampler(lutStruct));
+    CDXTexture* lutTexture(CreateLUTexture(lutStruct));
+
+    if (!lutSampler || !lutTexture)
+    {
+      CLog::Log(LOGERROR, "%s - Couldn't create LUTs");
+      return false;
+    }
+    passLUTs.emplace_back(lutStruct.id, lutStruct.path, lutSampler, lutTexture);
+  }
 
   for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
     auto& pass = m_pPreset->m_Pass[shaderIdx];
@@ -170,7 +186,8 @@ bool CVideoShaderManager::CreateShaders()
     // Get only the parameters belonging to this specific shader
     ShaderParameters passParameters = GetShaderParameters(m_pPreset->m_Parameters, numParameters, pass.source.string.vertex);
     ID3D11SamplerState* passSampler = pass.filter ? m_pSampLinear : m_pSampNearest;
-    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, m_videoSize, textureSize))
+
+    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, std::move(passLUTs), m_videoSize, textureSize))
     {
       CLog::Log(LOGERROR, "Couldn't create a video shader");
       return false;
@@ -205,6 +222,73 @@ bool CVideoShaderManager::CreateSamplers()
     return false;
 
   return true;
+}
+
+ID3D11SamplerState* CVideoShaderManager::CreateLUTSampler(const video_shader_lut_& lut)
+{
+  ID3D11SamplerState* samp;
+  D3D11_SAMPLER_DESC sampDesc;
+
+  D3D11_TEXTURE_ADDRESS_MODE wrapType = TranslateWrapType(lut.wrap);
+  auto filterType = lut.filter ? D3D11_FILTER_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_POINT;
+
+  ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
+  sampDesc.Filter = filterType;
+  sampDesc.AddressU = wrapType;
+  sampDesc.AddressV = wrapType;
+  sampDesc.AddressW = wrapType;
+  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+  sampDesc.MinLOD = 0;
+  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+  FLOAT blackBorder[4] = { 0, 1, 0, 1 };  // TODO: turn this back to black
+  memcpy(sampDesc.BorderColor, &blackBorder, 4 * sizeof(FLOAT));
+
+  if (FAILED(g_Windowing.Get3D11Device()->CreateSamplerState(&sampDesc, &samp)))
+  {
+    CLog::Log(LOGWARNING, "%s - failed to create LUT sampler for LUT &s", __FUNCTION__, lut.path);
+    return nullptr;
+  }
+
+  return samp;
+}
+
+CDXTexture* CVideoShaderManager::CreateLUTexture(const video_shader_lut_& lut)
+{
+  const std::string& presetBasePath = URIUtils::GetBasePath(m_videoShaderPath);
+  const std::string& texturePath = URIUtils::CanonicalizePath(
+    URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/libretro/hlsl", presetBasePath, lut.path)
+  );
+
+  CDXTexture* texture = static_cast<CDXTexture*>(CDXTexture::LoadFromFile(texturePath));
+  if (!texture)
+  {
+    CLog::Log(LOGERROR, "Couldn't open LUT %s", lut.path);
+    return nullptr;
+  }
+  if (lut.mipmap)
+    texture->SetMipmapping();
+
+  if (texture)
+    texture->LoadToGPU();
+
+  return texture;
+}
+
+D3D11_TEXTURE_ADDRESS_MODE CVideoShaderManager::TranslateWrapType(gfx_wrap_type_ wrap)
+{
+  switch(wrap)
+  {
+  case RARCH_WRAP_EDGE_:
+    return D3D11_TEXTURE_ADDRESS_CLAMP;
+  case RARCH_WRAP_REPEAT_:
+    return D3D11_TEXTURE_ADDRESS_WRAP;
+  case RARCH_WRAP_MIRRORED_REPEAT_:
+    return D3D11_TEXTURE_ADDRESS_MIRROR;
+  case RARCH_WRAP_DEFAULT_:
+  default:
+    return D3D11_TEXTURE_ADDRESS_BORDER;
+  }
 }
 
 ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter_* parameters,

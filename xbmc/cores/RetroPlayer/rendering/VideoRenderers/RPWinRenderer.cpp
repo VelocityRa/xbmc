@@ -30,7 +30,8 @@ CRPWinRenderer::CRPWinRenderer()
   , m_isShaderManagerReady(false)
 {
   //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
-  SetShaderPreset("reshade/lut.cgp");
+  //SetShaderPreset("reshade/lut.cgp");
+  SetShaderPreset("borders/1080p/color-grid.cgp");
   //SetShaderPreset("cgp/gameboy-screen-grid.cgp");
   //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
   //SetShaderPreset("anti-aliasing/reverse-aa.cgp");
@@ -127,7 +128,7 @@ void CRPWinRenderer::RenderPS(CD3DTexture* target)
   m_colorShader->Render(m_sourceRect, destPoints,
     CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Contrast,
     CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Brightness,
-    &m_renderBuffers[m_iYV12RenderBuffer], target);
+    &m_renderBuffers[m_iYV12RenderBuffer], target, m_scalingMethod);
 
   if (firstShaderTexture)
     // Render shaders
