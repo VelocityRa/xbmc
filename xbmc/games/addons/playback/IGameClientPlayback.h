@@ -41,6 +41,7 @@ namespace GAME
     virtual unsigned int GetTotalTimeMs() const = 0;
     virtual unsigned int GetCacheTimeMs() const = 0;
     virtual uint64_t GetTotalFrameCount() const = 0;
+    virtual const uint64_t* GetTotalFrameCountPointer() const = 0;
     virtual void SeekTimeMs(unsigned int timeMs) = 0;
     virtual double GetSpeed() const = 0;
     virtual void SetSpeed(double speedFactor) = 0;

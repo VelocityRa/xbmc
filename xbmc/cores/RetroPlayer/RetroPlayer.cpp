@@ -544,6 +544,11 @@ void CRetroPlayer::UpdateVideoRender(bool video)
   m_processInfo->SetVideoRender(video);
 }
 
+const uint64_t* CRetroPlayer::GetTotalFrameCountPointer()
+{
+  return m_gameClient->GetPlayback()->GetTotalFrameCountPointer();
+}
+
 void CRetroPlayer::OnSpeedChange(double newSpeed)
 {
   m_audio->Enable(newSpeed == 1.0);

@@ -742,7 +742,6 @@ void CD3DEffect::AddIncludePath(const std::string& includePath)
   m_includePaths.push_back(includePath);
 }
 
-
 bool CD3DEffect::Begin(UINT *passes, DWORD flags)
 {
   if (m_effect && m_techniquie)

@@ -28,6 +28,8 @@
 #include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 
 #include <regex>
+#include "Application.h"
+#include "cores/RetroPlayer/RetroPlayer.h"
 
 using namespace SHADER;
 
@@ -38,6 +40,7 @@ CVideoShaderManager::CVideoShaderManager(unsigned videoWidth, unsigned videoHeig
   , m_videoSize(videoWidth, videoHeight)
   , m_textureSize()
   , m_pInputBuffer(nullptr)
+  , m_frameCount(0)
 {
   m_videoSize = { videoWidth, videoHeight };
 
@@ -88,6 +91,8 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& t
   }
   // Apply last pass and write to target (backbuffer)
   m_pVideoShaders.back()->Render(sourceRect, dest, *m_pShaderTextures.back(), target);
+
+  ++m_frameCount;
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();
@@ -413,12 +418,11 @@ void CVideoShaderManager::UpdateInputBuffer()
 
 CVideoShaderManager::cbInput CVideoShaderManager::GetInputData()
 {
-
   cbInput input = {
     { m_videoSize },   // video_size
     { m_textureSize }, // texture_size
     { m_outputSize },  // output_size
-    { 0 },// g_application.m_pPlayer->GetPlayTempo() },             // TODO: frame_count
+    { m_frameCount },             // TODO: frame_count
     { 1 }              // frame_direction
   };
   return input;

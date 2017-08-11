@@ -142,6 +142,8 @@ namespace RETRO
     virtual void UpdateGuiRender(bool gui) override;
     virtual void UpdateVideoRender(bool video) override;
 
+    const uint64_t* GetTotalFrameCountPointer();
+
   private:
     /*!
      * \brief Called when the speed changes

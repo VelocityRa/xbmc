@@ -106,6 +106,9 @@ private:
   // cbInput's 'video_size'
   float2 m_videoSize;
 
+  // Number of frames that have passed
+  uint64_t m_frameCount;
+
   // Point/nearest neighbor sampler
   ID3D11SamplerState* m_pSampNearest;
 
