@@ -36,9 +36,9 @@ namespace SHADER
     }
 
     template<typename T>
-    T Max() { return std::max(x, y); }
+    T Max() { return static_cast<T>(std::max(x, y)); }
     template<typename T>
-    T Min() { return std::min(x, y); }
+    T Min() { return static_cast<T>(std::min(x, y)); }
 
     operator DirectX::XMFLOAT2() const
     {
