@@ -19,6 +19,7 @@
  */
 
 #include "GameLoop.h"
+#include "cores/DataCacheCore.h"
 #include "threads/SingleLock.h"
 #include "threads/SystemClock.h"
 
@@ -62,6 +63,7 @@ void CGameLoop::SetSpeed(double speedFactor)
     CSingleLock lock(m_mutex);
     m_speedFactor = speedFactor;
   }
+  CDataCacheCore::GetInstance().SetSpeed(1.f, speedFactor);
   m_sleepEvent.Set();
 }
 
