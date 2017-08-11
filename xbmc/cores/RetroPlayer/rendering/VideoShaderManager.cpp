@@ -33,9 +33,11 @@ using namespace SHADER;
 
 CVideoShaderManager::CVideoShaderManager(unsigned videoWidth, unsigned videoHeight)
   : m_bPresetNeedsUpdate(true)
-  , m_videoSize()
   , m_pSampNearest(nullptr)
   , m_pSampLinear(nullptr)
+  , m_videoSize(videoWidth, videoHeight)
+  , m_textureSize()
+  , m_pInputBuffer(nullptr)
 {
   m_videoSize = { videoWidth, videoHeight };
 
@@ -50,11 +52,12 @@ CVideoShaderManager::CVideoShaderManager(unsigned videoWidth, unsigned videoHeig
 CVideoShaderManager::~CVideoShaderManager()
 {
   DisposeVideoShaders();
+  SAFE_RELEASE(m_pInputBuffer);
   // The gui is going to render after this, so apply the state required
   g_Windowing.ApplyStateBlock();
 }
 
-void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture* target)
+void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& target)
 {
   // Update shaders/shader textures if required
   if (!Update())
@@ -63,16 +66,28 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture* t
   // Handle resizing of the viewport (window)
   UpdateViewPort();
 
-  // At this point, the input video has been rendered to the first texture
+  PrepareParameters(target, sourceRect, dest);
 
+  // Set common parameters to all the shaders
+  for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size(); ++shaderIdx)
+  {
+    CVideoShader& shader = *m_pVideoShaders[shaderIdx];
+    CD3DTexture& texture = *m_pShaderTextures[shaderIdx];
+    SetCommonShaderParams(shader, texture);
+  }
+
+  // At this point, the input video has been rendered to the first texture
   // Apply all passes except the last one (which needs to be applied to the backbuffer)
   for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
-    m_pVideoShaders[shaderIdx]->Render(sourceRect, dest,
-      m_pShaderTextures[shaderIdx].get(),
-      m_pShaderTextures[shaderIdx + 1].get());
+  {
+    CVideoShader& shader = *m_pVideoShaders[shaderIdx];
+    CD3DTexture& texture = *m_pShaderTextures[shaderIdx];
+    CD3DTexture& nextTexture = *m_pShaderTextures[shaderIdx + 1];
 
+    shader.Render(sourceRect, dest, texture, nextTexture);
+  }
   // Apply last pass and write to target (backbuffer)
-  m_pVideoShaders.back()->Render(sourceRect, dest, m_pShaderTextures.back().get(), target);
+  m_pVideoShaders.back()->Render(sourceRect, dest, *m_pShaderTextures.back(), target);
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();
@@ -105,9 +120,16 @@ bool CVideoShaderManager::Update()
       return false;
     }
 
-    if (!CreateSamplers())
+    if (!CreateShaders())
     {
-      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to create samplers. Disabling video shaders.");
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize shaders. Disabling video shaders.");
+      DisposeVideoShaders();
+      return false;
+    }
+
+    if (!CreateLayouts())
+    {
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to create layouts. Disabling video shaders.");
       DisposeVideoShaders();
       return false;
     }
@@ -119,9 +141,16 @@ bool CVideoShaderManager::Update()
       return false;
     }
 
-    if (!CreateShaders())
+    if (!CreateBuffers())
     {
-      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize. Disabling video shaders.");
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize buffers. Disabling video shaders.");
+      DisposeVideoShaders();
+      return false;
+    }
+
+    if (!CreateSamplers())
+    {
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to create samplers. Disabling video shaders.");
       DisposeVideoShaders();
       return false;
     }
@@ -169,7 +198,7 @@ bool CVideoShaderManager::CreateShaders()
 {
   auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
   auto numParameters = std::min(m_pPreset->m_NumParameters, static_cast<unsigned>(GFX_MAX_PARAMETERS));
-  auto textureSize = GetOptimalTextureSize(m_videoSize);
+  m_textureSize = GetOptimalTextureSize(m_videoSize);
   // TODO: bad!
   auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/libretro/hlsl", m_videoShaderPath);
 
@@ -203,7 +232,7 @@ bool CVideoShaderManager::CreateShaders()
     ShaderParameters passParameters = GetShaderParameters(m_pPreset->m_Parameters, numParameters, pass.source.string.vertex);
     ID3D11SamplerState* passSampler = pass.filter ? m_pSampLinear : m_pSampNearest;
 
-    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, std::move(passLUTs), m_videoSize, textureSize))
+    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, std::move(passLUTs)))
     {
       CLog::Log(LOGERROR, "Couldn't create a video shader");
       return false;
@@ -240,6 +269,48 @@ bool CVideoShaderManager::CreateSamplers()
   return true;
 }
 
+bool CVideoShaderManager::CreateLayouts()
+{
+  for (auto& videoShader : m_pVideoShaders)
+  {
+    videoShader->CreateVertexBuffer(4, sizeof(CUSTOMVERTEX));
+    // Create input layout
+    D3D11_INPUT_ELEMENT_DESC layout[] =
+    {
+      { "SV_POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+      { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+      { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    };
+
+    if (!videoShader->CreateInputLayout(layout, ARRAYSIZE(layout)))
+    {
+      CLog::Log(LOGERROR, __FUNCTION__": Failed to create input layout for Input Assembler.");
+      return false;
+    }
+  }
+  return true;
+}
+
+bool CVideoShaderManager::CreateBuffers()
+{
+  CRect viewPort;
+  g_Windowing.GetViewPort(viewPort);
+
+  m_outputSize = { static_cast<unsigned>(viewPort.Width()), static_cast<unsigned>(viewPort.Height()) };
+
+  ID3D11Device* pDevice = g_Windowing.Get3D11Device();
+  cbInput inputInitData = GetInputData();
+  auto inputBufSize = (sizeof(cbInput) + 15) & ~15;
+  CD3D11_BUFFER_DESC cbInputDesc(inputBufSize, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE);
+  D3D11_SUBRESOURCE_DATA initInputSubresource = { &inputInitData, 0, 0 };
+  if (FAILED(pDevice->CreateBuffer(&cbInputDesc, &initInputSubresource, &m_pInputBuffer)))
+  {
+    CLog::Log(LOGERROR, __FUNCTION__ " - Failed to create constant buffer for video shader input data.");
+    return false;
+  }
+  return true;
+}
+
 ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter_* parameters,
    unsigned numParameters, const std::string& sourceStr) const
 {
@@ -269,6 +340,90 @@ ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter
    return matchParams;
 }
 
+
+void CVideoShaderManager::PrepareParameters(CD3DTexture& texture, CRect sourceRect, CPoint dest[])
+{
+  if (m_sourceRect != sourceRect
+    || m_dest[0] != dest[0] || m_dest[1] != dest[1]
+    || m_dest[2] != dest[2] || m_dest[3] != dest[3]
+    || texture.GetWidth() != m_outputSize.x
+    || texture.GetHeight() != m_outputSize.y)
+  {
+    m_sourceRect = sourceRect;
+    for (size_t i = 0; i < 4; ++i)
+      m_dest[i] = dest[i];
+    m_outputSize = { texture.GetWidth(), texture.GetHeight() };
+
+    for (auto& videoShader : m_pVideoShaders)
+    {
+      CUSTOMVERTEX* v;
+      videoShader->LockVertexBuffer(reinterpret_cast<void**>(&v));
+      v[0].x = m_dest[0].x - m_outputSize.x / 2.0f;
+      v[0].y = m_dest[0].y - m_outputSize.y / 2.0f;
+      v[0].z = 0.0f;
+      v[0].tu = sourceRect.x1 / m_outputSize.x;
+      v[0].tv = sourceRect.y1 / m_outputSize.y;
+
+      v[1].x = m_dest[1].x - m_outputSize.x / 2.0f;
+      v[1].y = m_dest[1].y - m_outputSize.y / 2.0f;
+      v[1].z = 0.0f;
+      v[1].tu = sourceRect.x2 / m_outputSize.x;
+      v[1].tv = sourceRect.y1 / m_outputSize.y;
+
+      v[2].x = m_dest[2].x - m_outputSize.x / 2.0f;
+      v[2].y = m_dest[2].y - m_outputSize.y / 2.0f;
+      v[2].z = 0.0f;
+      v[2].tu = sourceRect.x2 / m_outputSize.x;
+      v[2].tv = sourceRect.y2 / m_outputSize.y;
+
+      v[3].x = m_dest[3].x - m_outputSize.x / 2.0f;
+      v[3].y = m_dest[3].y - m_outputSize.y / 2.0f;
+      v[3].z = 0.0f;
+      v[3].tu = sourceRect.x1 / m_outputSize.x;
+      v[3].tv = sourceRect.y2 / m_outputSize.y;
+      videoShader->UnlockVertexBuffer();
+    }
+
+    // Update projection matrix and input cbuffer
+    CRect viewPort;
+    g_Windowing.GetViewPort(viewPort);
+    SetViewPort(viewPort);
+  }
+  UpdateInputBuffer();
+}
+
+void CVideoShaderManager::UpdateInputBuffer()
+{
+  auto pContext = g_Windowing.Get3D11Context();
+
+  cbInput input = GetInputData();
+  cbInput* pData;
+  void** ppData = reinterpret_cast<void**>(&pData);
+
+  D3D11_MAPPED_SUBRESOURCE resource;
+  if (SUCCEEDED(pContext->Map(m_pInputBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource)))
+  {
+    *ppData = resource.pData;
+
+    memcpy(*ppData, &input, sizeof(cbInput));
+    pContext->Unmap(m_pInputBuffer, 0);
+  }
+
+}
+
+CVideoShaderManager::cbInput CVideoShaderManager::GetInputData()
+{
+
+  cbInput input = {
+    { m_videoSize },   // video_size
+    { m_textureSize }, // texture_size
+    { m_outputSize },  // output_size
+    { 0 },// g_application.m_pPlayer->GetPlayTempo() },             // TODO: frame_count
+    { 1 }              // frame_direction
+  };
+  return input;
+}
+
 void CVideoShaderManager::DisposeVideoShaders()
 {
   m_pVideoShaders.clear();
@@ -282,6 +437,41 @@ CD3DTexture* CVideoShaderManager::GetFirstTexture()
   return nullptr;
 }
 
+bool CVideoShaderManager::SetShaderPreset(const std::string shaderPresetPath)
+{
+  m_videoShaderPath = shaderPresetPath;
+  m_bPresetNeedsUpdate = true;
+  return Update();
+}
+
+void CVideoShaderManager::SetViewPort(const CRect& viewPort)
+{
+  auto xProjection = 1.0f / viewPort.Width() * 2.0f;
+  auto yProjection = -1.0f / viewPort.Height() * 2.0f;
+
+  // Update projection matrix
+  m_MVP = XMFLOAT4X4(
+    xProjection, 0, 0, 0,
+    0, yProjection, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+
+  // Update output size
+  m_outputSize = { static_cast<unsigned>(viewPort.Width()), static_cast<unsigned>(viewPort.Height()) };
+}
+
+void CVideoShaderManager::SetCommonShaderParams(CVideoShader& shader, CD3DTexture& texture)
+{
+  CD3DEffect& effect = shader.GetEffect();
+
+  effect.SetTechnique("TEQ");
+  effect.SetResources("decal", { texture.GetAddressOfSRV() }, 1);
+  // TODO: (Optimization): Add frame_count to separate cbuffer
+  effect.SetConstantBuffer("input", m_pInputBuffer);
+  effect.SetMatrix("modelViewProj", &m_MVP);
+}
+
 void CVideoShaderManager::UpdateViewPort()
 {
   CRect viewPort;
@@ -293,11 +483,4 @@ void CVideoShaderManager::UpdateViewPort()
     m_viewPortSize = currentViewPortSize;
     CreateShaderTextures();
   }
-}
-
-bool CVideoShaderManager::SetShaderPreset(const std::string shaderPresetPath)
-{
-  m_videoShaderPath = shaderPresetPath;
-  m_bPresetNeedsUpdate = true;
-  return Update();
 }

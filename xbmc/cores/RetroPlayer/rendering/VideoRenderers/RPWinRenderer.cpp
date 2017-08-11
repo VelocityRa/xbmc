@@ -134,7 +134,7 @@ void CRPWinRenderer::RenderPS(CD3DTexture* target)
   if (firstShaderTexture)
     // Render shaders
     // todo: do we need the first arg?
-    m_shaderManager->Render(m_destRect, destPoints, realTarget);
+    m_shaderManager->Render(m_destRect, destPoints, *realTarget);
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();

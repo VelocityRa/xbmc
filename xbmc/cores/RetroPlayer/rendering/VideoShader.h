@@ -47,29 +47,25 @@ public:
   CVideoShader();
   virtual ~CVideoShader();
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
-    ID3D11SamplerState* sampler, std::vector<ShaderLUT> luts, float2 videoSize, float2 textureSize);
-  void Render(CRect sourceRect, CPoint dest[], CD3DTexture* texture, CD3DTexture *target);
-  void SetViewPort(const CRect& viewPort);
+    ID3D11SamplerState* sampler, std::vector<ShaderLUT> luts);
+  void Render(CRect sourceRect, CPoint dest[], CD3DTexture& texture, CD3DTexture& target);
+
+  // expose these from CWinShader
+  bool LockVertexBuffer(void **data) override;
+  bool UnlockVertexBuffer() override;
+  bool CreateVertexBuffer(unsigned vertCount, unsigned vertSize) override;
+  bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC *layout, unsigned numElements) override;
+  CD3DEffect& GetEffect();
 
 protected:
-  void UpdateInputBuffer();
-  void PrepareParameters(CD3DTexture* videoBuffer, CRect sourceRect, CPoint dest[]);
-  void SetShaderParameters(CD3DTexture* videoBuffer);
-  bool CreateBuffers();
+  void SetShaderParameters(CD3DTexture& videoBuffer);
 
 private:
-  struct CUSTOMVERTEX {
-    FLOAT x, y, z;
-    FLOAT tu, tv;   // Texture coordinates
-  };
   // Currently loaded shader's source code
   std::string m_shaderSource;
 
   // Currently loaded shader's relative path
   std::string m_shaderPath;
-
-  // Projection matrix
-  XMFLOAT4X4 m_MVP;
 
   // Array of shader parameters
   ShaderParameters m_shaderParameters;
