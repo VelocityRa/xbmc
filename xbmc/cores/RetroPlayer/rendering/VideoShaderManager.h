@@ -39,35 +39,87 @@ public:
 
   bool Update();
   bool SetShaderPreset(const std::string shaderPresetPath);
-  void SetVideoSize(unsigned videoWidth, unsigned videoHeight);
-  void Render(CRect sourceRect, CPoint dest[], CD3DTexture* target);
+  void Render(CRect sourceRect, CPoint dest[], CD3DTexture& target);
   CD3DTexture* GetFirstTexture();
 
+
+  void SetViewPort(const CRect& viewPort);
+
+protected:
+  void SetCommonShaderParams(CVideoShader& shader, CD3DTexture& texture);
+
 private:
+  struct cbInput
+  {
+    XMFLOAT2 video_size;
+    XMFLOAT2 texture_size;
+    XMFLOAT2 output_size;
+    float frame_count;
+    float frame_direction;
+  };
+  struct CUSTOMVERTEX {
+    FLOAT x, y, z;
+    FLOAT tu, tv;   // Texture coordinates
+  };
+
   bool CreateShaderTextures();
   ShaderParameters GetShaderParameters(video_shader_parameter_* parameters,
-    unsigned numParameters, const std::string& sourceStr);
+    unsigned numParameters, const std::string& sourceStr) const;
   bool CreateShaders();
   bool CreateSamplers();
+  bool CreateLayouts();
+  bool CreateBuffers();
   void UpdateViewPort();
   void DisposeVideoShaders();
 
+  void UpdateInputBuffer();
+  void PrepareParameters(CD3DTexture& videoBuffer, CRect sourceRect, CPoint dest[]);
+
   // Loaded preset
   std::unique_ptr<SHADERPRESET::CVideoShaderPreset> m_pPreset;
+
   // Relative path of the currently loaded shader preset
   std::string m_videoShaderPath;
+
   // VideoShaders for the shader passes
   std::vector<std::unique_ptr<CVideoShader>> m_pVideoShaders;
+
   // Intermediate textures used for pixel shader passes
   std::vector<std::unique_ptr<CD3DTexture>> m_pShaderTextures;
+
   // Was the shader preset changed during the last frame?
   bool m_bPresetNeedsUpdate;
+
   // Size of the viewport
   float2 m_viewPortSize;
+
+  // Size of the viewport
+  // cbInput's 'output_size'
+  float2 m_outputSize;
+
+  // The size of the texture itself
+  // Power-of-two sized.
+  // cbInput's 'texture_size'
+  float2 m_textureSize;
+
   // Size of the actual source video data (ie. 160x144 for the Game Boy)
+  // cbInput's 'video_size'
   float2 m_videoSize;
+
   // Point/nearest neighbor sampler
   ID3D11SamplerState* m_pSampNearest;
+
   // Linear sampler
   ID3D11SamplerState* m_pSampLinear;
+
+  // Projection matrix
+  XMFLOAT4X4 m_MVP;
+
+  // Holds the data bount to the input cbuffer (cbInput here)
+  ID3D11Buffer* m_pInputBuffer;
+
+  CRect m_sourceRect;
+  CPoint m_dest[4];
+
+  cbInput GetInputData();
 };
