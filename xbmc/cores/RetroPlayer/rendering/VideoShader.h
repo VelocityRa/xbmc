@@ -48,7 +48,7 @@ public:
   virtual ~CVideoShader();
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
     ID3D11SamplerState* sampler, std::vector<ShaderLUT> luts);
-  void Render(CRect sourceRect, CPoint dest[], CD3DTexture& texture, CD3DTexture& target);
+  void Render(CD3DTexture& texture, CD3DTexture& target);
 
   // expose these from CWinShader
   bool LockVertexBuffer(void **data) override;
@@ -58,7 +58,7 @@ public:
   CD3DEffect& GetEffect();
 
 protected:
-  void SetShaderParameters(CD3DTexture& videoBuffer);
+  void SetShaderParameters();
 
 private:
   // Currently loaded shader's source code

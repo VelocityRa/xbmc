@@ -71,14 +71,6 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& t
 
   PrepareParameters(target, sourceRect, dest);
 
-  // Set common parameters to all the shaders
-  for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size(); ++shaderIdx)
-  {
-    CVideoShader& shader = *m_pVideoShaders[shaderIdx];
-    CD3DTexture& texture = *m_pShaderTextures[shaderIdx];
-    SetCommonShaderParams(shader, texture);
-  }
-
   // At this point, the input video has been rendered to the first texture
   // Apply all passes except the last one (which needs to be applied to the backbuffer)
   for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
@@ -87,12 +79,18 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& t
     CD3DTexture& texture = *m_pShaderTextures[shaderIdx];
     CD3DTexture& nextTexture = *m_pShaderTextures[shaderIdx + 1];
 
-    shader.Render(sourceRect, dest, texture, nextTexture);
+    SetCommonShaderParams(shader, texture);
+    shader.Render(texture, nextTexture);
   }
-  // Apply last pass and write to target (backbuffer)
-  m_pVideoShaders.back()->Render(sourceRect, dest, *m_pShaderTextures.back(), target);
 
-  ++m_frameCount;
+  // Apply last pass and write to target (backbuffer)
+  CVideoShader& lastShader = *m_pVideoShaders.back();
+  CD3DTexture& lastTexture = *m_pShaderTextures.back();
+  SetCommonShaderParams(lastShader, lastTexture);
+  lastShader.Render(lastTexture, target);
+
+  if(!g_application.m_pPlayer->IsPaused())
+    ++m_frameCount;
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();

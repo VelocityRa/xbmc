@@ -61,15 +61,15 @@ bool CVideoShader::Create(const std::string& shaderSource, const std::string& sh
   return true;
 }
 
-void CVideoShader::Render(CRect sourceRect, CPoint dest[], CD3DTexture& texture, CD3DTexture& target)
+void CVideoShader::Render(CD3DTexture& texture, CD3DTexture& target)
 {
   // TODO: Doesn't work. Investigate calling this in Execute or binding the SRV first
   //g_Windowing.Get3D11Context()->PSSetSamplers(2, 1, &m_pSampler);
-  SetShaderParameters(texture);
+  SetShaderParameters();
   Execute({ &target }, 4);
 }
 
-void CVideoShader::SetShaderParameters(CD3DTexture& texture)
+void CVideoShader::SetShaderParameters()
 {
   for (const auto& param : m_shaderParameters)
     m_effect.SetFloatArray(param.first.c_str(), &param.second, 1);
