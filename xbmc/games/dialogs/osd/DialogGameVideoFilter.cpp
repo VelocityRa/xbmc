@@ -96,7 +96,6 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
     CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(16316)); // "Auto"
     items.Add(std::move(item));
   }
-  //items.Add(CFileItem("special://xbmcbinaddons/game.shader.presets/libretro/hlsl/", true));
 }
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)

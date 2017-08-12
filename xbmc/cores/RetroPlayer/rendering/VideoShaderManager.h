@@ -24,6 +24,7 @@
 #include <memory>
 #include "guilib/Texture.h"
 #include "cores/RetroPlayer/VideoShaderPreset.h"
+#include "VideoRenderers/BaseRenderer.h"
 
 using namespace SHADER;
 
@@ -34,14 +35,14 @@ struct video_shader_parameter_;
 class CVideoShaderManager
 {
 public:
-  CVideoShaderManager(unsigned videoWidth = 0, unsigned videoHeight = 0);
+  CVideoShaderManager() = delete;
+  CVideoShaderManager(CBaseRenderer& rendererRef, unsigned videoWidth = 0, unsigned videoHeight = 0);
   ~CVideoShaderManager();
 
   bool Update();
   bool SetShaderPreset(const std::string shaderPresetPath);
-  void Render(CRect sourceRect, CPoint dest[], CD3DTexture& target);
+  void RenderUpdate(CRect sourceRect, CPoint dest[], CD3DTexture& target);
   CD3DTexture* GetFirstTexture();
-
 
   void SetViewPort(const CRect& viewPort);
 
@@ -89,6 +90,9 @@ private:
   // Intermediate textures used for pixel shader passes
   std::vector<std::unique_ptr<CD3DTexture>> m_pShaderTextures;
 
+  // First texture (this won't be needed when we have RGB rendering
+  std::unique_ptr<CD3DTexture> firstTexture;
+
   // Was the shader preset changed during the last frame?
   bool m_bPresetNeedsUpdate;
 
@@ -123,8 +127,12 @@ private:
   // Holds the data bount to the input cbuffer (cbInput here)
   ID3D11Buffer* m_pInputBuffer;
 
+  float m_aspectRatio;
+
   CRect m_sourceRect;
   CPoint m_dest[4];
+
+  CBaseRenderer& m_rendererRef;
 
   cbInput GetInputData();
 
