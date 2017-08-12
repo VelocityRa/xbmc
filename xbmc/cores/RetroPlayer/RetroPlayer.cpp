@@ -585,8 +585,8 @@ const uint64_t* CRetroPlayer::GetTotalFrameCountPointer()
 void CRetroPlayer::OnSpeedChange(double newSpeed)
 {
   m_audio->Enable(newSpeed == 1.0);
-  m_input->SetSpeed(newSpeed);
-  m_processInfo->SetSpeed(static_cast<float>(newSpeed));
+  m_renderManager->SetSpeed(newSpeed);
+  m_processInfo->SetSpeed(newSpeed);
   if (newSpeed != 0.0)
     CloseOSD();
 }

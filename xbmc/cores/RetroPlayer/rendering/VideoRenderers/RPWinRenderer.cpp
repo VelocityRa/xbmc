@@ -49,6 +49,12 @@ CBaseRenderer* CRPWinRenderer::Create(CVideoBuffer *buffer)
   return new CRPWinRenderer();
 }
 
+void CRPWinRenderer::SetSpeed(double speed)
+{
+  if (m_shaderManager)
+    m_shaderManager->SetSpeed(speed);
+}
+
 void CRPWinRenderer::Render(DWORD flags, CD3DTexture* target)
 {
   if (!m_renderBuffers[m_iYV12RenderBuffer].loaded)

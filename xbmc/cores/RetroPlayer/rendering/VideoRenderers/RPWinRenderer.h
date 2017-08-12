@@ -58,6 +58,9 @@ public:
 //  bool WantsDoublePass() override;
 //  bool ConfigChanged(const VideoPicture& picture) override;
 
+  //! @todo Remove me
+  void SetSpeed(double speed) override;
+
 protected:
   void Render(DWORD flags, CD3DTexture* target) override;
 

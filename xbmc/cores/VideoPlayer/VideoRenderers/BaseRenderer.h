@@ -102,6 +102,9 @@ public:
 
   static void SettingOptionsRenderMethodsFiller(std::shared_ptr<const CSetting> setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
 
+  //! @todo Remove me
+  virtual void SetSpeed(double speed) { }
+
 protected:
   void CalcNormalRenderRect(float offsetX, float offsetY, float width, float height,
                             float inputFrameRatio, float zoomAmount, float verticalShift);
