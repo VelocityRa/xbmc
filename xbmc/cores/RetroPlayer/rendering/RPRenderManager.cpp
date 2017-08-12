@@ -173,6 +173,12 @@ void CRPRenderManager::FrameMove()
   ManageCaptures();
 }
 
+void CRPRenderManager::SetSpeed(double speed)
+{
+  if (m_pRenderer)
+    m_pRenderer->SetSpeed(speed);
+}
+
 // Implementation of IVideoSelectCallback
 
 bool CRPRenderManager::SupportsScalingMethod(ESCALINGMETHOD method)

@@ -38,6 +38,7 @@ namespace RETRO
     bool Configure();
     bool Configure(const VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers = 0);
     void FrameMove();
+    void SetSpeed(double speed);
 
     // Implementation of IVideoSelectCallback
     bool SupportsScalingMethod(ESCALINGMETHOD method) override;

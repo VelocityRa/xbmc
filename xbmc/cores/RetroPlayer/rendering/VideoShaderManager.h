@@ -45,6 +45,8 @@ public:
 
   void SetViewPort(const CRect& viewPort);
 
+  void SetSpeed(double speed) { m_speed = speed; }
+
 protected:
   void SetCommonShaderParams(CVideoShader& shader, CD3DTexture& texture);
 
@@ -125,4 +127,6 @@ private:
   CPoint m_dest[4];
 
   cbInput GetInputData();
+
+  double m_speed = 0.0;
 };

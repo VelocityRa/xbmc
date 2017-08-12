@@ -28,7 +28,6 @@
 #include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 
 #include <regex>
-#include "Application.h"
 #include "cores/RetroPlayer/RetroPlayer.h"
 
 using namespace SHADER;
@@ -89,7 +88,7 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& t
   SetCommonShaderParams(lastShader, lastTexture);
   lastShader.Render(lastTexture, target);
 
-  if(!g_application.m_pPlayer->IsPaused())
+  if (m_speed != 0.0)
     ++m_frameCount;
 
   // Restore our view port.
