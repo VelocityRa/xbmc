@@ -560,7 +560,7 @@ CD3DEffect::CD3DEffect()
   m_effect = nullptr;
   m_techniquie = nullptr;
   m_currentPass = nullptr;
-  m_includePaths.push_back("special://xbmc/system/shaders/");
+  m_includePaths.insert("special://xbmc/system/shaders/");
 }
 
 CD3DEffect::~CD3DEffect()
@@ -635,7 +635,7 @@ HRESULT CD3DEffect::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID
     return E_FAIL;
   }
 
-  m_includePaths.push_back(URIUtils::GetBasePath(fileName));
+  m_includePaths.insert(URIUtils::GetBasePath(fileName));
 
   int64_t length = includeFile.GetLength();
   void *pData = malloc(length);
@@ -739,7 +739,7 @@ bool CD3DEffect::SetScalar(LPCSTR handle, float value)
 
 void CD3DEffect::AddIncludePath(const std::string& includePath)
 {
-  m_includePaths.push_back(includePath);
+  m_includePaths.insert(includePath);
 }
 
 bool CD3DEffect::Begin(UINT *passes, DWORD flags)

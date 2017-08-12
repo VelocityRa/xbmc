@@ -24,6 +24,7 @@
 #include "utils/log.h"
 
 #include <string>
+#include "utils/URIUtils.h"
 
 using namespace KODI;
 using namespace SHADERPRESET;

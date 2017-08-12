@@ -29,14 +29,16 @@
 
 #include <regex>
 #include "cores/RetroPlayer/RetroPlayer.h"
+#include "settings/DisplaySettings.h"
 
 using namespace SHADER;
 
-CVideoShaderManager::CVideoShaderManager(unsigned videoWidth, unsigned videoHeight)
-  : m_bPresetNeedsUpdate(true)
+CVideoShaderManager::CVideoShaderManager(CBaseRenderer& rendererRef, unsigned videoWidth, unsigned videoHeight)
+  : m_videoSize(videoWidth, videoHeight)
+  , m_rendererRef(rendererRef)
+  , m_bPresetNeedsUpdate(true)
   , m_pSampNearest(nullptr)
   , m_pSampLinear(nullptr)
-  , m_videoSize(videoWidth, videoHeight)
   , m_textureSize()
   , m_pInputBuffer(nullptr)
   , m_frameCount(0)
@@ -49,6 +51,9 @@ CVideoShaderManager::CVideoShaderManager(unsigned videoWidth, unsigned videoHeig
 
   m_pVideoShaders.reserve(GFX_MAX_SHADERS);
   m_pShaderTextures.reserve(GFX_MAX_SHADERS);
+
+  // Save aspec ratio, we need to keep it consistent (even if it window size changes)
+  m_aspectRatio = CDisplaySettings::GetInstance().GetPixelRatio();
 }
 
 CVideoShaderManager::~CVideoShaderManager()
@@ -59,7 +64,7 @@ CVideoShaderManager::~CVideoShaderManager()
   g_Windowing.ApplyStateBlock();
 }
 
-void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& target)
+void CVideoShaderManager::RenderUpdate(CRect sourceRect, CPoint dest[], CD3DTexture& target)
 {
   // Update shaders/shader textures if required
   if (!Update())
@@ -70,26 +75,34 @@ void CVideoShaderManager::Render(CRect sourceRect, CPoint dest[], CD3DTexture& t
 
   PrepareParameters(target, sourceRect, dest);
 
-  // At this point, the input video has been rendered to the first texture
-  // Apply all passes except the last one (which needs to be applied to the backbuffer)
-  for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
+  // At this point, the input video has been rendered to the first texture ("firstTexture", not m_pShaderTextures[0])
+
+  // Apply first pass
+  CVideoShader& firstShader = *m_pVideoShaders.front();
+  CD3DTexture& secondTexture = m_pShaderTextures.size() > 1 ? *m_pShaderTextures[1] : *m_pShaderTextures[0];
+  CD3DTexture& firstShaderTexture = *m_pShaderTextures.front();
+  SetCommonShaderParams(firstShader, *firstTexture);
+  firstShader.Render(*firstTexture, firstShaderTexture);
+
+  // Apply all passes except the first and last one (which needs to be applied to the backbuffer)
+  for (unsigned shaderIdx = 1; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
   {
     CVideoShader& shader = *m_pVideoShaders[shaderIdx];
-    CD3DTexture& texture = *m_pShaderTextures[shaderIdx];
-    CD3DTexture& nextTexture = *m_pShaderTextures[shaderIdx + 1];
+    CD3DTexture& texture = *m_pShaderTextures[shaderIdx - 1];
+    CD3DTexture& nextTexture = *m_pShaderTextures[shaderIdx];
 
     SetCommonShaderParams(shader, texture);
     shader.Render(texture, nextTexture);
   }
 
-  // Apply last pass and write to target (backbuffer)
+  // Apply last pass and write to target (backbuffer) instead of the last texture (for now)
+  // TODO: "In the case that Shader 2 has set some scaling params, we need to first render to an FBO before stretching it to the back buffer."
   CVideoShader& lastShader = *m_pVideoShaders.back();
-  CD3DTexture& lastTexture = *m_pShaderTextures.back();
-  SetCommonShaderParams(lastShader, lastTexture);
-  lastShader.Render(lastTexture, target);
+  CD3DTexture& secTolastTexture = m_pShaderTextures.size() > 1 ? *m_pShaderTextures[m_pShaderTextures.size()-2] : *m_pShaderTextures.back();
+  SetCommonShaderParams(lastShader, secTolastTexture);
+  lastShader.Render(secTolastTexture, target);
 
-  if (m_speed != 0.0)
-    ++m_frameCount;
+  m_frameCount += static_cast<uint64_t>(m_speed);
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();
@@ -107,7 +120,8 @@ bool CVideoShaderManager::Update()
     DisposeVideoShaders();
 
     static const auto shaderFormat = "hlsl";  // "hlsl" or "glsl" - Windows uses HLSL shaders
-    auto presetPath = URIUtils::AddFileToFolder("libretro", shaderFormat, m_videoShaderPath);
+    // todo: Kodi probably shouldn't know about the add-on's relative path below
+    auto presetPath = URIUtils::AddFileToFolder("resources/libretro", shaderFormat, m_videoShaderPath);
 
     if(!m_pPreset)
       m_pPreset.reset(new SHADERPRESET::CVideoShaderPreset());
@@ -136,16 +150,16 @@ bool CVideoShaderManager::Update()
       return false;
     }
 
-    if (!CreateShaderTextures())
+    if (!CreateBuffers())
     {
-      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: a shader texture failed to init. Disabling video shaders.");
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize buffers. Disabling video shaders.");
       DisposeVideoShaders();
       return false;
     }
 
-    if (!CreateBuffers())
+    if (!CreateShaderTextures())
     {
-      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: failed to initialize buffers. Disabling video shaders.");
+      CLog::Log(LOGWARNING, __FUNCTION__": VideoShaders: a shader texture failed to init. Disabling video shaders.");
       DisposeVideoShaders();
       return false;
     }
@@ -175,18 +189,78 @@ bool CVideoShaderManager::CreateShaderTextures()
 {
   m_pShaderTextures.clear();
 
+  // TODO: Remove this when we have rgb rendering
+  firstTexture.reset(new CD3DTexture());
+  auto res = firstTexture->Create(m_outputSize.x, m_outputSize.y, 1,
+    D3D11_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM, nullptr, 0);
+  if (!res)
+  {
+    CLog::Log(LOGERROR, "Couldn't create a intial video shader texture");
+    return false;
+  }
+
   auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
-  auto backBuffer = g_Windowing.GetBackBuffer();
 
   for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
     auto& pass = m_pPreset->m_Pass[shaderIdx];
 
+    // resolve final texture res taking scale type into account
+    UINT textureX = m_outputSize.x;
+    UINT textureY = m_outputSize.y;
+    /*
+    switch (pass.fbo.type_x)
+    {
+    case RARCH_SCALE_ABSOLUTE_:
+      textureX = pass.fbo.abs_x;
+      break;
+    case RARCH_SCALE_VIEWPORT_:   // todo: handle changing of viewport/window size
+      textureX = m_outputSize.x;
+      break;
+    case RARCH_SCALE_INPUT_:
+    default:
+      textureX = m_videoSize.x;
+      break;
+    }
+    switch (pass.fbo.type_y)
+    {
+    case RARCH_SCALE_ABSOLUTE_:
+      textureY = pass.fbo.abs_y;
+      break;
+    case RARCH_SCALE_VIEWPORT_:
+      textureY = m_outputSize.y;
+      break;
+    case RARCH_SCALE_INPUT_:
+    default:
+      textureY = m_videoSize.y;
+      break;
+    }
+
+    // if the scale was unspecified
+    if (pass.fbo.scale_x == 0 && pass.fbo.scale_y == 0)
+    {
+      // if the last shader has the scale unspecified
+      if (shaderIdx == numPasses - 1)
+      {
+        // we're supposed to output at full (viewport) res
+        // TODO: Thus, we can also bypass rendering to an intermediate render target (on the last pass)
+        // TODO: Is this correct?
+        textureX = m_outputSize.x;
+        textureY = m_outputSize.y;
+      }
+    }
+    else
+    {
+      textureX *= pass.fbo.scale_x;
+      textureY *= pass.fbo.scale_y;
+    }
+    */
     // For reach pass, create the texture
     std::unique_ptr<CD3DTexture> texture(new CD3DTexture());
 
-    auto res = texture->Create(backBuffer->GetWidth(), backBuffer->GetHeight(), 1,
+    //auto res = texture->Create(scaledX, scaledY, 1,
+    auto result = texture->Create(textureX, textureY, 1,
       D3D11_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM, nullptr, 0);
-    if (!res)
+    if (!result)
     {
       CLog::Log(LOGERROR, "Couldn't create a texture for video shader %s.", pass.source.path);
       return false;
@@ -201,8 +275,8 @@ bool CVideoShaderManager::CreateShaders()
   auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
   auto numParameters = std::min(m_pPreset->m_NumParameters, static_cast<unsigned>(GFX_MAX_PARAMETERS));
   m_textureSize = GetOptimalTextureSize(m_videoSize);
-  // TODO: bad!
-  auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/libretro/hlsl", m_videoShaderPath);
+  // TODO: Bad! Should pass full paths at add-on side like we did with shader paths
+  auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/resources/libretro/hlsl", m_videoShaderPath);
 
   // todo: is this pass specific?
   std::vector<ShaderLUT> passLUTs;
@@ -351,6 +425,7 @@ void CVideoShaderManager::PrepareParameters(CD3DTexture& texture, CRect sourceRe
     || texture.GetWidth() != m_outputSize.x
     || texture.GetHeight() != m_outputSize.y)
   {
+    //CDisplaySettings::GetInstance().SetPixelRatio(1.0);
     m_sourceRect = sourceRect;
     for (size_t i = 0; i < 4; ++i)
       m_dest[i] = dest[i];
@@ -417,9 +492,10 @@ CVideoShaderManager::cbInput CVideoShaderManager::GetInputData()
 {
   cbInput input = {
     { m_videoSize },   // video_size
-    { m_textureSize }, // texture_size
+    // Shaders don't (and shouldn't) know about _actual_ texture size, becase D3D gives them correct texture coordinates
+    { m_videoSize },   // texture_size
     { m_outputSize },  // output_size
-    { m_frameCount },             // TODO: frame_count
+    { m_frameCount },  // frame_count
     { 1 }              // frame_direction
   };
   return input;
@@ -433,9 +509,10 @@ void CVideoShaderManager::DisposeVideoShaders()
 
 CD3DTexture* CVideoShaderManager::GetFirstTexture()
 {
-  if (!m_pShaderTextures.empty())
-    return m_pShaderTextures.front().get();
-  return nullptr;
+  return firstTexture.get();
+  //if (!m_pShaderTextures.empty())
+  //  return m_pShaderTextures.front().get();
+  // return nullptr;
 }
 
 bool CVideoShaderManager::SetShaderPreset(const std::string shaderPresetPath)
@@ -482,6 +559,10 @@ void CVideoShaderManager::UpdateViewPort()
   if (currentViewPortSize != m_viewPortSize)
   {
     m_viewPortSize = currentViewPortSize;
-    CreateShaderTextures();
+    //CreateShaderTextures();
+    // Just re-make everything. Else we get resizing bugs.
+    // Could probably refine that to only rebuild certain things, for a tiny bit of perf. (only when resizing)
+    m_bPresetNeedsUpdate = true;
+    Update();
   }
 }

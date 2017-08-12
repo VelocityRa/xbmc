@@ -29,9 +29,10 @@ CRPWinRenderer::CRPWinRenderer()
   , m_shadersNeedUpdate(true)
   , m_isShaderManagerReady(false)
 {
-  //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
+  //SetShaderPreset("borders/gameboy-player/gameboy-player+crt-easymode.cgp");
   //SetShaderPreset("reshade/lut.cgp");
-  SetShaderPreset("borders/1080p/color-grid.cgp");
+  SetShaderPreset("borders/color-grid.cgp");
+  SetShaderPreset("borders/mudlord.cgp");
   //SetShaderPreset("cgp/gameboy-screen-grid.cgp");
   //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
   //SetShaderPreset("anti-aliasing/reverse-aa.cgp");
@@ -140,7 +141,7 @@ void CRPWinRenderer::RenderPS(CD3DTexture* target)
   if (firstShaderTexture)
     // Render shaders
     // todo: do we need the first arg?
-    m_shaderManager->Render(m_destRect, destPoints, *realTarget);
+    m_shaderManager->RenderUpdate(m_destRect, destPoints, *realTarget);
 
   // Restore our view port.
   g_Windowing.RestoreViewPort();
@@ -159,10 +160,12 @@ void CRPWinRenderer::SetShaderPreset(const std::string presetPath)
     m_shaderManager->SetShaderPreset(m_videoShaderPath);
   }
 }
+
 const std::string& CRPWinRenderer::GetShaderPreset()
 {
    return m_videoShaderPath;
 }
+
 void CRPWinRenderer::UpdateVideoShaders()
 {
   if (!m_shaderManager && m_shadersNeedUpdate)
@@ -177,7 +180,7 @@ void CRPWinRenderer::UpdateVideoShaders()
       // We need to construct this here because m_sourceRect isn't valid on init/pre-init
       // TODO: This needs more investigation. Use m_isShaderManagerReady for now to avoid
       // re-constructing when another preset is set
-      m_shaderManager.reset(new CVideoShaderManager(sourceWidth, sourceHeight));
+      m_shaderManager.reset(new CVideoShaderManager(*this, sourceWidth, sourceHeight));
       m_isShaderManagerReady = true;
     }
     SetShaderPreset(m_videoShaderPath);
