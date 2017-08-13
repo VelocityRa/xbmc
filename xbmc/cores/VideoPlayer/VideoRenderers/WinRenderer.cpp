@@ -196,15 +196,20 @@ void CWinRenderer::SelectRenderMethod()
     // drop through to pixel shader
     case RENDER_METHOD_D3D_PS:
     {
-      CTestShader shader;
-      if (shader.Create())
+      if (m_format != AV_PIX_FMT_0RGB32 &&
+          m_format != AV_PIX_FMT_RGB565 &&
+          m_format != AV_PIX_FMT_RGB555)
       {
-        m_renderMethod = RENDER_PS;
-        break;
+        CTestShader shader;
+        if (shader.Create())
+        {
+          m_renderMethod = RENDER_PS;
+          break;
+        }
+        // this is something out of the ordinary
+        CLog::Log(LOGNOTICE, "%s: unable to load test shader - D3D installation is most likely incomplete, falling back to SW mode.", __FUNCTION__);
+        CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, "DirectX", g_localizeStrings.Get(2101));
       }
-      // this is something out of the ordinary
-      CLog::Log(LOGNOTICE, "%s: unable to load test shader - D3D installation is most likely incomplete, falling back to SW mode.", __FUNCTION__);
-      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, "DirectX", g_localizeStrings.Get(2101));
     }
     // drop through to software
     case RENDER_METHOD_SOFTWARE:
@@ -504,6 +509,10 @@ EBufferFormat CWinRenderer::SelectBufferFormat(AVPixelFormat format, const Rende
       return BUFFER_FMT_YUV420P16;
     case AV_PIX_FMT_UYVY422:
       return BUFFER_FMT_UYVY422;
+    case AV_PIX_FMT_0RGB32:
+    case AV_PIX_FMT_RGB565:
+    case AV_PIX_FMT_RGB555:
+      return BUFFER_FMT_RGB;
     default:
       return BUFFER_FMT_NONE;
     }
@@ -1116,7 +1125,10 @@ CRenderInfo CWinRenderer::GetRenderInfo()
     AV_PIX_FMT_P016,
     AV_PIX_FMT_YUV420P,
     AV_PIX_FMT_YUV420P10,
-    AV_PIX_FMT_YUV420P16
+    AV_PIX_FMT_YUV420P16,
+    AV_PIX_FMT_0RGB32,
+    AV_PIX_FMT_RGB565,
+    AV_PIX_FMT_RGB555,
   };
   info.max_buffer_size = NUM_BUFFERS;
   if (m_renderMethod == RENDER_DXVA && m_processor)
