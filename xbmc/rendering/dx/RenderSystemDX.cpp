@@ -268,7 +268,7 @@ void CRenderSystemDX::PresentRender(bool rendered, bool videoLayer)
   if (!m_bRenderCreated)
     return;
 
-  if ( rendered
+  if ( rendered 
     && ( m_stereoMode == RENDER_STEREO_MODE_INTERLACED
       || m_stereoMode == RENDER_STEREO_MODE_CHECKERBOARD))
   {
@@ -277,7 +277,7 @@ void CRenderSystemDX::PresentRender(bool rendered, bool videoLayer)
     // all views prepared, let's merge them before present
     ID3D11RenderTargetView *const views[1] = { m_deviceResources->GetBackBufferRTV() };
     m_pContext->OMSetRenderTargets(1, views, m_deviceResources->GetDSV());
-
+    
     auto outputSize = m_deviceResources->GetOutputSize();
     CRect destRect = { 0.0f, 0.0f, float(outputSize.Width), float(outputSize.Height) };
 
@@ -432,7 +432,7 @@ void CRenderSystemDX::SetCameraPosition(const CPoint &camera, int screenWidth, i
   // world view.  Until this is moved onto the GPU (via a vertex shader for instance), we set it to the identity here.
   m_pGUIShader->SetWorld(XMMatrixIdentity());
 
-  // Initialize the view matrix camera view.
+  // Initialize the view matrix camera view.  
   // Multiply the Y coord by -1 then translate so that everything is relative to the camera position.
   XMMATRIX flipY = XMMatrixScaling(1.0, -1.0f, 1.0f);
   XMMATRIX translate = XMMatrixTranslation(-(w + offset.x - stereoFactor), -(h + offset.y), 2 * h);
@@ -827,6 +827,5 @@ void CRenderSystemDX::CheckDeviceCaps()
   {
     m_shaderFormats.push_back(AV_PIX_FMT_YUYV422);
     m_shaderFormats.push_back(AV_PIX_FMT_UYVY422);
-    m_shaderFormats.push_back(AV_PIX_FMT_BGRA);
   }
 }
