@@ -196,15 +196,20 @@ void CWinRenderer::SelectRenderMethod()
     // drop through to pixel shader
     case RENDER_METHOD_D3D_PS:
     {
-      CTestShader shader;
-      if (shader.Create())
+      if (m_format != AV_PIX_FMT_0RGB32 &&
+          m_format != AV_PIX_FMT_RGB565 &&
+          m_format != AV_PIX_FMT_RGB555)
       {
-        m_renderMethod = RENDER_PS;
-        break;
+        CTestShader shader;
+        if (shader.Create())
+        {
+          m_renderMethod = RENDER_PS;
+          break;
+        }
+        // this is something out of the ordinary
+        CLog::Log(LOGNOTICE, "%s: unable to load test shader - D3D installation is most likely incomplete, falling back to SW mode.", __FUNCTION__);
+        CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, "DirectX", g_localizeStrings.Get(2101));
       }
-      // this is something out of the ordinary
-      CLog::Log(LOGNOTICE, "%s: unable to load test shader - D3D installation is most likely incomplete, falling back to SW mode.", __FUNCTION__);
-      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, "DirectX", g_localizeStrings.Get(2101));
     }
     // drop through to software
     case RENDER_METHOD_SOFTWARE:
