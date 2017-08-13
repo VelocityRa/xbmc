@@ -20,8 +20,6 @@
 
 #include "RetroPlayerVideo.h"
 #include "RetroPlayerDefines.h"
-#include "PixelConverter.h"
-#include "PixelConverterRBP.h"
 #include "cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodec.h"
 #include "cores/VideoPlayer/DVDCodecs/DVDCodecUtils.h"
 #include "cores/VideoPlayer/DVDCodecs/DVDFactoryCodec.h"
@@ -33,9 +31,142 @@
 #include "utils/log.h"
 
 #include <atomic> //! @todo
+#include <cstring>
 
 using namespace KODI;
 using namespace RETRO;
+
+//------------------------------------------------------------------------------
+// Video Buffers
+//------------------------------------------------------------------------------
+
+namespace KODI
+{
+namespace RETRO
+{
+
+class CPixelBufferRGB : public CVideoBuffer
+{
+public:
+  CPixelBufferRGB(IVideoBufferPool &pool, int id);
+  ~CPixelBufferRGB() override;
+  virtual void GetPlanes(uint8_t*(&planes)[YuvImage::MAX_PLANES]) override;
+  virtual void GetStrides(int(&strides)[YuvImage::MAX_PLANES]) override;
+
+  void SetRef(uint8_t *frame, size_t size, unsigned int height, AVPixelFormat format);
+  void Unref();
+
+protected:
+  uint8_t *m_pFrame = nullptr;
+  size_t m_stride = 0;
+};
+
+CPixelBufferRGB::CPixelBufferRGB(IVideoBufferPool &pool, int id) :
+  CVideoBuffer(id)
+{
+}
+
+CPixelBufferRGB::~CPixelBufferRGB()
+{
+  delete[] m_pFrame;
+}
+
+void CPixelBufferRGB::GetPlanes(uint8_t*(&planes)[YuvImage::MAX_PLANES])
+{
+  planes[0] = m_pFrame;
+}
+
+void CPixelBufferRGB::GetStrides(int(&strides)[YuvImage::MAX_PLANES])
+{
+  strides[0] = m_stride;
+}
+
+void CPixelBufferRGB::SetRef(uint8_t *frame, size_t size, unsigned int height, AVPixelFormat format)
+{
+  delete[] m_pFrame;
+
+  m_pFrame = frame;
+  m_stride = size / height;
+  m_pixFormat = format;
+}
+
+void CPixelBufferRGB::Unref()
+{
+  delete[] m_pFrame;
+  m_pFrame = nullptr;
+}
+
+//------------------------------------------------------------------------------
+
+class CPixelBufferPoolRGB : public IVideoBufferPool
+{
+public:
+  ~CPixelBufferPoolRGB() override;
+  virtual void Return(int id) override;
+  virtual CVideoBuffer* Get() override;
+
+protected:
+  CCriticalSection m_critSection;
+  std::vector<CPixelBufferRGB*> m_all;
+  std::deque<int> m_used;
+  std::deque<int> m_free;
+};
+
+CPixelBufferPoolRGB::~CPixelBufferPoolRGB()
+{
+  for (auto buf : m_all)
+    delete buf;
+}
+
+CVideoBuffer* CPixelBufferPoolRGB::Get()
+{
+  CSingleLock lock(m_critSection);
+
+  CPixelBufferRGB *buf = nullptr;
+  if (!m_free.empty())
+  {
+    int idx = m_free.front();
+    m_free.pop_front();
+    m_used.push_back(idx);
+    buf = m_all[idx];
+  }
+  else
+  {
+    int id = m_all.size();
+    buf = new CPixelBufferRGB(*this, id);
+    m_all.push_back(buf);
+    m_used.push_back(id);
+  }
+
+  buf->Acquire(GetPtr());
+  return buf;
+}
+
+void CPixelBufferPoolRGB::Return(int id)
+{
+  CSingleLock lock(m_critSection);
+
+  m_all[id]->Unref();
+  auto it = m_used.begin();
+  while (it != m_used.end())
+  {
+    if (*it == id)
+    {
+      m_used.erase(it);
+      break;
+    }
+    else
+      ++it;
+  }
+  m_free.push_back(id);
+}
+
+} // namespace RETRO
+} // namespace KODI
+
+//------------------------------------------------------------------------------
+// main class
+//------------------------------------------------------------------------------
 
 CRetroPlayerVideo::CRetroPlayerVideo(CRenderManager& renderManager, CProcessInfo& processInfo, CDVDClock &clock) :
   //CThread("RetroPlayerVideo"),
@@ -45,7 +176,8 @@ CRetroPlayerVideo::CRetroPlayerVideo(CRenderManager& renderManager, CProcessInfo
   m_framerate(0.0),
   m_orientation(0),
   m_bConfigured(false),
-  m_droppedFrames(0)
+  m_droppedFrames(0),
+  m_pixelBufferPoolRGB(std::make_shared<CPixelBufferPoolRGB>())
 {
   m_renderManager.PreInit();
 }
@@ -60,29 +192,19 @@ bool CRetroPlayerVideo::OpenPixelStream(AVPixelFormat pixfmt, unsigned int width
 {
   CLog::Log(LOGINFO, "RetroPlayerVideo: Creating video stream with pixel format: %i, %dx%d", pixfmt, width, height);
 
+  m_format = pixfmt;
+  m_width = width;
+  m_height = height;
   m_framerate = framerate;
   m_orientation = orientationDeg;
   m_bConfigured = false;
   m_droppedFrames = 0;
 
-#ifdef TARGET_RASPBERRY_PI
-  m_pixelConverter.reset(new CPixelConverterRBP);
-#else
-  m_pixelConverter.reset(new CPixelConverter);
-#endif
-
-  if (m_pixelConverter->Open(pixfmt, AV_PIX_FMT_YUV420P, width, height))
-  {
-    //! @todo
-    //m_processInfo.SetVideoPixelFormat(CDVDVideoCodecFFmpeg::GetPixelFormatName(pixfmt));
-    m_processInfo.SetVideoDimensions(width, height);
-    m_processInfo.SetVideoFps(static_cast<float>(framerate));
-    return true;
-  }
-
-  m_pixelConverter.reset();
-
-  return false;
+  //! @todo
+  //m_processInfo.SetVideoPixelFormat(CDVDVideoCodecFFmpeg::GetPixelFormatName(pixfmt));
+  m_processInfo.SetVideoDimensions(width, height);
+  m_processInfo.SetVideoFps(static_cast<float>(framerate));
+  return true;
 }
 
 bool CRetroPlayerVideo::OpenEncodedStream(AVCodecID codec)
@@ -120,9 +242,6 @@ void CRetroPlayerVideo::AddData(const uint8_t* data, unsigned int size)
 
   if (GetPicture(data, size, picture))
   {
-    picture.pts = m_clock.GetClock(); // Show immediately
-    picture.iDuration = DVD_SEC_TO_TIME(1.0 / m_framerate);
-
     if (!Configure(picture))
     {
       CLog::Log(LOGERROR, "RetroPlayerVideo: Failed to configure renderer");
@@ -138,7 +257,6 @@ void CRetroPlayerVideo::AddData(const uint8_t* data, unsigned int size)
 void CRetroPlayerVideo::CloseStream()
 {
   m_renderManager.Flush(true);
-  m_pixelConverter.reset();
   m_pVideoCodec.reset();
 }
 
@@ -169,7 +287,7 @@ bool CRetroPlayerVideo::GetPicture(const uint8_t* data, unsigned int size, Video
 {
   bool bHasPicture = false;
 
-  if (m_pixelConverter)
+  if (data != nullptr && size != 0)
   {
     int lateframes;
     double renderPts;
@@ -181,27 +299,28 @@ bool CRetroPlayerVideo::GetPicture(const uint8_t* data, unsigned int size, Video
 
     if (!bDropped)
     {
-      if (m_pixelConverter->Decode(data, size))
-      {
-        m_pixelConverter->GetPicture(picture);
-        bHasPicture = true;
-      }
-    }
-  }
-  else if (m_pVideoCodec)
-  {
-    DemuxPacket packet(const_cast<uint8_t*>(data), size, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
-    if (m_pVideoCodec->AddData(packet))
-    {
-      CDVDVideoCodec::VCReturn ret = m_pVideoCodec->GetPicture(&picture);
-      if (ret == CDVDVideoCodec::VC_PICTURE)
-      {
-        // Drop frame if requested by the decoder
-        const bool bDropped = (picture.iFlags & DVP_FLAG_DROPPED) != 0;
+      // Picture properties
+      picture.pts = m_clock.GetClock(); // Show immediately
+      picture.dts = DVD_NOPTS_VALUE;
+      picture.iFlags = 0;
+      picture.iDuration = DVD_SEC_TO_TIME(1.0 / m_framerate);
+      picture.color_matrix = 4; // CONF_FLAGS_YUVCOEF_BT601
+      picture.color_range = 0; // *not* CONF_FLAGS_YUV_FULLRANGE
+      picture.iWidth = m_width;
+      picture.iHeight = m_height;
+      picture.iDisplayWidth = m_width; //! @todo: Update if aspect ratio changes
+      picture.iDisplayHeight = m_height;
 
-        if (!bDropped)
-          bHasPicture = true;
-      }
+      // Video buffer
+      uint8_t *dataCopy = nullptr;
+      AllocateRgbBuffer(&dataCopy, size);
+      std::memcpy(dataCopy, data, size);
+
+      CPixelBufferRGB *buffer = static_cast<CPixelBufferRGB*>(m_pixelBufferPoolRGB->Get());
+      buffer->SetRef(dataCopy, size, m_height, m_format);
+      picture.videoBuffer = buffer;
+
+      bHasPicture = true;
     }
   }
 
@@ -217,4 +336,9 @@ void CRetroPlayerVideo::SendPicture(VideoPicture& picture)
     // Video device might not be done yet, drop the frame
     m_droppedFrames++;
   }
+}
+
+void CRetroPlayerVideo::AllocateRgbBuffer(uint8_t **pData, size_t size) const
+{
+  *pData = new uint8_t[size];
 }

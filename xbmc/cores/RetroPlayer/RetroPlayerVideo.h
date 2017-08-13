@@ -22,11 +22,13 @@
 #include "games/addons/GameClientCallbacks.h"
 //#include "threads/Thread.h"
 
+#include "libavutil/pixfmt.h"
+
 #include <memory>
+#include <stdint.h>
 
 class CDVDClock;
 class CDVDVideoCodec;
-class CPixelConverter;
 class CProcessInfo;
 class CRenderManager;
 struct VideoPicture;
@@ -35,6 +37,8 @@ namespace KODI
 {
 namespace RETRO
 {
+  class CPixelBufferPoolRGB;
+
   class CRetroPlayerVideo : public GAME::IGameVideoCallback
                             //protected CThread
   {
@@ -60,17 +64,22 @@ namespace RETRO
     bool GetPicture(const uint8_t* data, unsigned int size, VideoPicture& picture);
     void SendPicture(VideoPicture& picture);
 
+    void AllocateRgbBuffer(uint8_t **pData, size_t size) const;
+
     // Construction parameters
     CRenderManager& m_renderManager;
     CProcessInfo&   m_processInfo;
     CDVDClock       &m_clock;
 
     // Stream properties
+    AVPixelFormat m_format = AV_PIX_FMT_NONE;
+    unsigned int m_width = 0;
+    unsigned int m_height = 0;
     double       m_framerate;
     unsigned int m_orientation; // Degrees counter-clockwise
     bool         m_bConfigured; // Need first picture to configure the render manager
     unsigned int m_droppedFrames;
-    std::unique_ptr<CPixelConverter> m_pixelConverter;
+    std::shared_ptr<CPixelBufferPoolRGB> m_pixelBufferPoolRGB;
     std::unique_ptr<CDVDVideoCodec>  m_pVideoCodec;
   };
 }
