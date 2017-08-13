@@ -26,7 +26,6 @@ struct VideoPicture;
 enum EBufferFormat 
 {
   BUFFER_FMT_NONE = 0,
-  BUFFER_FMT_RGB,
   BUFFER_FMT_YUV420P,
   BUFFER_FMT_YUV420P10,
   BUFFER_FMT_YUV420P16,

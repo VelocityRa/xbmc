@@ -504,8 +504,6 @@ EBufferFormat CWinRenderer::SelectBufferFormat(AVPixelFormat format, const Rende
       return BUFFER_FMT_YUV420P16;
     case AV_PIX_FMT_UYVY422:
       return BUFFER_FMT_UYVY422;
-    case AV_PIX_FMT_BGRA:
-      return BUFFER_FMT_RGB;
     default:
       return BUFFER_FMT_NONE;
     }
@@ -1118,8 +1116,7 @@ CRenderInfo CWinRenderer::GetRenderInfo()
     AV_PIX_FMT_P016,
     AV_PIX_FMT_YUV420P,
     AV_PIX_FMT_YUV420P10,
-    AV_PIX_FMT_YUV420P16,
-    AV_PIX_FMT_BGRA,
+    AV_PIX_FMT_YUV420P16
   };
   info.max_buffer_size = NUM_BUFFERS;
   if (m_renderMethod == RENDER_DXVA && m_processor)
