@@ -34,6 +34,7 @@
 #define PLANE_V 2
 #define PLANE_UV 1
 #define PLANE_D3D11 0
+#define PLANE_RGB 0
 
 CRenderBuffer::CRenderBuffer()
   : loaded(false)
@@ -267,6 +268,14 @@ bool CRenderBuffer::CreateBuffer(EBufferFormat fmt, unsigned width, unsigned hei
     m_activePlanes = 1;
     break;
   }
+  case BUFFER_FMT_RGB:
+  {
+    if (!m_textures[PLANE_RGB].Create(m_widthTex, m_heightTex, 1, usage, DXGI_FORMAT_B8G8R8A8_UNORM))
+      return false;
+
+    m_activePlanes = 1;
+    break;
+  }
   default:
     ;
   }
@@ -305,6 +314,7 @@ bool CRenderBuffer::UploadBuffer()
   case BUFFER_FMT_YUV420P16:
   case BUFFER_FMT_UYVY422:
   case BUFFER_FMT_YUYV422:
+  case BUFFER_FMT_RGB:
   {
     ret = CopyBuffer();
     break;
@@ -343,6 +353,7 @@ ID3D11View* CRenderBuffer::GetView(unsigned idx)
   case BUFFER_FMT_YUV420P16:
   case BUFFER_FMT_UYVY422:
   case BUFFER_FMT_YUYV422:
+  case BUFFER_FMT_RGB:
   default:
   {
     return m_textures[idx].GetShaderResource();
@@ -603,7 +614,10 @@ bool CRenderBuffer::CopyBuffer()
   if ( buffer_format == AV_PIX_FMT_YUV420P
     || buffer_format == AV_PIX_FMT_YUV420P10
     || buffer_format == AV_PIX_FMT_YUV420P16
-    || buffer_format == AV_PIX_FMT_NV12 )
+    || buffer_format == AV_PIX_FMT_NV12
+    || buffer_format == AV_PIX_FMT_0RGB32
+    || buffer_format == AV_PIX_FMT_RGB565
+    || buffer_format == AV_PIX_FMT_RGB555 )
   {
     uint8_t* bufData[3];
     int srcLines[3];
