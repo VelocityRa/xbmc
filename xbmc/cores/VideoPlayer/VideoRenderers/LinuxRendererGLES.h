@@ -41,6 +41,8 @@ class CBaseTexture;
 namespace Shaders { class BaseYUV2RGBShader; }
 namespace Shaders { class BaseVideoFilterShader; }
 
+struct SwsContext;
+
 struct DRAWRECT
 {
   float left;
@@ -70,6 +72,7 @@ enum RenderMethod
   RENDER_POT    = 0x010,
   RENDER_OMXEGL = 0x040,
   RENDER_CVREF  = 0x080,
+  RENDER_RGB    = 0x100,
   RENDER_MEDIACODEC = 0x400,
   RENDER_MEDIACODECSURFACE = 0x800,
   RENDER_IMXMAP = 0x1000
@@ -158,11 +161,16 @@ protected:
   void DeleteNV12Texture(int index);
   bool CreateNV12Texture(int index);
 
+  bool UploadRGBTexture(int index);
+  void DeleteRGBTexture(int index);
+  bool CreateRGBTexture(int index);
+
   void CalculateTextureSourceRects(int source, int num_planes);
 
   // renderers
   void RenderMultiPass(int index, int field);     // multi pass glsl renderer
   void RenderSinglePass(int index, int field);    // single pass glsl renderer
+  void RenderRGB(int index, int field);           // RGB renderer
 
   // hooks for HwDec Renderered
   virtual bool LoadShadersHook() { return false; };
@@ -231,6 +239,8 @@ protected:
 
   // clear colour for "black" bars
   float m_clearColour;
+
+  struct SwsContext *m_sw_scale_ctx = nullptr;
 };
 
 

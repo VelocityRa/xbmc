@@ -46,6 +46,10 @@
 #include "RenderFactory.h"
 #include "cores/IPlayer.h"
 
+extern "C" {
+#include "libswscale/swscale.h"
+}
+
 #if defined(__ARM_NEON__) && !defined(__LP64__)
 #include "yuv2rgb.neon.h"
 #include "utils/CPUInfo.h"
@@ -513,12 +517,16 @@ void CLinuxRendererGLES::LoadShaders(int field)
 
     ReleaseShaders();
 
+    const bool bIsRgb = (m_format == AV_PIX_FMT_0RGB32 ||
+                         m_format == AV_PIX_FMT_RGB565 ||
+                         m_format == AV_PIX_FMT_RGB555);
+
     switch(requestedMethod)
     {
       case RENDER_METHOD_AUTO:
       case RENDER_METHOD_GLSL:
         // Try GLSL shaders if supported and user requested auto or GLSL.
-        if (glCreateProgram())
+        if (!bIsRgb && glCreateProgram())
         {
           // create regular scan shader
           CLog::Log(LOGNOTICE, "GL: Selecting Single Pass YUV 2 RGB shader");
@@ -543,8 +551,16 @@ void CLinuxRendererGLES::LoadShaders(int field)
         }
       default:
         {
-          m_renderMethod = -1 ;
-          CLog::Log(LOGERROR, "GL: render method not supported");
+          if (bIsRgb)
+          {
+            m_renderMethod = RENDER_RGB;
+            CLog::Log(LOGNOTICE, "GL: Using custom render for RGB");
+          }
+          else
+          {
+            m_renderMethod = -1 ;
+            CLog::Log(LOGERROR, "GL: render method not supported");
+          }
         }
     }
   }
@@ -598,6 +614,12 @@ void CLinuxRendererGLES::UnInit()
   m_fbo.Cleanup();
   m_bValidated = false;
   m_bConfigured = false;
+
+  if (m_sw_scale_ctx)
+  {
+    sws_freeContext(m_sw_scale_ctx);
+    m_sw_scale_ctx = nullptr;
+  }
 }
 
 inline void CLinuxRendererGLES::ReorderDrawPoints()
@@ -609,6 +631,12 @@ bool CLinuxRendererGLES::CreateTexture(int index)
 {
   if (m_format == AV_PIX_FMT_NV12)
     return CreateNV12Texture(index);
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+  {
+    CreateRGBTexture(index);
+  }
   else
     return CreateYV12Texture(index);
 }
@@ -619,6 +647,12 @@ void CLinuxRendererGLES::DeleteTexture(int index)
 
   if (m_format == AV_PIX_FMT_NV12)
     DeleteNV12Texture(index);
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+  {
+    DeleteRGBTexture(index);
+  }
   else
     DeleteYV12Texture(index);
 }
@@ -634,15 +668,37 @@ bool CLinuxRendererGLES::UploadTexture(int index)
   bool ret = false;
 
   YuvImage &dst = m_buffers[index].image;
-  m_buffers[index].videoBuffer->GetPlanes(dst.plane);
-  m_buffers[index].videoBuffer->GetStrides(dst.stride);
 
   if (m_format == AV_PIX_FMT_NV12)
   {
+    m_buffers[index].videoBuffer->GetPlanes(dst.plane);
+    m_buffers[index].videoBuffer->GetStrides(dst.stride);
+
     ret = UploadNV12Texture(index);
+  }
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+  {
+    YuvImage src;
+
+    m_buffers[index].videoBuffer->GetPlanes(src.plane);
+    m_buffers[index].videoBuffer->GetStrides(src.stride);
+
+    m_sw_scale_ctx = sws_getCachedContext(m_sw_scale_ctx,
+                                          m_sourceWidth, m_sourceHeight, m_buffers[index].videoBuffer->GetFormat(),
+                                          m_sourceWidth, m_sourceHeight, AV_PIX_FMT_BGRA,
+                                          SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
+
+    sws_scale(m_sw_scale_ctx, src.plane, src.stride, 0, m_sourceHeight, dst.plane, dst.stride);
+
+    ret = UploadRGBTexture(index);
   }
   else
   {
+    m_buffers[index].videoBuffer->GetPlanes(dst.plane);
+    m_buffers[index].videoBuffer->GetStrides(dst.stride);
+
     // default to YV12 texture handlers
     ret = UploadYV12Texture(index);
   }
@@ -690,6 +746,12 @@ void CLinuxRendererGLES::Render(DWORD flags, int index)
     default:
       break;
     }
+  }
+  else if (m_renderMethod & RENDER_RGB)
+  {
+    UpdateVideoFilter();
+    RenderRGB(index, m_currentField);
+    VerifyGLState();
   }
   
   AfterRenderHook(index);
@@ -808,6 +870,75 @@ void CLinuxRendererGLES::RenderMultiPass(int index, int field)
   //! @todo Multipass rendering does not currently work! FIX!
   CLog::Log(LOGERROR, "GLES: MULTIPASS rendering was called! But it doesnt work!!!");
   return;
+}
+
+void CLinuxRendererGLES::RenderRGB(int index, int field)
+{
+  YUVPLANE &plane = m_buffers[index].fields[FIELD_FULL][0];
+
+  glEnable(m_textureTarget);
+  glActiveTextureARB(GL_TEXTURE0);
+
+  glBindTexture(m_textureTarget, plane.id);
+
+  // Try some clamping or wrapping
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  if (m_pVideoFilterShader)
+  {
+    GLint filter;
+    if (!m_pVideoFilterShader->GetTextureFilter(filter))
+      filter = m_scalingMethod == VS_SCALINGMETHOD_NEAREST ? GL_NEAREST : GL_LINEAR;
+
+    glTexParameteri(m_textureTarget, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(m_textureTarget, GL_TEXTURE_MIN_FILTER, filter);
+    m_pVideoFilterShader->SetSourceTexture(0);
+    m_pVideoFilterShader->SetWidth(m_sourceWidth);
+    m_pVideoFilterShader->SetHeight(m_sourceHeight);
+
+    //disable non-linear stretch when a dvd menu is shown, parts of the menu are rendered through the overlay renderer
+    //having non-linear stretch on breaks the alignment
+    if (g_application.m_pPlayer->IsInMenu())
+      m_pVideoFilterShader->SetNonLinStretch(1.0);
+    else
+      m_pVideoFilterShader->SetNonLinStretch(pow(CDisplaySettings::GetInstance().GetPixelRatio(), g_advancedSettings.m_videoNonLinStretchRatio));
+
+    m_pVideoFilterShader->Enable();
+  }
+  else
+  {
+    GLint filter = m_scalingMethod == VS_SCALINGMETHOD_NEAREST ? GL_NEAREST : GL_LINEAR;
+    glTexParameteri(m_textureTarget, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(m_textureTarget, GL_TEXTURE_MIN_FILTER, filter);
+  }
+
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  VerifyGLState();
+
+  glBegin(GL_QUADS);
+  if (m_textureTarget == GL_TEXTURE_2D)
+  {
+    glTexCoord2f(plane.rect.x1, plane.rect.y1);  glVertex2f(m_rotatedDestCoords[0].x, m_rotatedDestCoords[0].y);
+    glTexCoord2f(plane.rect.x2, plane.rect.y1);  glVertex2f(m_rotatedDestCoords[1].x, m_rotatedDestCoords[1].y);
+    glTexCoord2f(plane.rect.x2, plane.rect.y2);  glVertex2f(m_rotatedDestCoords[2].x, m_rotatedDestCoords[2].y);
+    glTexCoord2f(plane.rect.x1, plane.rect.y2);  glVertex2f(m_rotatedDestCoords[3].x, m_rotatedDestCoords[3].y);
+  }
+  else
+  {
+    glTexCoord2f(plane.rect.x1, plane.rect.y1); glVertex4f(m_rotatedDestCoords[0].x, m_rotatedDestCoords[0].y, 0.0f, 0.0f);
+    glTexCoord2f(plane.rect.x2, plane.rect.y1); glVertex4f(m_rotatedDestCoords[1].x, m_rotatedDestCoords[1].y, 1.0f, 0.0f);
+    glTexCoord2f(plane.rect.x2, plane.rect.y2); glVertex4f(m_rotatedDestCoords[2].x, m_rotatedDestCoords[2].y, 1.0f, 1.0f);
+    glTexCoord2f(plane.rect.x1, plane.rect.y2); glVertex4f(m_rotatedDestCoords[3].x, m_rotatedDestCoords[3].y, 0.0f, 1.0f);
+  }
+  glEnd();
+  VerifyGLState();
+
+  if (m_pVideoFilterShader)
+    m_pVideoFilterShader->Disable();
+
+  glBindTexture (m_textureTarget, 0);
+  glDisable(m_textureTarget);
 }
 
 bool CLinuxRendererGLES::RenderCapture(CRenderCapture* capture)
@@ -1241,6 +1372,140 @@ void CLinuxRendererGLES::DeleteNV12Texture(int index)
 
   for(int p = 0;p<2;p++)
     im.plane[p] = NULL;
+}
+
+//********************************************************************************************************
+// RGB Texture loading, creation and deletion
+//********************************************************************************************************
+bool CLinuxRendererGLES::UploadRGBTexture(int source)
+{
+  YUVBUFFER& buf = m_buffers[source];
+  YuvImage* im = &buf.image;
+
+  glEnable(m_textureTarget);
+  VerifyGLState();
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, im->bpp);
+
+  // Load RGB plane
+  LoadPlane(buf.fields[FIELD_FULL][0], GL_BGRA,
+            im->width, im->height,
+            im->stride[0], im->bpp, im->plane[0]);
+
+  VerifyGLState();
+
+  CalculateTextureSourceRects(source, 3);
+
+  glDisable(m_textureTarget);
+  return true;
+}
+
+void CLinuxRendererGLES::DeleteRGBTexture(int index)
+{
+  YUVBUFFER& buf = m_buffers[index];
+  YuvImage &im = buf.image;
+
+  if (buf.fields[FIELD_FULL][0].id == 0)
+    return;
+
+  // finish up all textures, and delete them
+  for (int f = 0; f < MAX_FIELDS; f++)
+  {
+    for (int p = 0; p < 2; p++)
+    {
+      if (buf.fields[f][p].id)
+      {
+        if (glIsTexture(buf.fields[f][p].id))
+        {
+          glDeleteTextures(1, &buf.fields[f][p].id);
+        }
+        buf.fields[f][p].id = 0;
+      }
+    }
+    buf.fields[f][2].id = 0;
+  }
+
+  for (int p = 0; p < 2; p++)
+    im.plane[p] = NULL;
+}
+
+bool CLinuxRendererGLES::CreateRGBTexture(int index)
+{
+  // since we also want the field textures, pitch must be texture aligned
+  YUVBUFFER& buf = m_buffers[index];
+  YuvImage &im = buf.image;
+
+  // Delete any old texture
+  DeleteRGBTexture(index);
+
+  im.height = m_sourceHeight;
+  im.width  = m_sourceWidth;
+  im.cshift_x = 0;
+  im.cshift_y = 0;
+  im.bpp = 1;
+
+  im.stride[0] = im.width * glFormatElementByteCount(GL_RGBA);
+  im.stride[1] = 0;
+  im.stride[2] = 0;
+
+  im.plane[0] = NULL;
+  im.plane[1] = NULL;
+  im.plane[2] = NULL;
+
+  // packed RGB plane
+  im.planesize[0] = im.stride[0] * im.height;
+  // second plane is not used
+  im.planesize[1] = 0;
+  // third plane is not used
+  im.planesize[2] = 0;
+
+  for (int i = 0; i < 2; i++)
+    im.plane[i] = new BYTE[im.planesize[i]];
+
+  glEnable(m_textureTarget);
+  for (int f = 0; f < MAX_FIELDS; f++)
+  {
+    for (int p = 0; p < 2; p++)
+    {
+      if (!glIsTexture(buf.fields[f][p].id))
+      {
+        glGenTextures(1, &buf.fields[f][p].id);
+        VerifyGLState();
+      }
+    }
+    buf.fields[f][2].id = buf.fields[f][1].id;
+  }
+
+  // RGB
+  YUVPLANE (&planes)[YuvImage::MAX_PLANES] = buf.fields[FIELD_FULL];
+
+  YUVPLANE &plane = planes[0];
+
+  plane.texwidth  = im.width;
+  plane.texheight = im.height;
+
+  plane.pixpertex_x = 1;
+  plane.pixpertex_y = 1;
+
+  if (m_renderMethod & RENDER_POT)
+  {
+    plane.texwidth  = NP2(plane.texwidth);
+    plane.texheight = NP2(plane.texheight);
+  }
+
+  glBindTexture(m_textureTarget, plane.id);
+
+  glTexImage2D(m_textureTarget, 0, GL_RGBA, plane.texwidth, plane.texheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+  glTexParameteri(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  VerifyGLState();
+
+  glDisable(m_textureTarget);
+
+  return true;
 }
 
 //********************************************************************************************************
