@@ -43,6 +43,8 @@ class CBaseTexture;
 namespace Shaders { class BaseYUV2RGBShader; }
 namespace Shaders { class BaseVideoFilterShader; }
 
+struct SwsContext;
+
 struct DRAWRECT
 {
   float left;
@@ -70,7 +72,8 @@ enum RenderMethod
   RENDER_GLSL=0x01,
   RENDER_ARB=0x02,
   RENDER_POT=0x04,
-  RENDER_CUSTOM=0x08
+  RENDER_CUSTOM=0x08,
+  RENDER_RGB=0x10,
 };
 
 enum RenderQuality
@@ -153,6 +156,10 @@ protected:
   bool UploadYUV422PackedTexture(int index);
   void DeleteYUV422PackedTexture(int index);
   bool CreateYUV422PackedTexture(int index);
+
+  bool UploadRGBTexture(int index);
+  void DeleteRGBTexture(int index);
+  bool CreateRGBTexture(int index);
 
   void CalculateTextureSourceRects(int source, int num_planes);
 
@@ -260,6 +267,8 @@ protected:
 
   bool LoadCLUT();
   void DeleteCLUT();
+
+  struct SwsContext *m_sw_scale_ctx = nullptr;
 };
 
 

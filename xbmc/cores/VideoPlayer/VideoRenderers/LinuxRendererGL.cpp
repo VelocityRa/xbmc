@@ -54,6 +54,10 @@
 #include "platform/darwin/DarwinUtils.h"
 #endif
 
+extern "C" {
+#include "libswscale/swscale.h"
+}
+
 //! @bug
 //! due to a bug on osx nvidia, using gltexsubimage2d with a pbo bound and a null pointer
 //! screws up the alpha, an offset fixes this, there might still be a problem if stride + PBO_OFFSET
@@ -177,6 +181,12 @@ CLinuxRendererGL::~CLinuxRendererGL()
     m_pVideoFilterShader->Free();
     delete m_pVideoFilterShader;
     m_pVideoFilterShader = NULL;
+  }
+
+  if (m_sw_scale_ctx)
+  {
+    sws_freeContext(m_sw_scale_ctx);
+    m_sw_scale_ctx = nullptr;
   }
 }
 
@@ -824,6 +834,14 @@ void CLinuxRendererGL::LoadShaders(int field)
     }
 
     bool tryGlsl = true;
+
+    const bool bIsRgb = (m_format == AV_PIX_FMT_0RGB32 ||
+                         m_format == AV_PIX_FMT_RGB565 ||
+                         m_format == AV_PIX_FMT_RGB555);
+
+    if (bIsRgb)
+      tryGlsl = false;
+
     switch(requestedMethod)
     {
       case RENDER_METHOD_AUTO:
@@ -873,7 +891,7 @@ void CLinuxRendererGL::LoadShaders(int field)
       }
       case RENDER_METHOD_ARB:
       // Try ARB shaders if supported and user requested it or GLSL shaders failed.
-      if (g_Windowing.IsExtSupported("GL_ARB_fragment_program"))
+      if (g_Windowing.IsExtSupported("GL_ARB_fragment_program") && !bIsRgb)
       {
         CLog::Log(LOGNOTICE, "GL: ARB shaders support detected");
         m_renderMethod = RENDER_ARB ;
@@ -902,8 +920,16 @@ void CLinuxRendererGL::LoadShaders(int field)
       }
       default:
       {
-        m_renderMethod = -1;
-        CLog::Log(LOGERROR, "GL: Shaders support not present");
+        if (bIsRgb)
+        {
+          m_renderMethod = RENDER_RGB;
+          CLog::Log(LOGNOTICE, "GL: Using custom render for RGB");
+        }
+        else
+        {
+          m_renderMethod = -1;
+          CLog::Log(LOGERROR, "GL: Shaders support not present");
+        }
         break;
       }
     }
@@ -996,6 +1022,12 @@ bool CLinuxRendererGL::Render(DWORD flags, int renderBuffer)
   else if (m_renderMethod & RENDER_ARB)
   {
     RenderSinglePass(renderBuffer, m_currentField);
+  }
+  else if (m_renderMethod & RENDER_RGB)
+  {
+    UpdateVideoFilter();
+    RenderRGB(renderBuffer, m_currentField);
+    VerifyGLState();
   }
   else
   {
@@ -1519,6 +1551,10 @@ bool CLinuxRendererGL::CreateTexture(int index)
   else if (m_format == AV_PIX_FMT_YUYV422 ||
            m_format == AV_PIX_FMT_UYVY422)
     return CreateYUV422PackedTexture(index);
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+    return CreateRGBTexture(index);
   else
     return CreateYV12Texture(index);
 }
@@ -1532,6 +1568,10 @@ void CLinuxRendererGL::DeleteTexture(int index)
   else if (m_format == AV_PIX_FMT_YUYV422 ||
            m_format == AV_PIX_FMT_UYVY422)
     DeleteYUV422PackedTexture(index);
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+    DeleteRGBTexture(index);
   else
     DeleteYV12Texture(index);
 }
@@ -1565,6 +1605,20 @@ bool CLinuxRendererGL::UploadTexture(int index)
     CVideoBuffer::CopyYUV422PackedPicture(&dst, &src);
     BindPbo(m_buffers[index]);
     ret = UploadYUV422PackedTexture(index);
+  }
+  else if (m_format == AV_PIX_FMT_0RGB32 ||
+           m_format == AV_PIX_FMT_RGB565 ||
+           m_format == AV_PIX_FMT_RGB555)
+  {
+    m_sw_scale_ctx = sws_getCachedContext(m_sw_scale_ctx,
+                                          m_sourceWidth, m_sourceHeight, m_buffers[index].videoBuffer->GetFormat(),
+                                          m_sourceWidth, m_sourceHeight, AV_PIX_FMT_BGRA,
+                                          SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
+
+    sws_scale(m_sw_scale_ctx, src.plane, src.stride, 0, m_sourceHeight, dst.plane, dst.stride);
+
+    BindPbo(m_buffers[index]);
+    ret = UploadRGBTexture(index);
   }
   else
   {
@@ -2316,6 +2370,186 @@ bool CLinuxRendererGL::CreateYUV422PackedTexture(int index)
     glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     VerifyGLState();
   }
+  glDisable(m_textureTarget);
+
+  return true;
+}
+
+bool CLinuxRendererGL::UploadRGBTexture(int source)
+{
+  YUVBUFFER& buf = m_buffers[source];
+  YuvImage* im = &buf.image;
+
+  glEnable(m_textureTarget);
+  VerifyGLState();
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, im->bpp);
+
+  // Load RGB plane
+  LoadPlane(buf.fields[FIELD_FULL][0], GL_BGRA,
+            im->width, im->height,
+            im->stride[0], im->bpp, im->plane[0]);
+
+  VerifyGLState();
+
+  CalculateTextureSourceRects(source, 1);
+
+  glDisable(m_textureTarget);
+  return true;
+}
+
+void CLinuxRendererGL::DeleteRGBTexture(int index)
+{
+  YUVBUFFER& buf = m_buffers[index];
+  YuvImage &im = buf.image;
+  GLuint *pbo = buf.pbo;
+
+  if (buf.fields[FIELD_FULL][0].id == 0)
+    return;
+
+  // finish up all textures, and delete them
+  for (int f = 0; f < MAX_FIELDS; f++)
+  {
+    if (buf.fields[f][0].id)
+    {
+      if (glIsTexture(buf.fields[f][0].id))
+      {
+        glDeleteTextures(1, &buf.fields[f][0].id);
+      }
+      buf.fields[f][0].id = 0;
+    }
+    buf.fields[f][1].id = 0;
+    buf.fields[f][2].id = 0;
+  }
+
+  if (pbo[0])
+  {
+    if (im.plane[0])
+    {
+      glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo[0]);
+      glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB);
+      im.plane[0] = NULL;
+      glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+    }
+    glDeleteBuffersARB(1, pbo);
+    pbo[0] = 0;
+  }
+  else
+  {
+    if (im.plane[0])
+    {
+      delete[] im.plane[0];
+      im.plane[0] = NULL;
+    }
+  }
+}
+
+bool CLinuxRendererGL::CreateRGBTexture(int index)
+{
+  YUVBUFFER& buf = m_buffers[index];
+  YuvImage &im = buf.image;
+  GLuint *pbo = buf.pbo;
+
+  // Delete any old texture
+  DeleteRGBTexture(index);
+
+  im.height = m_sourceHeight;
+  im.width  = m_sourceWidth;
+  im.cshift_x = 0;
+  im.cshift_y = 0;
+  im.bpp = 1;
+
+  im.stride[0] = im.width * glFormatElementByteCount(GL_RGBA);
+  im.stride[1] = 0;
+  im.stride[2] = 0;
+
+  im.plane[0] = NULL;
+  im.plane[1] = NULL;
+  im.plane[2] = NULL;
+
+  // packed RGB plane
+  im.planesize[0] = im.stride[0] * im.height;
+  // second plane is not used
+  im.planesize[1] = 0;
+  // third plane is not used
+  im.planesize[2] = 0;
+
+  bool pboSetup = false;
+  if (m_pboUsed)
+  {
+    pboSetup = true;
+    glGenBuffersARB(1, pbo);
+
+    glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo[0]);
+    glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, im.planesize[0] + PBO_OFFSET, 0, GL_STREAM_DRAW_ARB);
+    void* pboPtr = glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+    if (pboPtr)
+    {
+      im.plane[0] = (uint8_t*)pboPtr + PBO_OFFSET;
+      memset(im.plane[0], 0, im.planesize[0]);
+    }
+    else
+    {
+      CLog::Log(LOGWARNING,"GL: failed to set up pixel buffer object");
+      pboSetup = false;
+    }
+
+    if (!pboSetup)
+    {
+      glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, *pbo);
+      glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB);
+      glDeleteBuffersARB(1, pbo);
+      memset(m_buffers[index].pbo, 0, sizeof(m_buffers[index].pbo));
+    }
+
+    glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+  }
+
+  if (!pboSetup)
+  {
+    im.plane[0] = new uint8_t[im.planesize[0]];
+  }
+
+  glEnable(m_textureTarget);
+
+  for (int f = 0; f < MAX_FIELDS; f++)
+  {
+    if (!glIsTexture(buf.fields[f][0].id))
+    {
+      glGenTextures(1, &buf.fields[f][0].id);
+      VerifyGLState();
+    }
+    buf.fields[f][0].pbo = pbo[0];
+    buf.fields[f][1].id = buf.fields[f][0].id;
+    buf.fields[f][2].id = buf.fields[f][1].id;
+  }
+
+  // RGB
+  YUVPLANE (&planes)[YuvImage::MAX_PLANES] = buf.fields[FIELD_FULL];
+
+  YUVPLANE &plane = planes[0];
+
+  plane.texwidth  = im.width;
+  plane.texheight = im.height;
+  plane.pixpertex_x = 1;
+  plane.pixpertex_y = 1;
+
+  if (m_renderMethod & RENDER_POT)
+  {
+    plane.texwidth  = NP2(plane.texwidth);
+    plane.texheight = NP2(plane.texheight);
+  }
+
+  glBindTexture(m_textureTarget, plane.id);
+
+  glTexImage2D(m_textureTarget, 0, GL_RGBA, plane.texwidth, plane.texheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+  glTexParameteri(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  VerifyGLState();
+
   glDisable(m_textureTarget);
 
   return true;
