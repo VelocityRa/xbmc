@@ -100,6 +100,8 @@ D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(const gfx_wrap_type_ wrap)
 
 float2 SHADER::GetOptimalTextureSize(float2 videoSize)
 {
+  // TODO: enable again
+  return videoSize;
   unsigned sizeMax = videoSize.Max<unsigned>();
   unsigned size = 1;
 

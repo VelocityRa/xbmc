@@ -83,8 +83,8 @@ void CVideoShaderManager::RenderUpdate(CRect sourceRect, CPoint dest[], CD3DText
   CD3DTexture& firstShaderTexture = *m_pShaderTextures.front();
   SetCommonShaderParams(firstShader, *firstTexture);
   firstShader.Render(*firstTexture, firstShaderTexture);
-  /*
-  // Apply all passes except the last one (which needs to be applied to the backbuffer)
+
+  // Apply all passes except the first and last one (which needs to be applied to the backbuffer)
   for (unsigned shaderIdx = 1; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
   {
     CVideoShader& shader = *m_pVideoShaders[shaderIdx];
@@ -121,7 +121,7 @@ bool CVideoShaderManager::Update()
     DisposeVideoShaders();
 
     static const auto shaderFormat = "hlsl";  // "hlsl" or "glsl" - Windows uses HLSL shaders
-    // todo: Kodi probably shouldn't know about the add-on's relative path below. Find a solution
+    // todo: Kodi probably shouldn't know about the add-on's relative path below
     auto presetPath = URIUtils::AddFileToFolder("resources/libretro", shaderFormat, m_videoShaderPath);
 
     if(!m_pPreset)
@@ -206,6 +206,7 @@ bool CVideoShaderManager::CreateShaderTextures()
     auto& pass = m_pPreset->m_Pass[shaderIdx];
 
     // resolve final texture res taking scale type into account
+
     UINT textureX;
     UINT textureY;
 
@@ -254,7 +255,6 @@ bool CVideoShaderManager::CreateShaderTextures()
       textureX *= pass.fbo.scale_x;
       textureY *= pass.fbo.scale_y;
     }
-
     // For reach pass, create the texture
     std::unique_ptr<CD3DTexture> texture(new CD3DTexture());
 

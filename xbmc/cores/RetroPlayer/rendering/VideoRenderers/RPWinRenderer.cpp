@@ -32,6 +32,7 @@ CRPWinRenderer::CRPWinRenderer()
   //SetShaderPreset("borders/gameboy-player/gameboy-player+crt-easymode.cgp");
   //SetShaderPreset("reshade/lut.cgp");
   SetShaderPreset("borders/color-grid.cgp");
+  SetShaderPreset("borders/mudlord.cgp");
   //SetShaderPreset("cgp/gameboy-screen-grid.cgp");
   //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
   //SetShaderPreset("anti-aliasing/reverse-aa.cgp");

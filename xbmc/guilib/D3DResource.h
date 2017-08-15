@@ -21,6 +21,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <d3dx11effect.h>
 #include <DirectXMath.h>
 #include "Geometry.h"
@@ -203,7 +204,7 @@ private:
   ID3DX11EffectTechnique* m_techniquie;
   ID3DX11EffectPass*      m_currentPass;
   DefinesMap              m_defines;
-  std::vector<std::string> m_includePaths;
+  std::set<std::string> m_includePaths;
 };
 
 class CD3DBuffer : public ID3DResource
