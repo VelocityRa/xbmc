@@ -19,10 +19,14 @@
  */
 
 #include "RPWinRenderer.h"
+
 #include "cores/RetroPlayer/rendering/RPRenderFactory.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderPresetDX.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 #include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h" //! @todo
-#include "guilib/GraphicContext.h"
 #include "guilib/D3DResource.h"
+#include "guilib/GraphicContext.h"
+#include "settings/MediaSettings.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
 
@@ -45,13 +49,16 @@ void CRPWinRenderer::Register()
   CRPRendererFactory::RegisterRenderer(CRPWinRenderer::Create);
 }
 
-CRPWinRenderer::CRPWinRenderer() :
-  m_bQueued(false),
-  m_intermediateTarget(new CD3DTexture),
-  m_outputShader(new COutputShader)
+CRPWinRenderer::CRPWinRenderer()
+  : m_bQueued(false)
+  , m_intermediateTarget(new CShaderTextureCD3D(new CD3DTexture()))
+  , m_outputShader(new COutputShader)
+  , m_targetTexture(CShaderTextureCD3D())
 {
   // Initialize CRPBaseRenderer
-  m_scalingMethod = VS_SCALINGMETHOD_LINEAR;
+  m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
+
+  m_shaderPreset.reset(new SHADERPRESET::CVideoShaderPresetDX());
 }
 
 CRPWinRenderer::~CRPWinRenderer()
@@ -73,7 +80,7 @@ bool CRPWinRenderer::Configure(AVPixelFormat format, unsigned int width, unsigne
   if (g_Windowing.IsFormatSupport(DXGI_FORMAT_B8G8R8A8_UNORM, D3D11_USAGE_DYNAMIC))
     m_targetDxFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 
-  if (!m_intermediateTarget->Create(m_sourceWidth, m_sourceHeight, 1, D3D11_USAGE_DYNAMIC, m_targetDxFormat))
+  if (!m_intermediateTarget->GetPointer()->Create(m_sourceWidth, m_sourceHeight, 1, D3D11_USAGE_DYNAMIC, m_targetDxFormat))
   {
     CLog::Log(LOGERROR, "%s: intermediate render target creation failed", __FUNCTION__);
     return false;
@@ -125,6 +132,8 @@ void CRPWinRenderer::RenderUpdate(bool clear, unsigned int alpha)
 
   ManageRenderArea();
 
+  UpdateVideoShaders();
+
   if (m_bQueued)
   {
     if (UploadTexture())
@@ -136,7 +145,7 @@ void CRPWinRenderer::RenderUpdate(bool clear, unsigned int alpha)
 
 void CRPWinRenderer::Deinitialize()
 {
-  m_intermediateTarget->Release();
+  m_intermediateTarget->GetPointer()->Release();
 }
 
 bool CRPWinRenderer::Supports(ERENDERFEATURE feature) const
@@ -160,10 +169,16 @@ bool CRPWinRenderer::Supports(ESCALINGMETHOD method) const
   return false;
 }
 
+void CRPWinRenderer::SetSpeed(double speed)
+{
+  if (m_shaderPreset)
+    m_shaderPreset->SetSpeed(speed);
+}
+
 bool CRPWinRenderer::UploadTexture()
 {
   D3D11_MAPPED_SUBRESOURCE destlr;
-  if (!m_intermediateTarget->LockRect(0, &destlr, D3D11_MAP_WRITE_DISCARD))
+  if (!m_intermediateTarget->GetPointer()->LockRect(0, &destlr, D3D11_MAP_WRITE_DISCARD))
   {
     CLog::Log(LOGERROR, "%s: failed to lock swtarget texture into memory", __FUNCTION__);
     return false;
@@ -194,7 +209,7 @@ bool CRPWinRenderer::UploadTexture()
     sws_scale(m_swsContext, src, srcStride, 0, m_sourceHeight, dst, dstStride);
   }
 
-  if (!m_intermediateTarget->UnlockRect(0))
+  if (!m_intermediateTarget->GetPointer()->UnlockRect(0))
   {
     CLog::Log(LOGERROR, "%s: failed to unlock swtarget texture", __FUNCTION__);
     return false;
@@ -205,12 +220,42 @@ bool CRPWinRenderer::UploadTexture()
 
 void CRPWinRenderer::Render(CD3DTexture *target)
 {
-  if (m_outputShader)
+  // Are we using video shaders?
+  if (m_useShaderPreset)
   {
-    m_outputShader->Render(*m_intermediateTarget, m_sourceWidth, m_sourceHeight,
-      m_sourceRect, m_rotatedDestCoords, target,
-      g_Windowing.UseLimitedColor() ? 1 : 0, 0.5f, 0.5f);
-  }
+    // select destination rectangle
+    CPoint destPoints[4];
+    if (m_renderOrientation)
+    {
+      for (size_t i = 0; i < 4; i++)
+        destPoints[i] = m_rotatedDestCoords[i];
+    }
+    else
+    {
+      CRect destRect = g_graphicsContext.StereoCorrection(m_destRect);
+      destPoints[0] = { destRect.x1, destRect.y1 };
+      destPoints[1] = { destRect.x2, destRect.y1 };
+      destPoints[2] = { destRect.x2, destRect.y2 };
+      destPoints[3] = { destRect.x1, destRect.y2 };
+    }
 
+    // Render shaders and ouput to display
+    m_targetTexture.SetTexture(target);
+    if (!m_shaderPreset->RenderUpdate(destPoints, m_intermediateTarget.get(), &m_targetTexture))
+    {
+      m_shadersNeedUpdate = false;
+      m_useShaderPreset = false;
+    }
+  }
+  else
+  {
+    // Ouput to display directly
+    if (m_outputShader)
+    {
+      m_outputShader->Render(*m_intermediateTarget->GetPointer(), m_sourceWidth, m_sourceHeight,
+        m_sourceRect, m_rotatedDestCoords, target,
+        g_Windowing.UseLimitedColor() ? 1 : 0, 0.5f, 0.5f);
+    }
+  }
   g_Windowing.ApplyStateBlock();
 }

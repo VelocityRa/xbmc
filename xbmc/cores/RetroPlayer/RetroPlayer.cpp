@@ -468,28 +468,18 @@ void CRetroPlayer::FrameMove()
 
 void CRetroPlayer::Render(bool clear, uint32_t alpha /* = 255 */, bool gui /* = true */)
 {
-  if (gui)
-  {
-    CGUIGameControlManager &gameControls = CServiceBroker::GetGameServices().GameControls();
+  CGUIGameControlManager &gameControls = CServiceBroker::GetGameServices().GameControls();
 
-    ESCALINGMETHOD scalingMedthod = m_renderManager->GetScalingMethod();
-    ViewMode viewMode = m_renderManager->GetRenderViewMode();
+  const std::string &shaderPreset = m_renderManager->GetShaderPreset();
+  ViewMode viewMode = m_renderManager->GetRenderViewMode();
 
-    if (gameControls.IsControlActive())
-    {
-      const CGUIRenderSettings &renderSettings = gameControls.GetRenderSettings();
-      m_renderManager->SetScalingMethod(renderSettings.GetScalingMethod());
-      m_renderManager->SetRenderViewMode(renderSettings.GetRenderViewMode());
-    }
+  //m_renderManager->SetShaderPreset(renderSettings.GetVideoFilter());
+  //m_renderManager->SetRenderViewMode(renderSettings.GetRenderViewMode());
 
-    m_renderManager->Render(clear, alpha);
+  m_renderManager->Render(clear, alpha, gui);
 
-    if (gameControls.IsControlActive())
-    {
-      m_renderManager->SetScalingMethod(scalingMedthod);
-      m_renderManager->SetRenderViewMode(viewMode);
-    }
-  }
+  //m_renderManager->SetShaderPreset(shaderPreset);
+  //m_renderManager->SetRenderViewMode(viewMode);
 }
 
 void CRetroPlayer::FlushRenderer()
@@ -536,6 +526,7 @@ void CRetroPlayer::OnSpeedChange(double newSpeed)
 {
   m_audio->Enable(newSpeed == 1.0);
   m_input->SetSpeed(newSpeed);
+  m_renderManager->SetSpeed(newSpeed);
   m_processInfo->SetSpeed(static_cast<float>(newSpeed));
   if (newSpeed != 0.0)
     CloseOSD();

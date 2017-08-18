@@ -35,6 +35,7 @@ void CBinaryAddonCache::Init()
   m_addonsToCache = {
     ADDON_PVRDLL,
     ADDON_GAMEDLL,
+    ADDON_SHADERDLL,
   };
   CAddonMgr::GetInstance().Events().Subscribe(this, &CBinaryAddonCache::OnEvent);
   Update();

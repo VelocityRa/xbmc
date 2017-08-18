@@ -27,20 +27,31 @@ using namespace RETRO;
 
 void CGUIRenderSettings::Reset()
 {
+  m_videoFilter.clear();
   m_scalingMethod = -1;
   m_viewMode = -1;
 }
 
 bool CGUIRenderSettings::operator==(const CGUIRenderSettings &rhs) const
 {
-  return m_scalingMethod == rhs.m_scalingMethod &&
+  return m_videoFilter == rhs.m_videoFilter &&
+         m_scalingMethod == rhs.m_scalingMethod &&
          m_viewMode == rhs.m_viewMode;
 }
 
-ESCALINGMETHOD CGUIRenderSettings::GetScalingMethod() const
+std::string CGUIRenderSettings::GetVideoFilter() const
+{
+  if (HasVideoFilter())
+    return m_videoFilter;
+
+  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
+  return gameSettings.VideoFilter();
+}
+
+int CGUIRenderSettings::GetScalingMethod() const
 {
   if (HasScalingMethod())
-    return static_cast<ESCALINGMETHOD>(m_scalingMethod);
+    return m_scalingMethod;
 
   CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
   return gameSettings.ScalingMethod();

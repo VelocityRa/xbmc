@@ -19,13 +19,17 @@
  */
 
 #include "RPRenderManager.h"
+
 #include "RPRenderFactory.h"
 #include "cores/RetroPlayer/rendering/VideoRenderers/RPBaseRenderer.h"
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
 #include "settings/MediaSettings.h"
-#include "settings/VideoSettings.h"
 #include "threads/SingleLock.h"
+//todo
+#if defined(TARGET_WINDOWS)
+#include "cores/RetroPlayer/rendering/VideoRenderers/RPWinRenderer.h"
+#endif
 
 using namespace KODI;
 using namespace RETRO;
@@ -94,9 +98,9 @@ void CRPRenderManager::FrameMove()
   }
 }
 
-void CRPRenderManager::Render(bool clear, DWORD alpha)
+void CRPRenderManager::Render(bool clear, DWORD alpha, bool gui)
 {
-  if (!m_renderer)
+  if (!m_renderer || !gui)
     return;
 
   CSingleExit exitLock(g_graphicsContext);
@@ -159,6 +163,22 @@ void CRPRenderManager::SetRenderViewMode(ViewMode mode)
 {
   if (m_renderer)
     m_renderer->SetViewMode(mode);
+}
+
+void CRPRenderManager::SetSpeed(double speed)
+{
+  if (m_renderer)
+    m_renderer->SetSpeed(speed);
+}
+
+void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
+{
+  m_renderer->SetShaderPreset(shaderPresetPath);
+}
+
+const std::string& CRPRenderManager::GetShaderPreset() const
+{
+  return m_renderer->GetShaderPreset();
 }
 
 void CRPRenderManager::UpdateResolution()

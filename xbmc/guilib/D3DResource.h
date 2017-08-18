@@ -21,6 +21,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <d3dx11effect.h>
 #include <DirectXMath.h>
 #include "Geometry.h"
@@ -176,9 +177,11 @@ public:
   bool SetMatrix(LPCSTR handle, const XMFLOAT4X4* mat);
   bool SetTechnique(LPCSTR handle);
   bool SetTexture(LPCSTR handle, CD3DTexture &texture);
+  bool SetTexture(LPCSTR handle, ID3D11ShaderResourceView* resourceView);
   bool SetResources(LPCSTR handle, ID3D11ShaderResourceView** ppSRViews, size_t count);
   bool SetConstantBuffer(LPCSTR handle, ID3D11Buffer *buffer);
   bool SetScalar(LPCSTR handle, float value);
+  void AddIncludePath(const std::string& includePath);
   bool Begin(UINT *passes, DWORD flags);
   bool BeginPass(UINT pass);
   bool EndPass();
@@ -201,6 +204,7 @@ private:
   ID3DX11EffectTechnique* m_techniquie;
   ID3DX11EffectPass*      m_currentPass;
   DefinesMap              m_defines;
+  std::set<std::string> m_includePaths;
 };
 
 class CD3DBuffer : public ID3DResource

@@ -17,6 +17,7 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
+
 #pragma once
 
 #include "RPBaseRenderer.h"
@@ -25,6 +26,9 @@
 #include <memory>
 #include <stdint.h>
 #include <vector>
+
+#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 
 struct SwsContext;
 class CD3DTexture;
@@ -51,10 +55,11 @@ namespace RETRO
     void Deinitialize() override;
     bool Supports(ERENDERFEATURE feature) const override;
     bool Supports(ESCALINGMETHOD method) const override;
+    void SetSpeed(double speed) override;
 
   private:
     bool UploadTexture();
-    void Render(CD3DTexture *target);
+    void Render(CD3DTexture* target);
 
     bool m_bConfigured = false;
     bool m_bLoaded = false;
@@ -63,9 +68,11 @@ namespace RETRO
     DXGI_FORMAT m_targetDxFormat = DXGI_FORMAT_UNKNOWN;
     std::vector<uint8_t> m_buffer;
     std::atomic<bool> m_bQueued;
-    std::unique_ptr<CD3DTexture> m_intermediateTarget;
-    SwsContext *m_swsContext = nullptr;
+    std::unique_ptr<SHADER::CShaderTextureCD3D> m_intermediateTarget;
+    SwsContext* m_swsContext = nullptr;
     std::unique_ptr<COutputShader> m_outputShader;
+
+    SHADER::CShaderTextureCD3D m_targetTexture;
   };
 }
 }

@@ -19,12 +19,13 @@
  */
 #pragma once
 
-#include "guilib/Geometry.h"
-#include "cores/IPlayer.h"
+#include <stdint.h>
 
+#include "cores/IPlayer.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
+#include "guilib/Geometry.h"
 #include "libavutil/pixfmt.h"
 
-#include <stdint.h>
 
 namespace KODI
 {
@@ -42,6 +43,7 @@ namespace RETRO
     virtual void Flush() = 0;
     virtual void RenderUpdate(bool clear, unsigned int alpha) = 0;
     virtual void Deinitialize() = 0;
+    virtual void SetSpeed(double speed) = 0;
 
     // Feature support
     virtual bool Supports(ERENDERFEATURE feature) const = 0;
@@ -56,6 +58,17 @@ namespace RETRO
      */
     void GetVideoRect(CRect &source, CRect &dest, CRect &view);
     float GetAspectRatio() const;
+
+    /**
+    * \brief Gets the shader preset path currently loaded
+    * \returns Preset relative path
+    */
+    const std::string& GetShaderPreset() const;
+    /**
+    * \brief Sets the shader preset path to be loaded and used from the next frame
+    * \param presetPath Relative path to preset file
+    */
+    void SetShaderPreset(const std::string presetPath);
 
     ESCALINGMETHOD GetScalingMethod() const { return m_scalingMethod; }
     void SetScalingMethod(ESCALINGMETHOD method);
@@ -110,6 +123,14 @@ namespace RETRO
     CRect m_sourceRect;
     CRect m_viewRect;
 
+    // ====== Video Shader Members =====
+  protected:
+    void UpdateVideoShaders();
+    std::unique_ptr<SHADERPRESET::IVideoShaderPreset> m_shaderPreset;
+
+    std::string m_shaderPresetPath;
+    bool m_shadersNeedUpdate;
+    bool m_useShaderPreset;
   };
 }
 }
