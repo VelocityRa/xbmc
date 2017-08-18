@@ -1,4 +1,5 @@
-set(SOURCES RPRenderManager.cpp
+set(SOURCES GUIRenderSettings.cpp
+            RPRenderManager.cpp
             VideoShader.cpp
             VideoShaderLUT.cpp
             VideoShaderManager.cpp)

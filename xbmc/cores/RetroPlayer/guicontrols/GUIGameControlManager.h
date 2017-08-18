@@ -19,34 +19,29 @@
  */
 #pragma once
 
-#include "cores/IPlayer.h"
+#include "guilib/GUIControl.h"
+#include "guilib/GUIInfoTypes.h"
 
 namespace KODI
 {
 namespace RETRO
 {
-  class CGUIRenderSettings
+  class CGUIGameControl;
+  class CGUIRenderSettings;
+
+  class CGUIGameControlManager
   {
   public:
-    CGUIRenderSettings() { Reset(); }
+    CGUIGameControlManager() = default;
 
-    void Reset();
+    void SetActiveControl(CGUIGameControl *control);
+    bool IsControlActive() const;
+    void ResetActiveControl();
 
-    bool operator==(const CGUIRenderSettings &rhs) const;
-
-    ViewMode GetRenderViewMode() const;
-    bool HasRenderViewMode() const { return m_viewMode != -1; }
-    void SetRenderViewMode(ViewMode mode) { m_viewMode = static_cast<int>(mode); }
-    void ResetRenderViewMode() { m_viewMode = -1; }
-
-    ESCALINGMETHOD GetScalingMethod() const;
-    bool HasScalingMethod() const { return m_scalingMethod != -1; }
-    void SetScalingMethod(ESCALINGMETHOD method) { m_scalingMethod = static_cast<int>(method); }
-    void ResetScalingMethod() { m_scalingMethod = -1; }
+    const CGUIRenderSettings &GetRenderSettings() const;
 
   private:
-    int m_viewMode;
-    int m_scalingMethod;
+    CGUIGameControl *m_activeControl = nullptr;
   };
 }
 }
