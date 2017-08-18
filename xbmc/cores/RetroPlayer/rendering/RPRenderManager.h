@@ -19,12 +19,11 @@
  */
 #pragma once
 
-#include "IRenderSettingsCallback.h"
-#include "threads/CriticalSection.h"
-
-#include "libavutil/pixfmt.h"
-
 #include <memory>
+
+#include "IRenderSettingsCallback.h"
+#include "libavutil/pixfmt.h"
+#include "threads/CriticalSection.h"
 
 namespace KODI
 {
@@ -44,6 +43,7 @@ namespace RETRO
     // Functions called from game loop
     bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation);
     bool AddFrame(const uint8_t* data, unsigned int size);
+    void SetSpeed(double speed);
 
     // Functions called from render thread
     bool IsConfigured() const;
@@ -59,6 +59,8 @@ namespace RETRO
     void SetScalingMethod(ESCALINGMETHOD scalingMethod) override;
     ViewMode GetRenderViewMode() const override;
     void SetRenderViewMode(ViewMode mode) override;
+    void SetShaderPreset(const std::string &shaderPresetPath) override;
+    const std::string &GetShaderPreset() const override;
 
   private:
     void UpdateResolution();

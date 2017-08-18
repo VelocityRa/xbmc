@@ -19,6 +19,7 @@
  */
 
 #include "RPBaseRenderer.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIWindowManager.h"
 #include "settings/GameSettings.h"
@@ -35,6 +36,9 @@ using namespace KODI;
 using namespace RETRO;
 
 CRPBaseRenderer::CRPBaseRenderer()
+  : m_shaderPreset(nullptr)
+  , m_shadersNeedUpdate(true)
+  , m_useShaderPreset(true)
 {
   m_oldDestRect.SetRect(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -68,6 +72,20 @@ float CRPBaseRenderer::GetAspectRatio() const
   float height = static_cast<float>(m_sourceHeight);
 
   return m_sourceFrameRatio * width / height * m_sourceHeight / m_sourceWidth;
+}
+
+const std::string& CRPBaseRenderer::GetShaderPreset() const
+{
+  return m_shaderPresetPath;
+}
+
+void CRPBaseRenderer::SetShaderPreset(const std::string presetPath)
+{
+  if (presetPath != m_shaderPresetPath)
+  {
+    m_shaderPresetPath = presetPath;
+    m_shadersNeedUpdate = true;
+  }
 }
 
 void CRPBaseRenderer::SetScalingMethod(ESCALINGMETHOD method)
@@ -503,4 +521,22 @@ void CRPBaseRenderer::MarkDirty()
 float CRPBaseRenderer::GetAllowedErrorInAspect() const
 {
   return CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ERRORINASPECT) * 0.01f;
+}
+
+void CRPBaseRenderer::UpdateVideoShaders()
+{
+  if (m_shadersNeedUpdate)
+  {
+    m_shadersNeedUpdate = false;
+
+    if (m_shaderPreset)
+    {
+      auto sourceWidth = static_cast<unsigned>(m_sourceRect.Width());
+      auto sourceHeight = static_cast<unsigned>(m_sourceRect.Height());
+
+      // We need to set this here because m_sourceRect isn't valid on init/pre-init
+      m_shaderPreset->SetVideoSize(sourceWidth, sourceHeight);
+      m_useShaderPreset = m_shaderPreset->SetShaderPreset(m_shaderPresetPath);
+    }
+  }
 }

@@ -24,7 +24,6 @@
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
 #include "settings/MediaSettings.h"
-#include "settings/VideoSettings.h"
 #include "threads/SingleLock.h"
 
 using namespace KODI;
@@ -159,6 +158,22 @@ void CRPRenderManager::SetRenderViewMode(ViewMode mode)
 {
   if (m_renderer)
     m_renderer->SetViewMode(mode);
+}
+
+void CRPRenderManager::SetSpeed(double speed)
+{
+  if (m_renderer)
+    m_renderer->SetSpeed(speed);
+}
+
+void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
+{
+  m_renderer->SetShaderPreset(shaderPresetPath);
+}
+
+const std::string& CRPRenderManager::GetShaderPreset() const
+{
+  return m_renderer->GetShaderPreset();
 }
 
 void CRPRenderManager::UpdateResolution()

@@ -34,6 +34,11 @@ namespace RETRO
 
     bool operator==(const CGUIRenderSettings &rhs) const;
 
+    std::string GetVideoFilter() const;
+    bool HasVideoFilter() const { return !m_videoFilter.empty(); }
+    void SetVideoFilter(const std::string &videoFilter) { m_videoFilter = videoFilter; }
+    void ResetVideoFilter() { m_videoFilter.clear(); }
+
     ESCALINGMETHOD GetScalingMethod() const;
     bool HasScalingMethod() const { return m_scalingMethod != -1; }
     void SetScalingMethod(ESCALINGMETHOD method) { m_scalingMethod = static_cast<int>(method); }
@@ -45,6 +50,7 @@ namespace RETRO
     void ResetRenderViewMode() { m_viewMode = -1; }
 
   private:
+    std::string m_videoFilter;
     int m_scalingMethod;
     int m_viewMode;
   };

@@ -48,6 +48,11 @@ void CGUIGameControl::SetVideoFilter(const CGUIInfoLabel &videoFilter)
   m_videoFilterInfo = videoFilter;
 }
 
+void CGUIGameControl::SetScalingMethod(const CGUIInfoLabel &scalingMode)
+{
+  m_scalingMethodInfo = scalingMode;
+}
+
 void CGUIGameControl::SetViewMode(const CGUIInfoLabel &viewMode)
 {
   m_viewModeInfo = viewMode;
@@ -113,7 +118,7 @@ void CGUIGameControl::RenderEx()
     g_application.m_pPlayer->Render(false, 255, false);
     DisableGUIRender();
   }
-  
+
   CGUIControl::RenderEx();
 }
 
@@ -129,11 +134,15 @@ void CGUIGameControl::UpdateInfo(const CGUIListItem *item /* = nullptr */)
 
   if (item)
   {
-    std::string strVideoFilter = m_videoFilterInfo.GetItemLabel(item);
-    if (StringUtils::IsNaturalNumber(strVideoFilter))
+    std::string videoFilter = m_videoFilterInfo.GetItemLabel(item);
+    if (!videoFilter.empty())
+      m_renderSettings.SetVideoFilter(videoFilter);
+
+    std::string strScalingMethod = m_scalingMethodInfo.GetItemLabel(item);
+    if (StringUtils::IsNaturalNumber(strScalingMethod))
     {
       unsigned int scalingMethod;
-      std::istringstream(std::move(strVideoFilter)) >> scalingMethod;
+      std::istringstream(std::move(strScalingMethod)) >> scalingMethod;
       m_renderSettings.SetScalingMethod(static_cast<ESCALINGMETHOD>(scalingMethod));
     }
 

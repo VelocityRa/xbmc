@@ -21,6 +21,7 @@
 
 #include "DialogGameVideoSelect.h"
 #include "cores/IPlayer.h"
+#include "FileItem.h"
 
 namespace KODI
 {
@@ -41,15 +42,21 @@ namespace GAME
     void PostExit() override;
 
   private:
+    void InitScalingMethods();
+    void InitVideoFilters();
+
+    static std::string GetLocalizedString(uint32_t code);
+    static void GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod);
+
     struct VideoFilterProperties
     {
-      int stringIndex;
-      ESCALINGMETHOD scalingMethod;
+      std::string path;
+      int nameIndex;
+      int categoryIndex;
+      int descriptionIndex;
     };
 
-    std::vector<VideoFilterProperties> m_videoFilters;
-
-    static const std::vector<VideoFilterProperties> m_allVideoFilters;
+    CFileItemList m_items;
   };
 }
 }
