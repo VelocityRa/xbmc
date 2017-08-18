@@ -17,10 +17,12 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
+
 #pragma once
 
 #include "RPBaseRenderer.h"
-
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
+#include "cores/RetroPlayer/IVideoShaderPreset.h"
 #include <atomic>
 #include <memory>
 #include <stdint.h>
@@ -32,40 +34,66 @@ class COutputShader;
 
 namespace KODI
 {
-namespace RETRO
-{
-  class CRPWinRenderer : public CRPBaseRenderer
+  namespace RETRO
   {
-  public:
-    static CRPBaseRenderer* Create();
-    static void Register();
+    class CRPWinRenderer : public CRPBaseRenderer
+    {
+    public:
+      static CRPBaseRenderer* Create();
+      static void Register();
 
-    CRPWinRenderer();
-    ~CRPWinRenderer() override;
+      CRPWinRenderer();
+      ~CRPWinRenderer() override;
 
-    // implementation of CRPBaseRenderer
-    bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) override;
-    void AddFrame(const uint8_t* data, unsigned int size) override;
-    void Flush() override;
-    void RenderUpdate(bool clear, unsigned int alpha) override;
-    void Deinitialize() override;
-    bool Supports(ERENDERFEATURE feature) const override;
-    bool Supports(ESCALINGMETHOD method) const override;
+      // implementation of CRPBaseRenderer
+      bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) override;
+      void AddFrame(const uint8_t* data, unsigned int size) override;
+      void Flush() override;
+      void RenderUpdate(bool clear, unsigned int alpha) override;
+      void Deinitialize() override;
+      bool Supports(ERENDERFEATURE feature) const override;
+      bool Supports(ESCALINGMETHOD method) const override;
+      void SetSpeed(double speed) override;
 
-  private:
-    bool UploadTexture();
-    void Render(CD3DTexture *target);
+    private:
+      bool UploadTexture();
+      void Render(CD3DTexture* target);
 
-    bool m_bConfigured = false;
-    bool m_bLoaded = false;
+      bool m_bConfigured = false;
+      bool m_bLoaded = false;
 
-    AVPixelFormat m_targetPixFormat = AV_PIX_FMT_NONE;
-    DXGI_FORMAT m_targetDxFormat = DXGI_FORMAT_UNKNOWN;
-    std::vector<uint8_t> m_buffer;
-    std::atomic<bool> m_bQueued;
-    std::unique_ptr<CD3DTexture> m_intermediateTarget;
-    SwsContext *m_swsContext = nullptr;
-    std::unique_ptr<COutputShader> m_outputShader;
-  };
-}
+      AVPixelFormat m_targetPixFormat = AV_PIX_FMT_NONE;
+      DXGI_FORMAT m_targetDxFormat = DXGI_FORMAT_UNKNOWN;
+      std::vector<uint8_t> m_buffer;
+      std::atomic<bool> m_bQueued;
+      std::unique_ptr<SHADER::CShaderTextureCD3D> m_intermediateTarget;
+      SwsContext* m_swsContext = nullptr;
+      std::unique_ptr<COutputShader> m_outputShader;
+
+
+      // ====== Video Shader Members =====
+    private:
+      class CVideoShaderPreset;
+      // For true renderer independence, RPRenderManager must own this
+      std::unique_ptr<SHADERPRESET::IVideoShaderPreset> m_shaderPreset;
+
+    public:
+      /**
+    * \brief Gets the shader preset path currently loaded
+    * \returns Preset relative path
+    */
+      const std::string& GetShaderPreset();
+      /**
+     * \brief Sets the shader preset path to be loaded and used from the next frame
+     * \param presetPath Relative path to preset file
+     */
+      void SetShaderPreset(const std::string presetPath);
+
+    private:
+      void UpdateVideoShaders();
+      std::string m_shaderPresetPath;
+      bool m_shadersNeedUpdate;
+      bool m_useShaderPreset;
+    };
+  }
 }

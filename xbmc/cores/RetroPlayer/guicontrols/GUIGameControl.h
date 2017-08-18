@@ -37,6 +37,7 @@ public:
   ~CGUIGameControl() override = default;
 
   void SetVideoFilter(const CGUIInfoLabel &videoFilter);
+  void SetScalingMode(const CGUIInfoLabel &scalingMode);
   void SetViewMode(const CGUIInfoLabel &viewMode);
 
   const CGUIRenderSettings &GetRenderSettings() const { return m_renderSettings; }
@@ -54,6 +55,7 @@ private:
   void DisableGUIRender();
 
   CGUIInfoLabel m_videoFilterInfo;
+  CGUIInfoLabel m_scalingModeInfo;
   CGUIInfoLabel m_viewModeInfo;
 
   CGUIRenderSettings m_renderSettings;

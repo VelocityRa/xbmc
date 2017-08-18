@@ -18,18 +18,22 @@
  *
  */
 
-#include "GameSettings.h"
+#include "VideoShaderTexture.h"
 
-void CGameSettings::Reset()
-{
-  m_videoFilter.clear();
-  m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
-  m_viewMode = ViewModeNormal;
-}
+using namespace KODI;
+using namespace SHADER;
 
-bool CGameSettings::operator==(const CGameSettings &rhs) const
+float2 SHADER::GetOptimalTextureSize(float2 videoSize)
 {
-  return m_videoFilter == rhs.m_videoFilter &&
-         m_scalingMethod == rhs.m_scalingMethod &&
-         m_viewMode == rhs.m_viewMode;
+  unsigned sizeMax = videoSize.Max<unsigned>();
+  unsigned size = 1;
+
+  // Find smallest possible power-of-two size that can contain input texture
+  while (true)
+  {
+    if (size >= sizeMax)
+      break;
+    size *= 2;
+  }
+  return float2(size, size);
 }

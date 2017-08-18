@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2017 Team Kodi
  *      http://kodi.tv
@@ -18,18 +19,25 @@
  *
  */
 
-#include "GameSettings.h"
+#include "VideoShaderTexture.h"
 
-void CGameSettings::Reset()
+namespace KODI
 {
-  m_videoFilter.clear();
-  m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
-  m_viewMode = ViewModeNormal;
+namespace SHADER
+{
+  struct float2;
+  class IShaderTexture;
+
+  class IVideoShader
+  {
+  public:
+    // todo
+    virtual bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
+      IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod = 0) = 0;
+    virtual void Render(IShaderTexture& source, IShaderTexture& target) = 0;
+    virtual void SetSizes(const float2& prevSize, const float2& nextSize) = 0;
+  protected:
+    ~IVideoShader() = default;
+  };
 }
-
-bool CGameSettings::operator==(const CGameSettings &rhs) const
-{
-  return m_videoFilter == rhs.m_videoFilter &&
-         m_scalingMethod == rhs.m_scalingMethod &&
-         m_viewMode == rhs.m_viewMode;
 }

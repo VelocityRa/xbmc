@@ -20,12 +20,14 @@
 
 #include "RPRenderManager.h"
 #include "RPRenderFactory.h"
-#include "cores/RetroPlayer/rendering/VideoRenderers/RPBaseRenderer.h"
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
 #include "settings/MediaSettings.h"
-#include "settings/VideoSettings.h"
 #include "threads/SingleLock.h"
+//todo
+#if defined(TARGET_WINDOWS)
+#include "cores/RetroPlayer/rendering/VideoRenderers/RPWinRenderer.h"
+#endif
 
 using namespace KODI;
 using namespace RETRO;
@@ -94,9 +96,9 @@ void CRPRenderManager::FrameMove()
   }
 }
 
-void CRPRenderManager::Render(bool clear, DWORD alpha)
+void CRPRenderManager::Render(bool clear, DWORD alpha, bool gui)
 {
-  if (!m_renderer)
+  if (!m_renderer || !gui)
     return;
 
   CSingleExit exitLock(g_graphicsContext);
@@ -159,6 +161,34 @@ void CRPRenderManager::SetRenderViewMode(ViewMode mode)
 {
   if (m_renderer)
     m_renderer->SetViewMode(mode);
+}
+
+void CRPRenderManager::SetSpeed(double speed)
+{
+  if (m_renderer)
+    m_renderer->SetSpeed(speed);
+}
+
+// TODO: Avoid casting by having CRPRenderManager own CVideoShaderManager
+void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
+{
+#if defined(TARGET_WINDOWS)
+  CRPWinRenderer* winRenderer = nullptr;
+  if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_renderer.get())))
+    winRenderer->SetShaderPreset(shaderPresetPath);
+#endif
+}
+
+// TODO: Avoid casting by having CRPRenderManager own CVideoShaderManager
+const std::string& CRPRenderManager::GetShaderPreset() const
+{
+#if defined(TARGET_WINDOWS)
+  CRPWinRenderer* winRenderer = nullptr;
+  if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_renderer.get())))
+    return winRenderer->GetShaderPreset();
+#endif
+  static const std::string empty;
+  return empty;
 }
 
 void CRPRenderManager::UpdateResolution()

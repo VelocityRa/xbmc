@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2017 Team Kodi
  *      http://kodi.tv
@@ -18,18 +19,26 @@
  *
  */
 
-#include "GameSettings.h"
+#include <map>
+#include <algorithm>
+#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
+#include <directxmath.h>
+#include <minwindef.h>
 
-void CGameSettings::Reset()
+namespace KODI
 {
-  m_videoFilter.clear();
-  m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
-  m_viewMode = ViewModeNormal;
+namespace SHADER
+{
+  /* todo
+  operator DirectX::XMFLOAT2(const float2& f) const
+  {
+    return DirectX::XMFLOAT2(static_cast<float>(f.x), static_cast<float>(f.y));
+  }
+  */
+
+  struct CUSTOMVERTEX {
+    FLOAT x, y, z;  // vertex positions
+    FLOAT tu, tv;   // texture coordinates
+  };
 }
-
-bool CGameSettings::operator==(const CGameSettings &rhs) const
-{
-  return m_videoFilter == rhs.m_videoFilter &&
-         m_scalingMethod == rhs.m_scalingMethod &&
-         m_viewMode == rhs.m_viewMode;
 }

@@ -32,14 +32,18 @@ public:
   bool operator==(const CGameSettings &rhs) const;
   bool operator!=(const CGameSettings &rhs) const { return !(*this == rhs); }
 
+  const std::string &VideoFilter() const { return m_videoFilter; }
+  void SetVideoFilter(const std::string &videoFilter) { m_videoFilter = videoFilter; }
+
   ESCALINGMETHOD ScalingMethod() const { return m_scalingMethod; }
   void SetScalingMethod(ESCALINGMETHOD scalingMethod) { m_scalingMethod = scalingMethod; }
-  
+
   enum ViewMode ViewMode() const { return m_viewMode; }
   void SetViewMode(enum ViewMode viewMode) { m_viewMode = viewMode; }
 
 private:
   // Video settings
+  std::string m_videoFilter;
   ESCALINGMETHOD m_scalingMethod;
   enum ViewMode m_viewMode;
 };

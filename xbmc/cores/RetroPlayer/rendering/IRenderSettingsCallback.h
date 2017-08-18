@@ -20,6 +20,7 @@
 #pragma once
 
 #include "cores/IPlayer.h"
+#include <string>
 
 namespace KODI
 {
@@ -38,6 +39,9 @@ namespace RETRO
 
     virtual ViewMode GetRenderViewMode() const = 0;
     virtual void SetRenderViewMode(ViewMode mode) = 0;
+
+    virtual void SetShaderPreset(const std::string& shaderPresetPath) = 0;
+    virtual const std::string &GetShaderPreset() const = 0;
   };
 }
 }

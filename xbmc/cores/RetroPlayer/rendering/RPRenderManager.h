@@ -44,11 +44,12 @@ namespace RETRO
     // Functions called from game loop
     bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation);
     bool AddFrame(const uint8_t* data, unsigned int size);
+    void SetSpeed(double speed);
 
     // Functions called from render thread
     bool IsConfigured() const;
     void FrameMove();
-    void Render(bool clear, DWORD alpha);
+    void Render(bool clear, DWORD alpha, bool gui);
     void Flush();
     void TriggerUpdateResolution();
 
@@ -59,6 +60,8 @@ namespace RETRO
     void SetScalingMethod(ESCALINGMETHOD scalingMethod) override;
     ViewMode GetRenderViewMode() const override;
     void SetRenderViewMode(ViewMode mode) override;
+    void SetShaderPreset(const std::string &shaderPresetPath) override;
+    const std::string &GetShaderPreset() const override;
 
   private:
     void UpdateResolution();
