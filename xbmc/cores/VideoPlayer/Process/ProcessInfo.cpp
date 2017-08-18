@@ -424,8 +424,13 @@ void CProcessInfo::GetRenderBuffers(int &queued, int &discard, int &free)
 
 std::vector<AVPixelFormat> CProcessInfo::GetRenderFormats()
 {
-  std::vector<AVPixelFormat> formats;
-  formats.push_back(AV_PIX_FMT_YUV420P);
+  CSingleLock lock(m_renderSection);
+
+  std::vector<AVPixelFormat> formats = m_renderInfo.formats;
+
+  if (formats.empty())
+    formats.push_back(AV_PIX_FMT_YUV420P);
+
   return formats;
 }
 

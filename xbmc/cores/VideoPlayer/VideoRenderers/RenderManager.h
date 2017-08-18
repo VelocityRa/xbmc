@@ -145,7 +145,7 @@ protected:
   bool IsPresenting();
   bool IsGuiLayer();
 
-  bool Configure();
+  bool Configure(bool resetRenderer = true);
   void CreateRenderer();
   void DeleteRenderer();
   void ManageCaptures();

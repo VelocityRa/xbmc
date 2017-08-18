@@ -34,12 +34,22 @@ namespace RETRO
     ~CRPRenderManager() override = default;
 
     // Implementation of IRenderSettingsCallback
-    bool SupportsRenderFeature(ERENDERFEATURE feature) override;
+    void PreInit();
+    void CreateRenderer();
+    bool Configure();
+    bool Configure(const VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers = 0);
+    void FrameMove();
+    void SetSpeed(double speed);
+
+    // Implementation of IRenderSettingsCallback
     bool SupportsScalingMethod(ESCALINGMETHOD method) override;
+    bool SupportsRenderFeature(ERENDERFEATURE feature) override;
     ViewMode GetRenderViewMode() override;
     void SetRenderViewMode(ViewMode mode) override;
+    void SetScalingMethod(ESCALINGMETHOD method) override;
+    void SetShaderPreset(const std::string& shaderPresetPath) override;
     ESCALINGMETHOD GetScalingMethod() override;
-    void SetScalingMethod(ESCALINGMETHOD scalingMethod) override;
+    const std::string& GetShaderPreset() override;
   };
 }
 }

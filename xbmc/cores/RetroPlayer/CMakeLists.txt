@@ -2,13 +2,16 @@ set(SOURCES RetroPlayer.cpp
             RetroPlayerAudio.cpp
             RetroPlayerAutoSave.cpp
             RetroPlayerInput.cpp
-            RetroPlayerVideo.cpp)
+            RetroPlayerVideo.cpp
+            VideoShaderPreset.cpp)
 
-set(HEADERS RetroPlayer.h
+set(HEADERS IVideoShaderPreset.h
+            RetroPlayer.h
             RetroPlayerAudio.h
             RetroPlayerAutoSave.h
             RetroPlayerDefines.h
             RetroPlayerInput.h
-            RetroPlayerVideo.h)
+            RetroPlayerVideo.h
+            VideoShaderPreset.h)
 
 core_add_library(retroplayer)

@@ -29,16 +29,15 @@
  * Some parts on headers are only be used for Kodi itself and internally (not
  * for add-on development).
  *
- * For this reason also no doxygen part with "///" defined there.
+ * For this reason also no doxygen parts with "///" defined there.
  * -----------------------------------------------------------------------------
  */
 
 /*
  * Versions of all add-on globals and instances are defined below.
  *
- * This is added here and not in related header to prevent not
- * needed includes during compile. Also have it here a better
- * overview.
+ * This is added here and not in related header to prevent unneeded
+ * includes during compilation. It also gives a better overview.
  */
 
 #define ADDON_GLOBAL_VERSION_MAIN                     "1.0.10"
@@ -143,12 +142,17 @@
                                                       "StreamCodec.h" \
                                                       "StreamCrypto.h"
 
+#define ADDON_INSTANCE_VERSION_SHADERPRESET           "0.0.2"
+#define ADDON_INSTANCE_VERSION_SHADERPRESET_MIN       "0.0.2"
+#define ADDON_INSTANCE_VERSION_SHADERPRESET_XML_ID    "kodi.binary.instance.shaderpreset"
+#define ADDON_INSTANCE_VERSION_SHADERPRESET_DEPENDS   "addon-instance/ShaderPreset.h"
+
 ///
 /// The currently available instance types for Kodi add-ons
 ///
 /// \internal
-/// @note For add of new types take a new number on end. To change
-/// existing numbers can be make problems on already compiled add-ons.
+/// @note To add a new type append it at the end. Changing
+/// existing numbers can cause problems on already compiled add-ons.
 /// \endinternal
 ///
 typedef enum ADDON_TYPE
@@ -160,7 +164,8 @@ typedef enum ADDON_TYPE
   ADDON_GLOBAL_GENERAL = 3,
   ADDON_GLOBAL_NETWORK = 4,
   ADDON_GLOBAL_FILESYSTEM = 5,
-  ADDON_GLOBAL_MAX = 5, // Last used global id, used in loops to check versions. Need to change if new global type becomes added.
+  ADDON_GLOBAL_MAX = 5, // Last used global id, used in loops to check versions.
+                        // Needs to change if new global type is added.
 
   /* addon type instances */
   ADDON_INSTANCE_ADSP = 101,
@@ -175,6 +180,7 @@ typedef enum ADDON_TYPE
   ADDON_INSTANCE_VFS = 110,
   ADDON_INSTANCE_IMAGEDECODER = 111,
   ADDON_INSTANCE_VIDEOCODEC = 112,
+  ADDON_INSTANCE_SHADERPRESET = 113,
 } ADDON_TYPE;
 
 #ifdef __cplusplus
@@ -185,16 +191,16 @@ namespace addon {
 
 ///
 /// This is used from Kodi to get the active version of add-on parts.
-/// It is compiled in add-on and also in Kodi itself, with this can be Kodi
-/// compare the version from him with them on add-on.
+/// It is compiled in add-ons and also in Kodi itself. With this
+/// Kodi can compare its version with add-ons.
 ///
-/// @param[in] type The with 'enum ADDON_TYPE' type to ask
+/// @param[in] type The with 'enum ADDON_TYPE' defined type to ask
 /// @return version The current version of asked type
 ///
 inline const char* GetTypeVersion(int type)
 {
   /*
-   * #ifdef's below becomes set by cmake, no set by hand needed.
+   * #ifdefs below are set by cmake, no setting by hand is needed
    */
   switch (type)
   {
@@ -259,6 +265,10 @@ inline const char* GetTypeVersion(int type)
     case ADDON_INSTANCE_SCREENSAVER:
       return ADDON_INSTANCE_VERSION_SCREENSAVER;
 #endif
+#if !defined(BUILD_KODI_ADDON) || defined(ADDON_INSTANCE_VERSION_SHADERPRESET_USED)
+    case ADDON_INSTANCE_SHADERPRESET:
+      return ADDON_INSTANCE_VERSION_SHADERPRESET;
+#endif
 #if !defined(BUILD_KODI_ADDON) || defined(ADDON_INSTANCE_VERSION_VFS_USED)
     case ADDON_INSTANCE_VFS:
       return ADDON_INSTANCE_VERSION_VFS;
@@ -277,8 +287,8 @@ inline const char* GetTypeVersion(int type)
 
 ///
 /// This is used from Kodi to get the minimum supported version of add-on parts.
-/// It is compiled in add-on and also in Kodi itself, with this can be Kodi
-/// compare the version from him with them on add-on.
+/// It is compiled in add-ons and also in Kodi itself. With this
+/// Kodi can compare its version with add-ons.
 ///
 /// @param[in] type The with 'enum ADDON_TYPE' type to ask
 /// @return version The minimum version of asked type
@@ -320,6 +330,8 @@ inline const char* GetTypeMinVersion(int type)
       return ADDON_INSTANCE_VERSION_PVR_MIN;
     case ADDON_INSTANCE_SCREENSAVER:
       return ADDON_INSTANCE_VERSION_SCREENSAVER_MIN;
+    case ADDON_INSTANCE_SHADERPRESET:
+      return ADDON_INSTANCE_VERSION_SHADERPRESET_MIN;
     case ADDON_INSTANCE_VFS:
       return ADDON_INSTANCE_VERSION_VFS_MIN;
     case ADDON_INSTANCE_VISUALIZATION:
@@ -374,6 +386,8 @@ inline const char* GetTypeName(int type)
       return "PVR";
     case ADDON_INSTANCE_SCREENSAVER:
       return "ScreenSaver";
+    case ADDON_INSTANCE_SHADERPRESET:
+      return "ShaderPreset";
     case ADDON_INSTANCE_VISUALIZATION:
       return "Visualization";
     case ADDON_INSTANCE_VIDEOCODEC:
@@ -425,6 +439,8 @@ inline int GetTypeId(const char* name)
       return ADDON_INSTANCE_PVR;
     else if (strcmp(name, "screensaver") == 0)
       return ADDON_INSTANCE_SCREENSAVER;
+    else if (strcmp(name, "shaderpreset") == 0)
+      return ADDON_INSTANCE_SHADERPRESET;
     else if (strcmp(name, "vfs") == 0)
       return ADDON_INSTANCE_VFS;
     else if (strcmp(name, "visualization") == 0)

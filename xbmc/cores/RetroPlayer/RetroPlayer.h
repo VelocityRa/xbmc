@@ -20,10 +20,9 @@
 #pragma once
 
 #include "cores/IPlayer.h"
-#include "cores/VideoPlayer/VideoRenderers/RenderManager.h"
 #include "cores/VideoPlayer/DVDClock.h"
+#include "cores/RetroPlayer/rendering/RPRenderManager.h"
 #include "games/GameTypes.h"
-#include "guilib/DispResource.h"
 #include "threads/CriticalSection.h"
 
 #include <memory>

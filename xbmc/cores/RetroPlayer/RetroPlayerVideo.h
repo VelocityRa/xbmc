@@ -20,6 +20,8 @@
 #pragma once
 
 #include "games/addons/GameClientCallbacks.h"
+#include "cores/RetroPlayer/rendering/RPRenderManager.h"
+#include "cores/RetroPlayer/rendering/VideoShaderManager.h"
 //#include "threads/Thread.h"
 
 #include "libavutil/pixfmt.h"
@@ -43,7 +45,7 @@ namespace RETRO
                             //protected CThread
   {
   public:
-    CRetroPlayerVideo(CRenderManager& m_renderManager, CProcessInfo& m_processInfo, CDVDClock &clock);
+    CRetroPlayerVideo(CRPRenderManager& m_renderManager, CProcessInfo& m_processInfo, CDVDClock &clock);
 
     ~CRetroPlayerVideo() override;
 
@@ -67,7 +69,7 @@ namespace RETRO
     void AllocateRgbBuffer(uint8_t **pData, size_t size) const;
 
     // Construction parameters
-    CRenderManager& m_renderManager;
+    CRPRenderManager& m_renderManager;
     CProcessInfo&   m_processInfo;
     CDVDClock       &m_clock;
 

@@ -22,31 +22,17 @@
 #include "cores/RetroPlayer/rendering/IRenderSettingsCallback.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/WindowIDs.h"
-#include "settings/GameSettings.h"
-#include "settings/MediaSettings.h"
 #include "utils/Variant.h"
 #include "FileItem.h"
+#include "utils/log.h"
+#include "utils/XBMCTinyXML.h"
+
+#include <stdlib.h>
 
 using namespace KODI;
 using namespace GAME;
 
-const std::vector<CDialogGameVideoFilter::VideoFilterProperties> CDialogGameVideoFilter::m_allVideoFilters =
-{
-  { 16301,  VS_SCALINGMETHOD_NEAREST },
-  { 16302,  VS_SCALINGMETHOD_LINEAR },
-  { 16303,  VS_SCALINGMETHOD_CUBIC },
-  { 16304,  VS_SCALINGMETHOD_LANCZOS2 },
-  { 16323,  VS_SCALINGMETHOD_SPLINE36_FAST },
-  { 16315,  VS_SCALINGMETHOD_LANCZOS3_FAST },
-  { 16322,  VS_SCALINGMETHOD_SPLINE36 },
-  { 16305,  VS_SCALINGMETHOD_LANCZOS3 },
-  { 16306,  VS_SCALINGMETHOD_SINC8 },
-  { 16307,  VS_SCALINGMETHOD_BICUBIC_SOFTWARE },
-  { 16308,  VS_SCALINGMETHOD_LANCZOS_SOFTWARE },
-  { 16309,  VS_SCALINGMETHOD_SINC_SOFTWARE },
-  { 13120,  VS_SCALINGMETHOD_VDPAU_HARDWARE },
-  { 16319,  VS_SCALINGMETHOD_DXVA_HARDWARE },
-};
+#define PRESETS_ADDON_NAME "game.shader.presets"
 
 CDialogGameVideoFilter::CDialogGameVideoFilter() :
   CDialogGameVideoSelect(WINDOW_DIALOG_GAME_VIDEO_FILTER)
@@ -57,22 +43,46 @@ void CDialogGameVideoFilter::PreInit()
 {
   m_videoFilters.clear();
 
-  if (m_callback != nullptr)
+  // TODO: Have the add-on give us the xml as a string (or parse it)
+  static const std::string addonPath = std::string("special://xbmcbinaddons/") + PRESETS_ADDON_NAME;
+  static const std::string xmlPath = addonPath + "/resources/ShaderPresetsDefault.xml";
+
+  CXBMCTinyXML xml = CXBMCTinyXML(xmlPath);
+
+  if (!xml.LoadFile())
   {
-    for (const auto &videoFilter : m_allVideoFilters)
-    {
-      if (m_callback->SupportsScalingMethod(videoFilter.scalingMethod))
-        m_videoFilters.emplace_back(videoFilter);
-    }
+    CLog::Log(LOGERROR, "%s - Couldn't load shader presets default .xml, %s", __FUNCTION__, xmlPath);
+    return;
   }
+
+  auto root = xml.RootElement();
+  TiXmlNode* child = nullptr;
+
+  while (child = root->IterateChildren(child))
+  {
+    VideoFilterProperties videoFilter;
+
+    videoFilter.path = child->FirstChild("path")->FirstChild()->Value();
+    videoFilter.nameIndex = atoi(child->FirstChild("name")->FirstChild()->Value());
+    videoFilter.categoryIndex = atoi(child->FirstChild("category")->FirstChild()->Value());
+    videoFilter.descriptionIndex = atoi(child->FirstChild("description")->FirstChild()->Value());
+
+    m_videoFilters.emplace_back(videoFilter);
+  }
+
+  CLog::Log(LOGDEBUG, "%s - Loaded shader presets default .xml, %s", __FUNCTION__, xmlPath);
 }
 
 void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 {
   for (const auto &videoFilter : m_videoFilters)
   {
-    CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(videoFilter.stringIndex));
-    item->SetProperty("game.videofilter", CVariant{ videoFilter.scalingMethod });
+    auto localizedName = GetLocalizedString(videoFilter.nameIndex);
+    auto localizedCategory = GetLocalizedString(videoFilter.categoryIndex);
+
+    CFileItemPtr item = std::make_shared<CFileItem>(localizedName);
+    item->SetLabel2(localizedCategory);
+
     items.Add(std::move(item));
   }
 
@@ -85,36 +95,36 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 {
-  if (index < m_videoFilters.size())
+  if (index < m_videoFilters.size() && m_callback != nullptr)
   {
-    const ESCALINGMETHOD scalingMethod = m_videoFilters[index].scalingMethod;
+    const std::string &presetToSet = m_videoFilters[index].path;
+    bool presetChanged = (m_shaderPresetPath != presetToSet);
 
-    CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
-    if (gameSettings.ScalingMethod() != scalingMethod)
+    if (presetChanged)
     {
-      gameSettings.SetScalingMethod(scalingMethod);
-
-      if (m_callback != nullptr)
-        m_callback->SetScalingMethod(scalingMethod);
+      m_callback->SetShaderPreset(presetToSet);
+      m_shaderPresetPath = presetToSet;
     }
   }
 }
 
 unsigned int CDialogGameVideoFilter::GetFocusedItem() const
 {
-  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
-
   for (unsigned int i = 0; i < m_videoFilters.size(); i++)
   {
-    const ESCALINGMETHOD scalingMethod = m_videoFilters[i].scalingMethod;
-    if (scalingMethod == gameSettings.ScalingMethod())
-      return i;
+    std::string preset = m_callback->GetShaderPreset();
+    if (preset == m_videoFilters[i].path)
+       return i;
   }
-
   return 0;
 }
 
 void CDialogGameVideoFilter::PostExit()
 {
   m_videoFilters.clear();
+}
+
+std::string CDialogGameVideoFilter::GetLocalizedString(uint32_t code)
+{
+  return g_localizeStrings.GetAddonString(PRESETS_ADDON_NAME, code);
 }

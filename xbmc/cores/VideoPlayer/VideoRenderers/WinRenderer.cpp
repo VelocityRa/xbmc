@@ -509,6 +509,7 @@ EBufferFormat CWinRenderer::SelectBufferFormat(AVPixelFormat format, const Rende
       return BUFFER_FMT_YUV420P16;
     case AV_PIX_FMT_UYVY422:
       return BUFFER_FMT_UYVY422;
+    case AV_PIX_FMT_BGRA:
     case AV_PIX_FMT_0RGB32:
     case AV_PIX_FMT_RGB565:
     case AV_PIX_FMT_RGB555:
@@ -1126,6 +1127,7 @@ CRenderInfo CWinRenderer::GetRenderInfo()
     AV_PIX_FMT_YUV420P,
     AV_PIX_FMT_YUV420P10,
     AV_PIX_FMT_YUV420P16,
+    AV_PIX_FMT_BGRA,
     AV_PIX_FMT_0RGB32,
     AV_PIX_FMT_RGB565,
     AV_PIX_FMT_RGB555,

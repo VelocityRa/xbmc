@@ -168,7 +168,7 @@ void CPixelBufferPoolRGB::Return(int id)
 // main class
 //------------------------------------------------------------------------------
 
-CRetroPlayerVideo::CRetroPlayerVideo(CRenderManager& renderManager, CProcessInfo& processInfo, CDVDClock &clock) :
+CRetroPlayerVideo::CRetroPlayerVideo(CRPRenderManager& renderManager, CProcessInfo& processInfo, CDVDClock &clock) :
   //CThread("RetroPlayerVideo"),
   m_renderManager(renderManager),
   m_processInfo(processInfo),
