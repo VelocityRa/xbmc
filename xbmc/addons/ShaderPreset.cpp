@@ -26,6 +26,48 @@
 
 using namespace ADDON;
 
+// --- CShaderPreset -----------------------------------------------------------
+
+CShaderPreset::CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct) :
+  m_file(file),
+  m_struct(instanceStruct)
+{
+}
+
+CShaderPreset::~CShaderPreset()
+{
+  m_struct.toAddon.config_file_free(&m_struct, m_file);
+}
+
+bool CShaderPreset::ReadShaderPreset(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_read(&m_struct, m_file, &shader);
+}
+
+void CShaderPreset::WriteShaderPreset(const video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_write(&m_struct, m_file, &shader);
+}
+
+/*
+void CShaderPresetAddon::ShaderPresetResolveRelative(video_shader &shader, const std::string &ref_path)
+{
+  return m_struct.toAddon.video_shader_resolve_relative(&m_struct, &shader, ref_path.c_str());
+}
+
+bool CShaderPresetAddon::ShaderPresetResolveCurrentParameters(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_resolve_current_parameters(&m_struct, m_file, &shader);
+}
+*/
+
+bool CShaderPreset::ResolveParameters(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, m_file, &shader);
+}
+
+// --- CShaderPresetAddon ------------------------------------------------------
+
 CShaderPresetAddon::CShaderPresetAddon(const BinaryAddonBasePtr& addonBase)
   : IAddonInstanceHandler(ADDON_INSTANCE_SHADERPRESET, addonBase)
 {
@@ -76,49 +118,16 @@ const char* CShaderPresetAddon::GetLibraryBasePath()
   return m_strLibraryPath.c_str();
 }
 
-config_file *CShaderPresetAddon::ConfigFileNew(const char *path)
+ShaderPresetPtr CShaderPresetAddon::LoadShaderPreset(const std::string &path)
 {
+  ShaderPresetPtr shaderPreset;
+
   m_strConfigPath = URIUtils::AddFileToFolder(GetLibraryBasePath(), path);
-  m_strConfigBasePath = URIUtils::GetBasePath(m_strConfigPath);
-  return m_struct.toAddon.config_file_new(&m_struct, m_strConfigPath.c_str(), m_strConfigBasePath.c_str());
-}
 
-config_file *CShaderPresetAddon::ConfigFileNewFromString(const char *from_string)
-{
-  return m_struct.toAddon.config_file_new_from_string(&m_struct, from_string);
-}
+  config_file *file = m_struct.toAddon.config_file_new(&m_struct, m_strConfigPath.c_str());
 
-void CShaderPresetAddon::ConfigFileFree(config_file *conf)
-{
-  return m_struct.toAddon.config_file_free(&m_struct, conf);
-}
+  if (file != nullptr)
+    shaderPreset = std::make_shared<CShaderPreset>(file, m_struct);
 
-bool CShaderPresetAddon::ShaderPresetRead(config_file *conf, video_shader *shader)
-{
-  return m_struct.toAddon.video_shader_read_conf_cgp(&m_struct, conf, shader);
-}
-
-void CShaderPresetAddon::ShaderPresetWrite(config_file *conf, video_shader *shader)
-{
-  return m_struct.toAddon.video_shader_write_conf_cgp(&m_struct, conf, shader);
-}
-
-void CShaderPresetAddon::ShaderPresetResolveRelative(video_shader *shader, const char *ref_path)
-{
-  return m_struct.toAddon.video_shader_resolve_relative(&m_struct, shader, ref_path);
-}
-
-bool CShaderPresetAddon::ShaderPresetResolveCurrentParameters(config_file *conf, video_shader *shader)
-{
-  return m_struct.toAddon.video_shader_resolve_current_parameters(&m_struct, conf, shader);
-}
-
-bool CShaderPresetAddon::ShaderPresetResolveParameters(config_file *conf, video_shader *shader)
-{
-  return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, conf, shader);
-}
-
-void CShaderPresetAddon::VideoShaderFree(video_shader *shader)
-{
-  return m_struct.toAddon.video_shader_free(&m_struct, shader);
+  return shaderPreset;
 }

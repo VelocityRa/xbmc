@@ -25,40 +25,6 @@
 
 namespace kodi { namespace addon { class CInstanceShaderPreset; } }
 
-extern "C"
-{
-  /// @name config_file
-  ///{
-  typedef struct config_entry_list
-  {
-    bool readonly; /* If we got this from an #include, do not allow overwrite */
-    char *key;
-    char *value;
-    uint32_t key_hash;
-
-    struct config_entry_list *next;
-  } config_entry_list;
-
-  typedef struct config_include_list
-  {
-    char *path;
-    config_include_list *next;
-  } config_include_list;
-
-  typedef struct config_file
-  {
-    char *path;
-    config_entry_list *entries;
-    config_entry_list *tail;
-    unsigned include_depth;
-
-    config_include_list *includes;
-  } config_file ;
-  ///}
-
-  /// @name video_shader_PARSE
-  ///{
-
 #ifndef PATH_MAX_LENGTH
 #define PATH_MAX_LENGTH 4096
 #endif
@@ -67,6 +33,10 @@ extern "C"
 #define GFX_MAX_TEXTURES 8
 #define GFX_MAX_VARIABLES 64
 #define GFX_MAX_PARAMETERS 128
+
+extern "C"
+{
+  typedef struct config_file config_file;
 
   typedef enum state_tracker_type
   {
@@ -227,22 +197,15 @@ extern "C"
   {
     kodi::addon::CInstanceShaderPreset* addonInstance;
 
-    /// @name config_file
-    ///{
-    config_file* (__cdecl* config_file_new)(const AddonInstance_ShaderPreset* addonInstance, const char *path, const char *basePath);
-    config_file* (__cdecl* config_file_new_from_string)(const AddonInstance_ShaderPreset* addonInstance, const char *from_string);
+    config_file* (__cdecl* config_file_new)(const AddonInstance_ShaderPreset* addonInstance, const char *path);
     void (__cdecl* config_file_free)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf);
-    ///}
 
-    /// @name video_shader_PARSE
-    ///{
-    bool (__cdecl* video_shader_read_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader);
-    void (__cdecl* video_shader_write_conf_cgp)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader);
-    void (__cdecl* video_shader_resolve_relative)(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader, const char *ref_path);
-    bool (__cdecl* video_shader_resolve_current_parameters)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader);
+    bool (__cdecl* video_shader_read)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader);
+    void (__cdecl* video_shader_write)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, const video_shader *shader);
+    //void (__cdecl* video_shader_resolve_relative)(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader, const char *ref_path);
+    //bool (__cdecl* video_shader_resolve_current_parameters)(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader);
     bool (__cdecl* video_shader_resolve_parameters)(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader);
     void (__cdecl* video_shader_free)(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader);
-    ///}
   } KodiToAddonFuncTable_ShaderPreset;
 
   typedef struct AddonInstance_ShaderPreset
@@ -290,12 +253,7 @@ namespace kodi
        *
        * \return The config file, or NULL if file doesn't exist
        */
-      virtual config_file* ConfigFileNew(const char *path, const char *basePath) { return nullptr; }
-
-      /*!
-       * \brief Load a config file from a string
-       */
-      virtual config_file* ConfigFileNewFromString(const char *from_string) { return nullptr; }
+      virtual config_file* ConfigFileNew(const char *path) { return nullptr; }
 
       /*!
        * \brief Free a config file
@@ -327,7 +285,7 @@ namespace kodi
        *
        * \param shader            Shader pass handle
        * \param ref_path          Relative shader path
-       */
+       *
       virtual void ShaderPresetResolveRelative(video_shader &shader, const char *ref_path) { }
 
       /*!
@@ -337,7 +295,7 @@ namespace kodi
        * \param shader            Shader passes handle
        *
        * \return True if successful, otherwise false
-       */
+       *
       virtual bool ShaderPresetResolveCurrentParameters(config_file *conf, video_shader &shader) { return false; }
 
       /*!
@@ -381,25 +339,19 @@ namespace kodi
         m_instanceData->toAddon.addonInstance = this;
 
         m_instanceData->toAddon.config_file_new = ADDON_config_file_new;
-        m_instanceData->toAddon.config_file_new_from_string = ADDON_config_file_new_from_string;
         m_instanceData->toAddon.config_file_free = ADDON_config_file_free;
 
-        m_instanceData->toAddon.video_shader_read_conf_cgp = ADDON_video_shader_read_conf_cgp;
-        m_instanceData->toAddon.video_shader_write_conf_cgp = ADDON_video_shader_write_conf_cgp;
-        m_instanceData->toAddon.video_shader_resolve_relative = ADDON_video_shader_resolve_relative;
-        m_instanceData->toAddon.video_shader_resolve_current_parameters = ADDON_video_shader_resolve_current_parameters;
+        m_instanceData->toAddon.video_shader_read = ADDON_video_shader_read_conf_cgp;
+        m_instanceData->toAddon.video_shader_write = ADDON_video_shader_write_conf_cgp;
+        //m_instanceData->toAddon.video_shader_resolve_relative = ADDON_video_shader_resolve_relative;
+        //m_instanceData->toAddon.video_shader_resolve_current_parameters = ADDON_video_shader_resolve_current_parameters;
         m_instanceData->toAddon.video_shader_resolve_parameters = ADDON_video_shader_resolve_parameters;
         m_instanceData->toAddon.video_shader_free = ADDON_video_shader_free;
       }
 
-      inline static config_file* ADDON_config_file_new(const AddonInstance_ShaderPreset* addonInstance, const char *path, const char *basePath)
+      inline static config_file* ADDON_config_file_new(const AddonInstance_ShaderPreset* addonInstance, const char *path)
       {
-        return addonInstance->toAddon.addonInstance->ConfigFileNew(path, basePath);
-      }
-
-      inline static config_file* ADDON_config_file_new_from_string(const AddonInstance_ShaderPreset* addonInstance, const char *from_string)
-      {
-        return addonInstance->toAddon.addonInstance->ConfigFileNewFromString(from_string);
+        return addonInstance->toAddon.addonInstance->ConfigFileNew(path);
       }
 
       inline static void ADDON_config_file_free(const AddonInstance_ShaderPreset* addonInstance, config_file *conf)
@@ -421,6 +373,7 @@ namespace kodi
           addonInstance->toAddon.addonInstance->ShaderPresetWrite(conf, *shader);
       }
 
+      /*
       inline static void ADDON_video_shader_resolve_relative(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader, const char *ref_path)
       {
         if (shader != nullptr)
@@ -434,6 +387,7 @@ namespace kodi
 
         return false;
       }
+      */
 
       inline static bool ADDON_video_shader_resolve_parameters(const AddonInstance_ShaderPreset* addonInstance, config_file *conf, video_shader *shader)
       {

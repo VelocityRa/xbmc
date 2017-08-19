@@ -68,35 +68,29 @@ bool CVideoShaderPreset::Init()
 
 void CVideoShaderPreset::Destroy()
 {
-  if (m_config)
-    FreeConfigFile(m_config);
-  if (m_videoShader)
-    FreePresetFile(m_videoShader);
-  if (shaderPresetAddon)
-  {
-    shaderPresetAddon->DestroyAddon();
-    shaderPresetAddon.reset();
-  }
+  m_videoShader.reset();
+  m_config.reset();
+  shaderPresetAddon.reset();
 }
 
 // TODO: Don't die in flames if the file doesn't exist
-bool CVideoShaderPreset::ReadPresetFile(std::string presetPath)
+bool CVideoShaderPreset::ReadPresetFile(const std::string &presetPath)
 {
-  m_config = shaderPresetAddon->ConfigFileNew(presetPath.c_str());
+  m_config = shaderPresetAddon->LoadShaderPreset(presetPath);
   if (!m_config)
     return false;
-  bool result = ReadPresetConfig(m_config);
+  bool result = ReadPresetConfig();
   ResolveParameters();
   return result;
 }
 
-bool CVideoShaderPreset::ReadPresetConfig(config_file* conf)
+bool CVideoShaderPreset::ReadPresetConfig()
 {
   if (!shaderPresetAddon) return false;
 
-  m_videoShader = static_cast<video_shader*>(calloc(1, sizeof(video_shader)));
+  m_videoShader.reset(new video_shader);
 
-  auto readResult = shaderPresetAddon->ShaderPresetRead(conf, m_videoShader);
+  auto readResult = m_config->ReadShaderPreset(*m_videoShader);
 
   if (readResult)
   {
@@ -110,23 +104,15 @@ bool CVideoShaderPreset::ReadPresetConfig(config_file* conf)
     memcpy(m_Variable, m_videoShader->variable, GFX_MAX_VARIABLES * sizeof state_tracker_uniform_info);
     m_FeedbackPass = m_videoShader->feedback_pass;
 
-    CLog::Log(LOGINFO, "Shader Preset Addon: Read shader preset %s", conf->path);
+    //CLog::Log(LOGINFO, "Shader Preset Addon: Read shader preset %s", conf->path); //! @todo
   }
 
   return readResult;
 }
 
-bool CVideoShaderPreset::ReadPresetString(std::string presetString)
-{
-  config_file* conf = shaderPresetAddon->ConfigFileNewFromString(presetString.c_str());
-  bool result = ReadPresetConfig(conf);
-  FreeConfigFile(conf);
-  return result;
-}
-
 bool CVideoShaderPreset::ResolveParameters()
 {
-  bool resolveResult = shaderPresetAddon->ShaderPresetResolveParameters(m_config, m_videoShader);
+  bool resolveResult = m_config->ResolveParameters(*m_videoShader);
   m_NumParameters = m_videoShader->num_parameters;
   memcpy(m_Parameters, m_videoShader->parameters, GFX_MAX_PARAMETERS * sizeof video_shader_parameter);
   return resolveResult;
@@ -135,14 +121,4 @@ bool CVideoShaderPreset::ResolveParameters()
 CVideoShaderPreset::~CVideoShaderPreset()
 {
   Destroy();
-}
-
-void CVideoShaderPreset::FreeConfigFile(config_file* conf)
-{
-  return shaderPresetAddon->ConfigFileFree(conf);
-}
-
-void CVideoShaderPreset::FreePresetFile(video_shader* shader)
-{
-  return shaderPresetAddon->VideoShaderFree(shader);
 }

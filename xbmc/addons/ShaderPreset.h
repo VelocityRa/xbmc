@@ -26,6 +26,39 @@
 
 namespace ADDON
 {
+  class CShaderPreset;
+  using ShaderPresetPtr = std::shared_ptr<CShaderPreset>;
+
+  class CShaderPreset
+  {
+  public:
+    CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct);
+    ~CShaderPreset();
+
+    /*!
+     * \brief @todo document
+     */
+    bool ReadShaderPreset(video_shader &shader);
+
+    /*!
+    * \brief @todo document
+    */
+    void WriteShaderPreset(const video_shader &shader);
+
+    //void ResolveRelative(video_shader &shader, const std::string &ref_path);
+
+    //bool ResolveCurrentParameters(video_shader &shader);
+
+    /*!
+    * \brief @todo document
+    */
+    bool ResolveParameters(video_shader &shader);
+
+  private:
+    config_file *m_file;
+    AddonInstance_ShaderPreset &m_struct;
+  };
+
   /*
    *  Wrapper class that wraps the shader presets add-on
    */
@@ -36,7 +69,7 @@ namespace ADDON
     ~CShaderPresetAddon(void) override;
 
     /*!
-     * @brief Initialise the instance of this add-on
+     * \brief Initialise the instance of this add-on
      */
     bool CreateAddon(void);
 
@@ -45,81 +78,16 @@ namespace ADDON
      */
     void DestroyAddon();
 
-    /// ======== config_file_ ========
-
-    /* Loads a config file. Returns NULL if file doesn't exist.
-     * NULL path will create an empty config file. */
-    config_file* ConfigFileNew(const char *path);
-
-    /* Load a config file from a string. */
-    config_file* ConfigFileNewFromString(const char *from_string);
-
-    /* Frees config file. */
-    void ConfigFileFree(config_file *conf);
-
-    /// ==== video_shader_PARSE =====
-
-    /**
-     * ShaderPresetRead:
-     * @conf              : Preset file to read from.
-     * @shader            : Shader passes handle.
-     *
-     * Loads preset file and all associated state (passes,
-     * textures, imports, etc).
-     *
-     * Returns: true (1) if successful, otherwise false (0).
-     **/
-    bool ShaderPresetRead(config_file* conf, video_shader* shader);
-
-    /**
-     * ShaderPresetWrite:
-     * @conf              : Preset file to read from.
-     * @shader            : Shader passes handle.
-     *
-     * Saves preset and all associated state (passes,
-     * textures, imports, etc) to disk.
-     **/
-    void ShaderPresetWrite(config_file *conf, struct video_shader *shader);
-
-    /**
-     * ShaderPresetResolveRelative:
-     * @shader            : Shader pass handle.
-     * @ref_path          : Relative shader path.
-     *
-     * Resolves relative shader path (@ref_path) into absolute
-     * shader paths.
-     **/
-    void ShaderPresetResolveRelative(struct video_shader *shader, const char *ref_path);
-
-    /**
-     * ShaderPresetResolveCurrentParameters:
-     * @conf              : Preset file to read from.
-     * @shader            : Shader passes handle.
-     *
-     * Reads the current value for all parameters from config file.
-     *
-     * Returns: true (1) if successful, otherwise false (0).
-     **/
-    bool ShaderPresetResolveCurrentParameters(config_file *conf, struct video_shader *shader);
-
-    /**
-     * ShaderPresetResolveParameters:
-     * @conf              : Preset file to read from.
-     * @shader            : Shader passes handle.
-     *
-     * Resolves all shader parameters belonging to shaders.
-     *
-     * Returns: true (1) if successful, otherwise false (0).
-     **/
-    bool ShaderPresetResolveParameters(config_file *conf, struct video_shader *shader);
-
-    void VideoShaderFree(video_shader* shader);
+    /*!
+     * \brief @todo document
+     */
+    ShaderPresetPtr LoadShaderPreset(const std::string &path);
 
     /**
      * GetLibraryBasePath:
      * @brief Returns the full/absolute path of the dynamic library file.
      *
-     **/
+     */
     const char* GetLibraryBasePath(void);
 
   private:

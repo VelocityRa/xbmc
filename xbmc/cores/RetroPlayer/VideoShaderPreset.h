@@ -26,6 +26,7 @@
 
 namespace ADDON
 {
+  class CShaderPreset;
   class CShaderPresetAddon;
 }
 
@@ -70,19 +71,15 @@ namespace SHADERPRESET
     bool Init() override;
     void Destroy() override;
 
-    bool ReadPresetFile(std::string presetPath) override;
-    bool ReadPresetConfig(config_file* presetConf) override;
-    bool ReadPresetString(std::string presetString) override;
-    void FreePresetFile(video_shader* shader) override;
+    bool ReadPresetFile(const std::string &presetPath) override;
+    bool ReadPresetConfig() override;
     bool ResolveParameters() override;
     // bool WritePresetFile(config_file* presetConf) override;  // TODO?: preset file writing
 
     ~CVideoShaderPreset() override;
 
-  protected:
-     static void FreeConfigFile(config_file* conf);
   private:
-    config_file* m_config;
-    video_shader* m_videoShader;
+    std::shared_ptr<ADDON::CShaderPreset> m_config;
+    std::unique_ptr<video_shader> m_videoShader;
   };
 } // namespace SHADERPRESET
