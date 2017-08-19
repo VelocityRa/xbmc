@@ -65,7 +65,6 @@ namespace SHADERPRESET
     // Instance of CShaderPreset
     static std::unique_ptr<ADDON::CShaderPresetAddon> shaderPresetAddon;
     explicit CVideoShaderPreset();
-    explicit CVideoShaderPreset(std::string presetPath);
 
     // Initializes CShaderPresetAddon instance that's used for calling the add-on's functions
     bool Init() override;

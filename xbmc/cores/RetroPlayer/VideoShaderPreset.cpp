@@ -34,15 +34,7 @@ std::unique_ptr<ADDON::CShaderPresetAddon> CVideoShaderPreset::shaderPresetAddon
 
 CVideoShaderPreset::CVideoShaderPreset()
 {
-  Init();
-}
-
-CVideoShaderPreset::CVideoShaderPreset(std::string presetPath)
-{
-  if (Init())
-  {
-    ReadPresetFile(presetPath);
-  }
+  //! @todo Initializes members in header
 }
 
 bool CVideoShaderPreset::Init()
