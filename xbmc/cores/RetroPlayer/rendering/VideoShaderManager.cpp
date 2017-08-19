@@ -216,26 +216,26 @@ bool CVideoShaderManager::CreateShaderTextures()
     UINT textureY;
     switch (pass.fbo.type_x)
     {
-    case RARCH_SCALE_ABSOLUTE_:
+    case RARCH_SCALE_ABSOLUTE:
       textureX = pass.fbo.abs_x;
       break;
-    case RARCH_SCALE_VIEWPORT_:
+    case RARCH_SCALE_VIEWPORT:
       textureX = m_outputSize.x;
       break;
-    case RARCH_SCALE_INPUT_:
+    case RARCH_SCALE_INPUT:
     default:
       textureX = prevSize.x;
       break;
     }
     switch (pass.fbo.type_y)
     {
-    case RARCH_SCALE_ABSOLUTE_:
+    case RARCH_SCALE_ABSOLUTE:
       textureY = pass.fbo.abs_y;
       break;
-    case RARCH_SCALE_VIEWPORT_:
+    case RARCH_SCALE_VIEWPORT:
       textureY = m_outputSize.y;
       break;
-    case RARCH_SCALE_INPUT_:
+    case RARCH_SCALE_INPUT:
     default:
       textureY = prevSize.y;
       break;
@@ -300,7 +300,7 @@ bool CVideoShaderManager::CreateShaders()
   ShaderLUTs passLUTs;
   for(unsigned i = 0; i < m_pPreset->m_Luts; ++i)
   {
-    video_shader_lut_& lutStruct = m_pPreset->m_Lut[i];
+    video_shader_lut& lutStruct = m_pPreset->m_Lut[i];
 
     ID3D11SamplerState* lutSampler(CreateLUTSampler(lutStruct));
     CDXTexture* lutTexture(CreateLUTexture(lutStruct, presetDirectory));
@@ -394,7 +394,7 @@ bool CVideoShaderManager::CreateBuffers()
   return true;
 }
 
-ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter_* parameters,
+ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter* parameters,
    unsigned numParameters, const std::string& sourceStr) const
 {
    static const std::regex pragmaParamRegex("#pragma parameter ([a-zA-Z_][a-zA-Z0-9_]*)");

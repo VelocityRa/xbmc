@@ -38,19 +38,19 @@ namespace SHADERPRESET
   //private:
   public:
     // todo: probably don't need that
-    enum rarch_shader_type_ type;
+    rarch_shader_type type;
 
     unsigned m_Passes;
-    struct video_shader_pass_ m_Pass[GFX_MAX_SHADERS];
+    video_shader_pass m_Pass[GFX_MAX_SHADERS];
 
     unsigned m_Luts;
-    struct video_shader_lut_ m_Lut[GFX_MAX_TEXTURES];
+    video_shader_lut m_Lut[GFX_MAX_TEXTURES];
 
-    struct video_shader_parameter_ m_Parameters[GFX_MAX_PARAMETERS];
+    video_shader_parameter m_Parameters[GFX_MAX_PARAMETERS];
     unsigned m_NumParameters;
 
     unsigned m_Variables;
-    struct state_tracker_uniform_info_ m_Variable[GFX_MAX_VARIABLES];
+    state_tracker_uniform_info m_Variable[GFX_MAX_VARIABLES];
 
     /* If < 0, no feedback pass is used. Otherwise,
     * the FBO after pass #N is passed a texture to next frame. */
@@ -67,18 +67,18 @@ namespace SHADERPRESET
     void Destroy() override;
 
     bool ReadPresetFile(std::string presetPath) override;
-    bool ReadPresetConfig(config_file_t_* presetConf) override;
+    bool ReadPresetConfig(config_file* presetConf) override;
     bool ReadPresetString(std::string presetString) override;
-    void FreePresetFile(video_shader_* shader) override;
+    void FreePresetFile(video_shader* shader) override;
     bool ResolveParameters() override;
-    // bool WritePresetFile(config_file_t_* presetConf) override;  // TODO?: preset file writing
+    // bool WritePresetFile(config_file* presetConf) override;  // TODO?: preset file writing
 
     ~CVideoShaderPreset() override;
 
   protected:
-     static void FreeConfigFile(config_file_t_* conf);
+     static void FreeConfigFile(config_file* conf);
   private:
-    config_file_t_* m_config;
-    video_shader_* m_videoShader;
+    config_file* m_config;
+    video_shader* m_videoShader;
   };
 } // namespace SHADERPRESET

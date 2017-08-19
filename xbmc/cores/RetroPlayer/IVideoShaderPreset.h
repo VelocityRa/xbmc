@@ -56,13 +56,13 @@ namespace SHADERPRESET
     virtual bool ReadPresetFile(std::string presetPath) = 0;
 
     /**
-    * \brief Reads a shader preset already parsed in a config_file_t_
+    * \brief Reads a shader preset already parsed in a config_file
     *        and loads its state to the object. What this state is
     *        is implementation specific.
     * \param presetConf Configuration file of the preset file that's been parsed.
     * \return True if successfully read, false on failure.
     */
-    virtual bool ReadPresetConfig(config_file_t_* presetConf) = 0;
+    virtual bool ReadPresetConfig(config_file* presetConf) = 0;
 
     /**
     * \brief Reads/Parses a shader preset already loaded in memory as a
@@ -77,7 +77,7 @@ namespace SHADERPRESET
     * \brief Frees all state related to shader
     * \param shader Object to free.
     */
-    virtual void FreePresetFile(video_shader_* shader) = 0;
+    virtual void FreePresetFile(video_shader* shader) = 0;
 
     /**
     * ShaderPresetResolveParameters:

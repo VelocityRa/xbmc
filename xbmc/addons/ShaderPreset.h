@@ -51,16 +51,16 @@ namespace SHADERPRESET
 
   /* Loads a config file. Returns NULL if file doesn't exist.
    * NULL path will create an empty config file. */
-  config_file_t_* ConfigFileNew(const char *path);
+  config_file* ConfigFileNew(const char *path);
 
   /* Load a config file from a string. */
-  config_file_t_* ConfigFileNewFromString(const char *from_string);
+  config_file* ConfigFileNewFromString(const char *from_string);
 
   /* Frees config file. */
-  void ConfigFileFree(config_file_t_ *conf);
+  void ConfigFileFree(config_file *conf);
 
 
-  /// ==== video_shader__PARSE =====
+  /// ==== video_shader_PARSE =====
 
   /**
    * ShaderPresetRead:
@@ -72,8 +72,8 @@ namespace SHADERPRESET
    *
    * Returns: true (1) if successful, otherwise false (0).
    **/
-  bool ShaderPresetRead(config_file_t_* conf,
-                        video_shader_* shader);
+  bool ShaderPresetRead(config_file* conf,
+                        video_shader* shader);
 
   /**
    * ShaderPresetWrite:
@@ -83,8 +83,8 @@ namespace SHADERPRESET
    * Saves preset and all associated state (passes,
    * textures, imports, etc) to disk.
    **/
-  void ShaderPresetWrite(config_file_t_ *conf,
-    struct video_shader_ *shader);
+  void ShaderPresetWrite(config_file *conf,
+    struct video_shader *shader);
 
   /**
    * ShaderPresetResolveRelative:
@@ -94,7 +94,7 @@ namespace SHADERPRESET
    * Resolves relative shader path (@ref_path) into absolute
    * shader paths.
    **/
-  void ShaderPresetResolveRelative(struct video_shader_ *shader,
+  void ShaderPresetResolveRelative(struct video_shader *shader,
     const char *ref_path);
 
   /**
@@ -106,8 +106,8 @@ namespace SHADERPRESET
    *
    * Returns: true (1) if successful, otherwise false (0).
    **/
-  bool ShaderPresetResolveCurrentParameters(config_file_t_ *conf,
-    struct video_shader_ *shader);
+  bool ShaderPresetResolveCurrentParameters(config_file *conf,
+    struct video_shader *shader);
 
   /**
    * ShaderPresetResolveParameters:
@@ -118,9 +118,10 @@ namespace SHADERPRESET
    *
    * Returns: true (1) if successful, otherwise false (0).
    **/
-  bool ShaderPresetResolveParameters(config_file_t_ *conf,
-    struct video_shader_ *shader);
-    void VideoShaderFree(video_shader_* shader);
+  bool ShaderPresetResolveParameters(config_file *conf,
+    struct video_shader *shader);
+
+  void VideoShaderFree(video_shader* shader);
 
     /**
   * GetLibraryBasePath:

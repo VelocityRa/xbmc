@@ -29,7 +29,7 @@
 using namespace SHADER;
 
 class CVideoShader;
-struct video_shader_parameter_;
+struct video_shader_parameter;
 
 // TODO: renderer independence
 class CVideoShaderManager
@@ -49,7 +49,7 @@ public:
 
 private:
   bool CreateShaderTextures();
-  ShaderParameters GetShaderParameters(video_shader_parameter_* parameters,
+  ShaderParameters GetShaderParameters(video_shader_parameter* parameters,
     unsigned numParameters, const std::string& sourceStr) const;
   bool CreateShaders();
   //bool CreateIntermediateShader();

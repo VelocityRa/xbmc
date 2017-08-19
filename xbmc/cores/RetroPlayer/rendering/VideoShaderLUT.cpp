@@ -23,13 +23,12 @@
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/Texture.h"
-#include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 
 #include <regex>
 
 using namespace SHADER;
 
-ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut_ lut)
+ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut lut)
 {
   ID3D11SamplerState* samp;
   D3D11_SAMPLER_DESC sampDesc;
@@ -58,7 +57,7 @@ ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut_ lut)
   return samp;
 }
 
-CDXTexture* SHADER::CreateLUTexture(const video_shader_lut_ lut, const std::string& presetDirectory)
+CDXTexture* SHADER::CreateLUTexture(video_shader_lut lut, const std::string& presetDirectory)
 {
   const std::string& texturePath =
     URIUtils::AddFileToFolder(
@@ -82,17 +81,17 @@ CDXTexture* SHADER::CreateLUTexture(const video_shader_lut_ lut, const std::stri
   return texture;
 }
 
-D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(const gfx_wrap_type_ wrap)
+D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(gfx_wrap_type wrap)
 {
   switch(wrap)
   {
-  case RARCH_WRAP_EDGE_:
+  case RARCH_WRAP_EDGE:
     return D3D11_TEXTURE_ADDRESS_CLAMP;
-  case RARCH_WRAP_REPEAT_:
+  case RARCH_WRAP_REPEAT:
     return D3D11_TEXTURE_ADDRESS_WRAP;
-  case RARCH_WRAP_MIRRORED_REPEAT_:
+  case RARCH_WRAP_MIRRORED_REPEAT:
     return D3D11_TEXTURE_ADDRESS_MIRROR;
-  case RARCH_WRAP_DEFAULT_:
+  case RARCH_WRAP_BORDER:
   default:
     return D3D11_TEXTURE_ADDRESS_BORDER;
   }
