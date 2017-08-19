@@ -23,18 +23,16 @@
 #include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 #include "threads/CriticalSection.h"
 #include "threads/SharedSection.h"
-#include "filesystem/SpecialProtocol.h"
-#include "binary-addons/BinaryAddonBase.h"
 
-namespace SHADERPRESET
+namespace ADDON
 {
   /*
    *  Wrapper class that wraps the shader presets add-on
    */
-  class CShaderPresetAddon : public ADDON::IAddonInstanceHandler
+  class CShaderPresetAddon : protected IAddonInstanceHandler
   {
   public:
-    CShaderPresetAddon(const ADDON::BinaryAddonBasePtr& addonInfo);
+    CShaderPresetAddon(const BinaryAddonBasePtr& addonInfo);
     ~CShaderPresetAddon(void) override;
 
     /*!
@@ -148,4 +146,4 @@ namespace SHADERPRESET
 
     CSharedSection      m_dllSection;
   };
-} // namespace SHADERPRESET
+}

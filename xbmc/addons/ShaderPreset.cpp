@@ -19,12 +19,14 @@
  */
 
 #include "ShaderPreset.h"
+#include "addons/binary-addons/BinaryAddonBase.h"
+#include "filesystem/SpecialProtocol.h"
+#include "utils/log.h"
 #include "utils/URIUtils.h"
 
-using namespace KODI;
-using namespace SHADERPRESET;
+using namespace ADDON;
 
-CShaderPresetAddon::CShaderPresetAddon(const ADDON::BinaryAddonBasePtr& addonBase)
+CShaderPresetAddon::CShaderPresetAddon(const BinaryAddonBasePtr& addonBase)
   : IAddonInstanceHandler(ADDON_INSTANCE_SHADERPRESET, addonBase)
 {
   ResetProperties();
@@ -33,6 +35,28 @@ CShaderPresetAddon::CShaderPresetAddon(const ADDON::BinaryAddonBasePtr& addonBas
 CShaderPresetAddon::~CShaderPresetAddon(void)
 {
   DestroyAddon();
+}
+
+bool CShaderPresetAddon::CreateAddon(void)
+{
+  CExclusiveLock lock(m_dllSection);
+
+  // Reset all properties to defaults
+  ResetProperties();
+
+  // Initialise the add-on
+  CLog::Log(LOGDEBUG, "%s - creating ShaderPreset add-on instance '%s'", __FUNCTION__, Name().c_str());
+
+  if (CreateInstance(&m_struct) != ADDON_STATUS_OK)
+    return false;
+
+  return true;
+}
+
+void CShaderPresetAddon::DestroyAddon()
+{
+  CExclusiveLock lock(m_dllSection);
+  DestroyInstance();
 }
 
 void CShaderPresetAddon::ResetProperties(void)
@@ -51,7 +75,6 @@ const char* CShaderPresetAddon::GetLibraryBasePath()
   }
   return m_strLibraryPath.c_str();
 }
-
 
 config_file *CShaderPresetAddon::ConfigFileNew(const char *path)
 {

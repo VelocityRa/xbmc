@@ -21,9 +21,13 @@
 
 #include "addons/binary-addons/AddonInstanceHandler.h"
 #include "IVideoShaderPreset.h"
-#include "addons/ShaderPreset.h"
 
 #include <memory>
+
+namespace ADDON
+{
+  class CShaderPresetAddon;
+}
 
 namespace SHADERPRESET
 {
@@ -58,7 +62,7 @@ namespace SHADERPRESET
 
   public:
     // Instance of CShaderPreset
-    static std::unique_ptr<CShaderPresetAddon> shaderPresetAddon;
+    static std::unique_ptr<ADDON::CShaderPresetAddon> shaderPresetAddon;
     explicit CVideoShaderPreset();
     explicit CVideoShaderPreset(std::string presetPath);
 

@@ -21,6 +21,7 @@
 #include "VideoShaderPreset.h"
 #include "ServiceBroker.h"
 #include "addons/binary-addons/BinaryAddonBase.h"
+#include "addons/ShaderPreset.h"
 #include "utils/log.h"
 
 #include <string>
@@ -29,8 +30,7 @@
 using namespace KODI;
 using namespace SHADERPRESET;
 
-
-std::unique_ptr<CShaderPresetAddon> CVideoShaderPreset::shaderPresetAddon;
+std::unique_ptr<ADDON::CShaderPresetAddon> CVideoShaderPreset::shaderPresetAddon;
 
 CVideoShaderPreset::CVideoShaderPreset()
 {
@@ -57,7 +57,7 @@ bool CVideoShaderPreset::Init()
 
   if (!addonInfos.empty())
   {
-    shaderPresetAddon.reset(new CShaderPresetAddon(addonInfos.front()));
+    shaderPresetAddon.reset(new ADDON::CShaderPresetAddon(addonInfos.front()));
     shaderPresetAddon->CreateAddon();
     return true;
   }
@@ -135,31 +135,6 @@ bool CVideoShaderPreset::ResolveParameters()
 CVideoShaderPreset::~CVideoShaderPreset()
 {
   Destroy();
-}
-
-bool CShaderPresetAddon::CreateAddon(void)
-{
-  CExclusiveLock lock(m_dllSection);
-
-  // Reset all properties to defaults
-  ResetProperties();
-
-  // Initialise the add-on
-  CLog::Log(LOGDEBUG, "%s - creating ShaderPreset add-on instance '%s'",
-    __FUNCTION__, Name().c_str());
-
-  if (CreateInstance(&m_struct) != ADDON_STATUS_OK)
-    return false;
-
-  return true;
-}
-
-void CShaderPresetAddon::DestroyAddon()
-{
-  {
-    CExclusiveLock lock(m_dllSection);
-    DestroyInstance();
-  }
 }
 
 void CVideoShaderPreset::FreeConfigFile(config_file* conf)
