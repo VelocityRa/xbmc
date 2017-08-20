@@ -142,8 +142,8 @@
                                                       "StreamCodec.h" \
                                                       "StreamCrypto.h"
 
-#define ADDON_INSTANCE_VERSION_SHADERPRESET           "0.0.2"
-#define ADDON_INSTANCE_VERSION_SHADERPRESET_MIN       "0.0.2"
+#define ADDON_INSTANCE_VERSION_SHADERPRESET           "0.0.3"
+#define ADDON_INSTANCE_VERSION_SHADERPRESET_MIN       "0.0.3"
 #define ADDON_INSTANCE_VERSION_SHADERPRESET_XML_ID    "kodi.binary.instance.shaderpreset"
 #define ADDON_INSTANCE_VERSION_SHADERPRESET_DEPENDS   "addon-instance/ShaderPreset.h"
 
