@@ -43,9 +43,6 @@ CVideoShaderManager::CVideoShaderManager(CBaseRenderer& rendererRef, unsigned vi
 {
   m_videoSize = { videoWidth, videoHeight };
 
-  m_pVideoShaders.reserve(GFX_MAX_SHADERS);
-  m_pShaderTextures.reserve(GFX_MAX_SHADERS);
-
   CRect viewPort;
   g_Windowing.GetViewPort(viewPort);
   m_outputSize = float2(viewPort.Width(), viewPort.Height());
@@ -216,26 +213,26 @@ bool CVideoShaderManager::CreateShaderTextures()
     UINT textureY;
     switch (pass.fbo.scaleX.type)
     {
-    case RARCH_SCALE_ABSOLUTE:
+    case SCALE_TYPE_ABSOLUTE:
       textureX = pass.fbo.scaleX.abs;
       break;
-    case RARCH_SCALE_VIEWPORT:
+    case SCALE_TYPE_VIEWPORT:
       textureX = m_outputSize.x;
       break;
-    case RARCH_SCALE_INPUT:
+    case SCALE_TYPE_INPUT:
     default:
       textureX = prevSize.x;
       break;
     }
     switch (pass.fbo.scaleY.type)
     {
-    case RARCH_SCALE_ABSOLUTE:
+    case SCALE_TYPE_ABSOLUTE:
       textureY = pass.fbo.scaleY.abs;
       break;
-    case RARCH_SCALE_VIEWPORT:
+    case SCALE_TYPE_VIEWPORT:
       textureY = m_outputSize.y;
       break;
-    case RARCH_SCALE_INPUT:
+    case SCALE_TYPE_INPUT:
     default:
       textureY = prevSize.y;
       break;

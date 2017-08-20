@@ -29,15 +29,6 @@ extern "C"
 {
   typedef struct config_file config_file;
 
-  typedef enum rarch_shader_type
-  {
-    RARCH_SHADER_NONE = 0,
-    RARCH_SHADER_CG,
-    RARCH_SHADER_HLSL,
-    RARCH_SHADER_GLSL,
-    RARCH_SHADER_SLANG
-  } rarch_shader_type;
-
   /*!
    * \brief Scale types
    *
@@ -48,7 +39,7 @@ extern "C"
    * output at the full resolution rather than assuming of scale of 1.0, and
    * bypasses any frame-buffer object rendering.
    */
-  typedef enum gfx_scale_type
+  typedef enum SHADER_SCALE_TYPE
   {
     /*!
      * \brief Use the source size
@@ -56,7 +47,7 @@ extern "C"
      * Output size of the shader pass is relative to the input size. Value is
      * float.
      */
-    RARCH_SCALE_INPUT = 0,
+    SHADER_SCALE_TYPE_INPUT,
 
     /*!
      * \brief Use the window viewport size
@@ -65,7 +56,7 @@ extern "C"
      * viewport. Value is float. This value can change over time if the user
      * resizes his/her window!
      */
-    RARCH_SCALE_ABSOLUTE,
+    SHADER_SCALE_TYPE_ABSOLUTE,
 
     /*!
      * \brief Use a statically defined size
@@ -73,44 +64,44 @@ extern "C"
      * Output size is statically defined to a certain size. Useful for hi-res
      * blenders or similar.
      */
-    RARCH_SCALE_VIEWPORT
-  } gfx_scale_type;
+    SHADER_SCALE_TYPE_VIEWPORT
+  } SHADER_SCALE_TYPE;
 
-  typedef enum filter_type
+  typedef enum SHADER_FILTER_TYPE
   {
-    RARCH_FILTER_UNSPEC = 0,
-    RARCH_FILTER_LINEAR,
-    RARCH_FILTER_NEAREST
-  } filter_type;
+    SHADER_FILTER_TYPE_UNSPEC,
+    SHADER_FILTER_TYPE_LINEAR,
+    SHADER_FILTER_TYPE_NEAREST
+  } SHADER_FILTER_TYPE;
 
   /*!
    * \brief Texture wrapping mode
    */
-  typedef enum gfx_wrap_type
+  typedef enum SHADER_WRAP_TYPE
   {
-    RARCH_WRAP_BORDER = 0, /* Deprecated, will be translated to EDGE in GLES */
-    RARCH_WRAP_EDGE,
-    RARCH_WRAP_REPEAT,
-    RARCH_WRAP_MIRRORED_REPEAT
-  } gfx_wrap_type;
+    SHADER_WRAP_TYPE_BORDER, /* Deprecated, will be translated to EDGE in GLES */
+    SHADER_WRAP_TYPE_EDGE,
+    SHADER_WRAP_TYPE_REPEAT,
+    SHADER_WRAP_TYPE_MIRRORED_REPEAT
+  } SHADER_WRAP_TYPE;
 
   /*!
    * \brief FBO scaling parameters for a single axis
    */
-  typedef struct gfx_fbo_scale_axis
+  typedef struct fbo_scale_axis
   {
-    gfx_scale_type type;
+    SHADER_SCALE_TYPE type;
     union
     {
       float scale;
       unsigned abs;
     };
-  } gfx_fbo_scale_axis;
+  } fbo_scale_axis;
 
   /*!
    * \brief FBO parameters
    */
-  typedef struct gfx_fbo_scale
+  typedef struct fbo_scale
   {
     /*!
      * \brief sRGB framebuffer
@@ -130,13 +121,13 @@ extern "C"
     /*!
      * \brief Scaling parameters for X axis
      */
-    gfx_fbo_scale_axis scale_x;
+    fbo_scale_axis scale_x;
 
     /*!
      * \brief Scaling parameters for Y axis
      */
-    gfx_fbo_scale_axis scale_y;
-  } gfx_fbo_scale;
+    fbo_scale_axis scale_y;
+  } fbo_scale;
 
   typedef struct video_shader_parameter
   {
@@ -175,19 +166,19 @@ extern "C"
     /*!
      * \brief FBO parameters
      */
-    gfx_fbo_scale fbo;
+    fbo_scale fbo;
 
     /*!
      * \brief Defines how the result of this pass will be filtered
      *
      * @todo Define behavior for unspecified filter
      */
-    filter_type filter;
+    SHADER_FILTER_TYPE filter;
 
     /*!
      * \brief Wrapping mode
      */
-    gfx_wrap_type wrap;
+    SHADER_WRAP_TYPE wrap;
 
     /*!
      * \brief Frame count mod
@@ -215,12 +206,12 @@ extern "C"
     /*!
      * \brief Filtering for the texture
      */
-    filter_type filter;
+    SHADER_FILTER_TYPE filter;
 
     /*!
      * \brief Texture wrapping mode
      */
-    gfx_wrap_type wrap;
+    SHADER_WRAP_TYPE wrap;
 
     /*!
      * \brief Use mipmapping for the texture
@@ -230,8 +221,6 @@ extern "C"
 
   typedef struct video_shader
   {
-    rarch_shader_type type;
-
     unsigned pass_count;
     video_shader_pass *passes;
 

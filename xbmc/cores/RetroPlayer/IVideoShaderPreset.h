@@ -26,13 +26,6 @@ namespace KODI
 {
 namespace SHADER
 {
-  enum SHADER_TYPE
-  {
-    SHADER_TYPE_NONE,
-    SHADER_TYPE_HLSL,
-    SHADER_TYPE_GLSL,
-  };
-
   enum FILTER_TYPE
   {
     FILTER_TYPE_NONE,
@@ -105,8 +98,6 @@ namespace SHADER
 
   struct VideoShaderPreset
   {
-    SHADER_TYPE type = SHADER_TYPE_NONE;
-
     std::vector<VideoShaderPass> passes;
     std::vector<VideoShaderLut> luts;
     std::vector<VideoShaderParameter> parameters;
