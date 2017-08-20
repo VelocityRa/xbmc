@@ -33,7 +33,6 @@ namespace RETRO
     CRPRenderManager(CDVDClock &clock, IRenderMsg *player);
     ~CRPRenderManager() override = default;
 
-    // Implementation of IRenderSettingsCallback
     void PreInit();
     void CreateRenderer();
     bool Configure();
@@ -42,14 +41,11 @@ namespace RETRO
     void SetSpeed(double speed);
 
     // Implementation of IRenderSettingsCallback
-    bool SupportsScalingMethod(ESCALINGMETHOD method) override;
     bool SupportsRenderFeature(ERENDERFEATURE feature) override;
+    void SetShaderPreset(const std::string &shaderPresetPath) override;
+    const std::string &GetShaderPreset() override;
     ViewMode GetRenderViewMode() override;
     void SetRenderViewMode(ViewMode mode) override;
-    void SetScalingMethod(ESCALINGMETHOD method) override;
-    void SetShaderPreset(const std::string& shaderPresetPath) override;
-    ESCALINGMETHOD GetScalingMethod() override;
-    const std::string& GetShaderPreset() override;
   };
 }
 }

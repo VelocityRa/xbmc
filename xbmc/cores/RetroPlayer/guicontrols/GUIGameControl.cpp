@@ -129,20 +129,16 @@ void CGUIGameControl::UpdateInfo(const CGUIListItem *item /* = nullptr */)
 
   if (item)
   {
+    std::string videoFilter = m_videoFilterInfo.GetItemLabel(item);
+    if (!videoFilter.empty())
+      m_renderSettings.SetVideoFilter(videoFilter);
+
     std::string strViewMode = m_viewModeInfo.GetItemLabel(item);
     if (StringUtils::IsNaturalNumber(strViewMode))
     {
       unsigned int viewMode;
       std::istringstream(std::move(strViewMode)) >> viewMode;
       m_renderSettings.SetRenderViewMode(static_cast<ViewMode>(viewMode));
-    }
-
-    std::string strVideoFilter = m_videoFilterInfo.GetItemLabel(item);
-    if (StringUtils::IsNaturalNumber(strVideoFilter))
-    {
-      unsigned int scalingMethod;
-      std::istringstream(std::move(strVideoFilter)) >> scalingMethod;
-      m_renderSettings.SetScalingMethod(static_cast<ESCALINGMETHOD>(scalingMethod));
     }
   }
 }

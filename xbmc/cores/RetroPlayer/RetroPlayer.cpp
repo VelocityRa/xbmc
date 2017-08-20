@@ -83,7 +83,6 @@ bool CRetroPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options
 
   //! @todo - Remove this when RetroPlayer has a renderer
   CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
-  videoSettings.m_ScalingMethod = CMediaSettings::GetInstance().GetCurrentGameSettings().ScalingMethod();
   videoSettings.m_ViewMode = CMediaSettings::GetInstance().GetCurrentGameSettings().ViewMode();
 
   CSingleLock lock(m_mutex);
@@ -470,22 +469,22 @@ void CRetroPlayer::Render(bool clear, uint32_t alpha /* = 255 */, bool gui /* = 
 {
   CGUIGameControlManager &gameControls = CServiceBroker::GetGameServices().GameControls();
 
+  const std::string &shaderPreset = m_renderManager->GetShaderPreset();
   ViewMode viewMode = m_renderManager->GetRenderViewMode();
-  ESCALINGMETHOD scalingMedthod = m_renderManager->GetScalingMethod();
 
   if (gameControls.IsControlActive())
   {
     const CGUIRenderSettings &renderSettings = gameControls.GetRenderSettings();
+    m_renderManager->SetShaderPreset(renderSettings.GetVideoFilter());
     m_renderManager->SetRenderViewMode(renderSettings.GetRenderViewMode());
-    m_renderManager->SetScalingMethod(renderSettings.GetScalingMethod());
   }
 
   m_renderManager->Render(clear, 0, alpha, gui);
 
   if (gameControls.IsControlActive())
   {
+    m_renderManager->SetShaderPreset(shaderPreset);
     m_renderManager->SetRenderViewMode(viewMode);
-    m_renderManager->SetScalingMethod(scalingMedthod);
   }
 }
 
