@@ -365,7 +365,7 @@ namespace kodi
        *
        * \param shader Object to free
        */
-      virtual void ShaderPresetFree(video_shader* shader) { }
+      virtual void ShaderPresetFree(video_shader &shader) { }
 
       std::string AddonPath() const
       {
@@ -452,7 +452,7 @@ namespace kodi
       inline static void ADDON_video_shader_free(const AddonInstance_ShaderPreset* addonInstance, video_shader *shader)
       {
         if (shader != nullptr)
-          addonInstance->toAddon.addonInstance->ShaderPresetFree(shader);
+          addonInstance->toAddon.addonInstance->ShaderPresetFree(*shader);
       }
 
       AddonInstance_ShaderPreset* m_instanceData;
