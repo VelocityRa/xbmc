@@ -214,10 +214,10 @@ bool CVideoShaderManager::CreateShaderTextures()
 
     UINT textureX;
     UINT textureY;
-    switch (pass.fbo.type_x)
+    switch (pass.fbo.scale_x.type)
     {
     case RARCH_SCALE_ABSOLUTE:
-      textureX = pass.fbo.abs_x;
+      textureX = pass.fbo.scale_x.abs;
       break;
     case RARCH_SCALE_VIEWPORT:
       textureX = m_outputSize.x;
@@ -227,10 +227,10 @@ bool CVideoShaderManager::CreateShaderTextures()
       textureX = prevSize.x;
       break;
     }
-    switch (pass.fbo.type_y)
+    switch (pass.fbo.scale_y.type)
     {
     case RARCH_SCALE_ABSOLUTE:
-      textureY = pass.fbo.abs_y;
+      textureY = pass.fbo.scale_y.abs;
       break;
     case RARCH_SCALE_VIEWPORT:
       textureY = m_outputSize.y;
@@ -242,7 +242,7 @@ bool CVideoShaderManager::CreateShaderTextures()
     }
 
     // if the scale was unspecified
-    if (pass.fbo.scale_x == 0 && pass.fbo.scale_y == 0)
+    if (pass.fbo.scale_x.scale == 0 && pass.fbo.scale_y.scale == 0)
     {
       // if the last shader has the scale unspecified
       if (shaderIdx == numPasses - 1)
@@ -255,8 +255,8 @@ bool CVideoShaderManager::CreateShaderTextures()
     }
     else
     {
-      textureX *= pass.fbo.scale_x;
-      textureY *= pass.fbo.scale_y;
+      textureX *= pass.fbo.scale_x.scale;
+      textureY *= pass.fbo.scale_y.scale;
     }
 
     // For reach pass, create the texture
@@ -275,7 +275,7 @@ bool CVideoShaderManager::CreateShaderTextures()
 
     if (!texture->Create(textureX, textureY, 1, D3D11_USAGE_DEFAULT, textureFormat, nullptr, 0))
     {
-      CLog::Log(LOGERROR, "Couldn't create a texture for video shader %s.", pass.source.path);
+      CLog::Log(LOGERROR, "Couldn't create a texture for video shader %s.", pass.source_path);
       return false;
     }
     m_pShaderTextures.push_back(std::move(texture));
@@ -321,11 +321,11 @@ bool CVideoShaderManager::CreateShaders()
     // For reach pass, create the shader
     std::unique_ptr<CVideoShader> videoShader(new CVideoShader());
 
-    auto shaderSrc = pass.source.string.vertex; // also contains fragment source
-    auto shaderPath = pass.source.path;
+    auto shaderSrc = pass.vertex_source; // also contains fragment source
+    auto shaderPath = pass.source_path;
 
     // Get only the parameters belonging to this specific shader
-    ShaderParameters passParameters = GetShaderParameters(m_pPreset->m_Parameters, numParameters, pass.source.string.vertex);
+    ShaderParameters passParameters = GetShaderParameters(m_pPreset->m_Parameters, numParameters, pass.vertex_source);
     ID3D11SamplerState* passSampler = pass.filter ? m_pSampLinear : m_pSampNearest;
 
     if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, passLUTs, m_outputSize, pass.frame_count_mod))

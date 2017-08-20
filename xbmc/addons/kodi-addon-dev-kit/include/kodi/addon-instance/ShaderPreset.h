@@ -38,34 +38,6 @@ extern "C"
 {
   typedef struct config_file config_file;
 
-  typedef enum state_tracker_type
-  {
-    RARCH_STATE_CAPTURE = 0,
-    RARCH_STATE_CAPTURE_PREV,
-    RARCH_STATE_TRANSITION,
-    RARCH_STATE_TRANSITION_COUNT,
-    RARCH_STATE_TRANSITION_PREV,
-    RARCH_STATE_PYTHON
-  } state_tracker_type;
-
-  typedef enum state_ram_type
-  {
-    RARCH_STATE_NONE,
-    RARCH_STATE_WRAM,
-    RARCH_STATE_INPUT_SLOT1,
-    RARCH_STATE_INPUT_SLOT2
-  } state_ram_type;
-
-  typedef struct state_tracker_uniform_info
-  {
-    char id[64];
-    uint32_t addr;
-    state_tracker_type type;
-    state_ram_type ram_type;
-    uint16_t mask;
-    uint16_t equal;
-  } state_tracker_uniform_info;
-
   typedef enum rarch_shader_type
   {
     RARCH_SHADER_NONE = 0,
@@ -75,10 +47,41 @@ extern "C"
     RARCH_SHADER_SLANG
   } rarch_shader_type;
 
+  /*!
+   * \brief Scale types
+   *
+   * If no scale type is specified, it is assumed that the scale type is
+   * relative to the input with a scaling factor of 1.0.
+   *
+   * Exceptions: If no scale type is set for the last pass, it is assumed to
+   * output at the full resolution rather than assuming of scale of 1.0, and
+   * bypasses any frame-buffer object rendering.
+   */
   typedef enum gfx_scale_type
   {
+    /*!
+     * \brief Use the source size
+     *
+     * Output size of the shader pass is relative to the input size. Value is
+     * float.
+     */
     RARCH_SCALE_INPUT = 0,
+
+    /*!
+     * \brief Use the window viewport size
+     *
+     * Output size of the shader pass is relative to the size of the window
+     * viewpoirt. Value is float. This value can change over time if the user
+     * resizes his/her window!
+     */
     RARCH_SCALE_ABSOLUTE,
+
+    /*!
+     * \brief Use a statically defined size
+     *
+     * Output size is statically defiend to a certain size. Useful for hi-res
+     * blenders or similar.
+     */
     RARCH_SCALE_VIEWPORT
   } gfx_scale_type;
 
@@ -89,6 +92,9 @@ extern "C"
     RARCH_FILTER_NEAREST
   } filter_type;
 
+  /*!
+   * \brief Texture wrapping mode
+   */
   typedef enum gfx_wrap_type
   {
     RARCH_WRAP_BORDER = 0, /* Deprecated, will be translated to EDGE in GLES */
@@ -97,17 +103,48 @@ extern "C"
     RARCH_WRAP_MIRRORED_REPEAT
   } gfx_wrap_type;
 
+  /*!
+   * \brief FBO scaling parameters for a single axis
+   */
+  typedef struct gfx_fbo_scale_axis
+  {
+    gfx_scale_type type;
+    union
+    {
+      float scale;
+      unsigned abs;
+    };
+  } gfx_fbo_scale_axis;
+
+  /*!
+   * \brief FBO parameters
+   */
   typedef struct gfx_fbo_scale
   {
-    gfx_scale_type type_x;
-    gfx_scale_type type_y;
-    float scale_x;
-    float scale_y;
-    unsigned abs_x;
-    unsigned abs_y;
-    bool fp_fbo;
+    /*!
+     * \brief sRGB framebuffer
+     */
     bool srgb_fbo;
-    bool valid;
+
+    /*!
+     * \brief Float framebuffer
+     *
+     * This parameter defines if the pass should be rendered to a 32-bit
+     * floating point buffer. The only takes effect if the pass is actaully
+     * rendered to an FBO. This is useful for shaders which have to store FBO
+     * values outside the range [0, 1].
+     */
+    bool fp_fbo;
+
+    /*!
+     * \brief Scaling parameters for X axis
+     */
+    gfx_fbo_scale_axis scale_x;
+
+    /*!
+     * \brief Scaling parameters for Y axis
+     */
+    gfx_fbo_scale_axis scale_y;
   } gfx_fbo_scale;
 
   typedef struct video_shader_parameter
@@ -123,30 +160,80 @@ extern "C"
 
   typedef struct video_shader_pass
   {
-    struct
-    {
-      char path[PATH_MAX_LENGTH];
-      struct
-      {
-        char *vertex;
-        char *fragment;
-      } string;
-    } source;
+    /*!
+     * \brief Path to the shader pass source
+     */
+    char source_path[PATH_MAX_LENGTH];
 
+    /*!
+     * \brief The vertex shader source
+     */
+    char *vertex_source;
+
+    /*!
+     * \brief The fragment shader source, if separate from the vertex source, or
+     * NULL otherwise
+     */
+    char *fragment_source;
+
+    /*!
+     * \brief Alias
+     */
     char alias[64];
+
+    /*!
+     * \brief FBO parameters
+     */
     gfx_fbo_scale fbo;
-    unsigned filter;
+
+    /*!
+     * \brief Defines how the result of this pass will be filtered
+     *
+     * @todo Define behavior for unspecified filter
+     */
+    filter_type filter;
+
+    /*!
+     * \brief Wrapping mode
+     */
     gfx_wrap_type wrap;
+
+    /*!
+     * \brief Frame count mod
+     */
     unsigned frame_count_mod;
+
+    /*!
+     * \brief Mipmapping
+     */
     bool mipmap;
   } video_shader_pass;
 
   typedef struct video_shader_lut
   {
+    /*!
+     * \brief Name of the sampler uniform, e.g. `uniform sampler2D foo`.
+     */
     char id[64];
+
+    /*!
+     * \brief Path of the texture
+     */
     char path[PATH_MAX_LENGTH];
-    unsigned filter;
+
+    /*!
+     * \brief Filtering for the texture
+     */
+    filter_type filter;
+
+    /*!
+     * \brief Texture wrapping mode
+     */
     gfx_wrap_type wrap;
+
+    /*!
+     * \brief Use mipmapping for the texture
+     */
     bool mipmap;
   } video_shader_lut;
 
@@ -166,13 +253,9 @@ extern "C"
     video_shader_parameter parameters[GFX_MAX_PARAMETERS];
     unsigned num_parameters;
 
-    unsigned variables;
-    state_tracker_uniform_info variable[GFX_MAX_VARIABLES];
-    char script_path[PATH_MAX_LENGTH];
-    char *script;
-    char script_class[512];
-
-    /*
+    /*!
+     * \brief Feedback pass
+     *
      * If < 0, no feedback pass is used. Otherwise, the FBO after pass #N is
      * passed a texture to next frame.
      */

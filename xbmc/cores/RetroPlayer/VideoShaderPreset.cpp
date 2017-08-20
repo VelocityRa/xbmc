@@ -92,8 +92,6 @@ bool CVideoShaderPreset::ReadPresetConfig()
     memcpy(m_Pass, m_videoShader->pass, GFX_MAX_SHADERS * sizeof video_shader_pass);
     m_Luts = m_videoShader->luts;
     memcpy(m_Lut, m_videoShader->lut, GFX_MAX_TEXTURES * sizeof video_shader_lut);
-    m_Variables = m_videoShader->variables;
-    memcpy(m_Variable, m_videoShader->variable, GFX_MAX_VARIABLES * sizeof state_tracker_uniform_info);
     m_FeedbackPass = m_videoShader->feedback_pass;
 
     //CLog::Log(LOGINFO, "Shader Preset Addon: Read shader preset %s", conf->path); //! @todo

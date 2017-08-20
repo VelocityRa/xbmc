@@ -54,9 +54,6 @@ namespace SHADERPRESET
     video_shader_parameter m_Parameters[GFX_MAX_PARAMETERS];
     unsigned m_NumParameters;
 
-    unsigned m_Variables;
-    state_tracker_uniform_info m_Variable[GFX_MAX_VARIABLES];
-
     /* If < 0, no feedback pass is used. Otherwise,
     * the FBO after pass #N is passed a texture to next frame. */
     int m_FeedbackPass;
