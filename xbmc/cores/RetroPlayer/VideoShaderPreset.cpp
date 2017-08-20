@@ -22,15 +22,15 @@
 #include "ServiceBroker.h"
 #include "addons/binary-addons/BinaryAddonBase.h"
 #include "addons/ShaderPreset.h"
+#include "games/GameServices.h"
 #include "utils/log.h"
 
 #include <string>
 #include "utils/URIUtils.h"
 
 using namespace KODI;
+using namespace SHADER;
 using namespace SHADERPRESET;
-
-std::unique_ptr<ADDON::CShaderPresetAddon> CVideoShaderPreset::shaderPresetAddon;
 
 CVideoShaderPreset::CVideoShaderPreset()
 {
@@ -39,73 +39,18 @@ CVideoShaderPreset::CVideoShaderPreset()
 
 bool CVideoShaderPreset::Init()
 {
-  if (shaderPresetAddon)
-    return true;
-
-  ADDON::BinaryAddonBaseList addonInfos;
-  CServiceBroker::GetBinaryAddonManager().GetAddonInfos(addonInfos, true, ADDON::ADDON_SHADERDLL);
-  if (addonInfos.size() > 1)
-    CLog::Log(LOGWARNING, "VideoShaderPreset: No handling of multiple shader add-ons implemented. Loading first one.");
-
-  if (!addonInfos.empty())
-  {
-    shaderPresetAddon.reset(new ADDON::CShaderPresetAddon(addonInfos.front()));
-    shaderPresetAddon->CreateAddon();
-    return true;
-  }
-
-  CLog::Log(LOGERROR, "VideoShaderPreset: Couldn't initialize addon instance. Make sure there is an enabled shader add-on present.");
-  return false;
+  return true;
 }
 
 void CVideoShaderPreset::Destroy()
 {
-  m_videoShader.reset();
-  m_config.reset();
-  shaderPresetAddon.reset();
+  m_videoShader = VideoShaderPreset(); //! @todo Need a clear method
 }
 
 // TODO: Don't die in flames if the file doesn't exist
 bool CVideoShaderPreset::ReadPresetFile(const std::string &presetPath)
 {
-  m_config = shaderPresetAddon->LoadShaderPreset(presetPath);
-  if (!m_config)
-    return false;
-  bool result = ReadPresetConfig();
-  ResolveParameters();
-  return result;
-}
-
-bool CVideoShaderPreset::ReadPresetConfig()
-{
-  if (!shaderPresetAddon) return false;
-
-  m_videoShader.reset(new video_shader);
-
-  auto readResult = m_config->ReadShaderPreset(*m_videoShader);
-
-  if (readResult)
-  {
-    // Copy over every field we want except parameters, these are resolved and copied elsewhere
-    type = m_videoShader->type;
-    m_Passes = m_videoShader->passes;
-    memcpy(m_Pass, m_videoShader->pass, GFX_MAX_SHADERS * sizeof video_shader_pass);
-    m_Luts = m_videoShader->luts;
-    memcpy(m_Lut, m_videoShader->lut, GFX_MAX_TEXTURES * sizeof video_shader_lut);
-    m_FeedbackPass = m_videoShader->feedback_pass;
-
-    //CLog::Log(LOGINFO, "Shader Preset Addon: Read shader preset %s", conf->path); //! @todo
-  }
-
-  return readResult;
-}
-
-bool CVideoShaderPreset::ResolveParameters()
-{
-  bool resolveResult = m_config->ResolveParameters(*m_videoShader);
-  m_NumParameters = m_videoShader->num_parameters;
-  memcpy(m_Parameters, m_videoShader->parameters, GFX_MAX_PARAMETERS * sizeof video_shader_parameter);
-  return resolveResult;
+  return CServiceBroker::GetGameServices().VideoShaders().LoadPreset(presetPath, m_videoShader);
 }
 
 CVideoShaderPreset::~CVideoShaderPreset()

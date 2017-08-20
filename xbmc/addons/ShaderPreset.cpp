@@ -20,10 +20,12 @@
 
 #include "ShaderPreset.h"
 #include "addons/binary-addons/BinaryAddonBase.h"
+#include "addons/AddonManager.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI;
 using namespace ADDON;
 
 // --- CShaderPreset -----------------------------------------------------------
@@ -66,12 +68,18 @@ bool CShaderPreset::ResolveParameters(video_shader &shader)
   return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, m_file, &shader);
 }
 
+void CShaderPreset::FreeShaderPreset(video_shader &shader)
+{
+  m_struct.toAddon.video_shader_free(&m_struct, &shader);
+}
+
 // --- CShaderPresetAddon ------------------------------------------------------
 
 CShaderPresetAddon::CShaderPresetAddon(const BinaryAddonBasePtr& addonBase)
   : IAddonInstanceHandler(ADDON_INSTANCE_SHADERPRESET, addonBase)
 {
   ResetProperties();
+  m_extensions = StringUtils::Split(addonBase->Type(ADDON_SHADERDLL)->GetValue("@extensions").asString(), "|");
 }
 
 CShaderPresetAddon::~CShaderPresetAddon(void)
@@ -118,16 +126,34 @@ const char* CShaderPresetAddon::GetLibraryBasePath()
   return m_strLibraryPath.c_str();
 }
 
-ShaderPresetPtr CShaderPresetAddon::LoadShaderPreset(const std::string &path)
+bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset)
 {
-  ShaderPresetPtr shaderPreset;
+  bool bSuccess = false;
 
-  m_strConfigPath = URIUtils::AddFileToFolder(GetLibraryBasePath(), path);
+  //! @todo Resolve special protocol
 
-  config_file *file = m_struct.toAddon.config_file_new(&m_struct, m_strConfigPath.c_str());
+  config_file *file = m_struct.toAddon.config_file_new(&m_struct, presetPath.c_str());
 
   if (file != nullptr)
-    shaderPreset = std::make_shared<CShaderPreset>(file, m_struct);
+  {
+    std::unique_ptr<CShaderPreset> shaderPresetAddon(new CShaderPreset(file, m_struct));
 
-  return shaderPreset;
+    video_shader videoShader;
+    if (shaderPresetAddon->ReadShaderPreset(videoShader))
+    {
+      if (shaderPresetAddon->ResolveParameters(videoShader))
+      {
+        TranslateShaderPreset(videoShader, shaderPreset);
+        bSuccess = true;
+      }
+      shaderPresetAddon->FreeShaderPreset(videoShader);
+    }
+  }
+
+  return bSuccess;
+}
+
+void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset)
+{
+  //! @todo
 }

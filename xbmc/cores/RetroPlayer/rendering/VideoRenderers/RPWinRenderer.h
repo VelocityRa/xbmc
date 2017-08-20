@@ -70,7 +70,7 @@ protected:
   // ====== Video Shader Members =====
 private:
   // For true renderer independence, RPRenderManager must own this
-  std::unique_ptr<CVideoShaderManager> m_shaderManager;
+  std::unique_ptr<KODI::SHADER::CVideoShaderManager> m_shaderManager;
 
 public:
   /**

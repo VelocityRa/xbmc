@@ -26,9 +26,10 @@
 
 #include <regex>
 
+using namespace KODI;
 using namespace SHADER;
 
-ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut lut)
+ID3D11SamplerState* SHADER::CreateLUTSampler(const VideoShaderLut &lut)
 {
   ID3D11SamplerState* samp;
   D3D11_SAMPLER_DESC sampDesc;
@@ -50,14 +51,14 @@ ID3D11SamplerState* SHADER::CreateLUTSampler(const video_shader_lut lut)
 
   if (FAILED(g_Windowing.Get3D11Device()->CreateSamplerState(&sampDesc, &samp)))
   {
-    CLog::Log(LOGWARNING, "%s - failed to create LUT sampler for LUT &s", __FUNCTION__, lut.path);
+    CLog::Log(LOGWARNING, "%s - failed to create LUT sampler for LUT &s", __FUNCTION__, lut.path.c_str());
     return nullptr;
   }
 
   return samp;
 }
 
-CDXTexture* SHADER::CreateLUTexture(video_shader_lut lut, const std::string& presetDirectory)
+CDXTexture* SHADER::CreateLUTexture(const VideoShaderLut &lut, const std::string& presetDirectory)
 {
   const std::string& texturePath =
     URIUtils::AddFileToFolder(
@@ -81,17 +82,17 @@ CDXTexture* SHADER::CreateLUTexture(video_shader_lut lut, const std::string& pre
   return texture;
 }
 
-D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(gfx_wrap_type wrap)
+D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(WRAP_TYPE wrap)
 {
   switch(wrap)
   {
-  case RARCH_WRAP_EDGE:
+  case WRAP_TYPE_EDGE:
     return D3D11_TEXTURE_ADDRESS_CLAMP;
-  case RARCH_WRAP_REPEAT:
+  case WRAP_TYPE_REPEAT:
     return D3D11_TEXTURE_ADDRESS_WRAP;
-  case RARCH_WRAP_MIRRORED_REPEAT:
+  case WRAP_TYPE_MIRRORED_REPEAT:
     return D3D11_TEXTURE_ADDRESS_MIRROR;
-  case RARCH_WRAP_BORDER:
+  case WRAP_TYPE_BORDER:
   default:
     return D3D11_TEXTURE_ADDRESS_BORDER;
   }

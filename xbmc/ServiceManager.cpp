@@ -147,7 +147,7 @@ bool CServiceManager::InitStageThree()
   // Peripherals depends on strings being loaded before stage 3
   m_peripherals->Initialise();
 
-  m_gameServices.reset(new GAME::CGameServices(*m_gameControllerManager, *m_peripherals));
+  m_gameServices.reset(new GAME::CGameServices(*m_gameControllerManager, *m_peripherals, *m_addonMgr, *m_binaryAddonManager));
 
   m_contextMenuManager->Init();
   m_PVRManager->Init();

@@ -21,14 +21,17 @@
 
 #include "addons/binary-addons/AddonInstanceHandler.h"
 #include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaderPresetFactory.h"
 #include "threads/CriticalSection.h"
 #include "threads/SharedSection.h"
 
+#include <string>
+#include <vector>
+
+struct cp_extension_t;
+
 namespace ADDON
 {
-  class CShaderPreset;
-  using ShaderPresetPtr = std::shared_ptr<CShaderPreset>;
-
   class CShaderPreset
   {
   public:
@@ -54,6 +57,8 @@ namespace ADDON
     */
     bool ResolveParameters(video_shader &shader);
 
+    void FreeShaderPreset(video_shader &shader);
+
   private:
     config_file *m_file;
     AddonInstance_ShaderPreset &m_struct;
@@ -62,9 +67,12 @@ namespace ADDON
   /*
    *  Wrapper class that wraps the shader presets add-on
    */
-  class CShaderPresetAddon : protected IAddonInstanceHandler
+  class CShaderPresetAddon : public IAddonInstanceHandler,
+                             public KODI::SHADER::IVideoShaderPresetLoader
   {
   public:
+    //static AddonPtr FromExtension(CAddonInfo addonInfo, const cp_extension_t* ext);
+
     CShaderPresetAddon(const BinaryAddonBasePtr& addonInfo);
     ~CShaderPresetAddon(void) override;
 
@@ -78,10 +86,8 @@ namespace ADDON
      */
     void DestroyAddon();
 
-    /*!
-     * \brief @todo document
-     */
-    ShaderPresetPtr LoadShaderPreset(const std::string &path);
+    // implementation of IVideoShaderPresetLoader
+    bool LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset) override;
 
     /**
      * GetLibraryBasePath:
@@ -90,11 +96,15 @@ namespace ADDON
      */
     const char* GetLibraryBasePath(void);
 
+    const std::vector<std::string> &GetExtensions() const { return m_extensions; }
+
   private:
     /*!
      * @brief Reset all class members to their defaults. Called by the constructors
      */
     void ResetProperties(void);
+
+    static void TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset);
 
     /* @brief Cache for const char* members in PERIPHERAL_PROPERTIES */
 
@@ -105,7 +115,7 @@ namespace ADDON
     std::string         m_strClientPath;  /*!< @brief translated path to this add-on */
 
     /* @brief Add-on properties */
-    bool                m_bTestBoolProp;
+    std::vector<std::string> m_extensions;
 
     /* @brief Thread synchronization */
     CCriticalSection    m_critSection;

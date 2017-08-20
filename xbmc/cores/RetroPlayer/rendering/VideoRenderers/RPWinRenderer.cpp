@@ -25,6 +25,9 @@
 #include "windowing/windows/WinSystemWin32DX.h"
 #include "utils/log.h"
 
+using namespace KODI;
+using namespace SHADER;
+
 CRPWinRenderer::CRPWinRenderer()
   : CWinRenderer()
   , m_shadersNeedUpdate(true)

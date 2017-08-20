@@ -3,7 +3,8 @@ set(SOURCES RetroPlayer.cpp
             RetroPlayerAutoSave.cpp
             RetroPlayerInput.cpp
             RetroPlayerVideo.cpp
-            VideoShaderPreset.cpp)
+            VideoShaderPreset.cpp
+)
 
 set(HEADERS IVideoShaderPreset.h
             RetroPlayer.h
@@ -12,6 +13,7 @@ set(HEADERS IVideoShaderPreset.h
             RetroPlayerDefines.h
             RetroPlayerInput.h
             RetroPlayerVideo.h
-            VideoShaderPreset.h)
+            VideoShaderPreset.h
+)
 
 core_add_library(retroplayer)

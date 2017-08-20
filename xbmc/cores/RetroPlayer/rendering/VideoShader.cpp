@@ -25,6 +25,7 @@
 #include "Application.h"
 #include "guilib/Texture.h"
 
+using namespace KODI;
 using namespace SHADER;
 
 CVideoShader::CVideoShader()
