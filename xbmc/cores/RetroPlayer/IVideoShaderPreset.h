@@ -68,7 +68,6 @@ namespace SHADER
     std::string sourcePath;
     std::string vertexSource;
     std::string fragmentSource;
-    std::string alias;
     FILTER_TYPE filter = FILTER_TYPE_NONE;
     WRAP_TYPE wrap = WRAP_TYPE_BORDER;
     unsigned int frameCountMod = 0;

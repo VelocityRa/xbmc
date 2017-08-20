@@ -159,11 +159,6 @@ extern "C"
     char *fragment_source;
 
     /*!
-     * \brief Alias
-     */
-    char alias[64];
-
-    /*!
      * \brief FBO parameters
      */
     fbo_scale fbo;
