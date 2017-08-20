@@ -25,15 +25,6 @@
 
 namespace kodi { namespace addon { class CInstanceShaderPreset; } }
 
-#ifndef PATH_MAX_LENGTH
-#define PATH_MAX_LENGTH 4096
-#endif
-
-#define GFX_MAX_SHADERS 26
-#define GFX_MAX_TEXTURES 8
-#define GFX_MAX_VARIABLES 64
-#define GFX_MAX_PARAMETERS 128
-
 extern "C"
 {
   typedef struct config_file config_file;
@@ -149,8 +140,8 @@ extern "C"
 
   typedef struct video_shader_parameter
   {
-    char id[64];
-    char desc[64];
+    char *id;
+    char *desc;
     float current;
     float minimum;
     float initial;
@@ -163,7 +154,7 @@ extern "C"
     /*!
      * \brief Path to the shader pass source
      */
-    char source_path[PATH_MAX_LENGTH];
+    char *source_path;
 
     /*!
      * \brief The vertex shader source
@@ -214,12 +205,12 @@ extern "C"
     /*!
      * \brief Name of the sampler uniform, e.g. `uniform sampler2D foo`.
      */
-    char id[64];
+    char *id;
 
     /*!
      * \brief Path of the texture
      */
-    char path[PATH_MAX_LENGTH];
+    char *path;
 
     /*!
      * \brief Filtering for the texture
@@ -241,17 +232,14 @@ extern "C"
   {
     rarch_shader_type type;
 
-    bool modern; /* Only used for XML shaders */
-    char prefix[64];
+    unsigned pass_count;
+    video_shader_pass *passes;
 
-    unsigned passes;
-    video_shader_pass pass[GFX_MAX_SHADERS];
+    unsigned lut_count;
+    video_shader_lut *luts;
 
-    unsigned luts;
-    video_shader_lut lut[GFX_MAX_TEXTURES];
-
-    video_shader_parameter parameters[GFX_MAX_PARAMETERS];
-    unsigned num_parameters;
+    unsigned parameter_count;
+    video_shader_parameter *parameters;
   } video_shader;
   ///}
 
