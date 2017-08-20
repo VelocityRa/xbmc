@@ -71,7 +71,7 @@ extern "C"
      * \brief Use the window viewport size
      *
      * Output size of the shader pass is relative to the size of the window
-     * viewpoirt. Value is float. This value can change over time if the user
+     * viewport. Value is float. This value can change over time if the user
      * resizes his/her window!
      */
     RARCH_SCALE_ABSOLUTE,
@@ -79,7 +79,7 @@ extern "C"
     /*!
      * \brief Use a statically defined size
      *
-     * Output size is statically defiend to a certain size. Useful for hi-res
+     * Output size is statically defined to a certain size. Useful for hi-res
      * blenders or similar.
      */
     RARCH_SCALE_VIEWPORT
@@ -130,7 +130,7 @@ extern "C"
      * \brief Float framebuffer
      *
      * This parameter defines if the pass should be rendered to a 32-bit
-     * floating point buffer. The only takes effect if the pass is actaully
+     * floating point buffer. This only takes effect if the pass is actaully
      * rendered to an FBO. This is useful for shaders which have to store FBO
      * values outside the range [0, 1].
      */
@@ -252,14 +252,6 @@ extern "C"
 
     video_shader_parameter parameters[GFX_MAX_PARAMETERS];
     unsigned num_parameters;
-
-    /*!
-     * \brief Feedback pass
-     *
-     * If < 0, no feedback pass is used. Otherwise, the FBO after pass #N is
-     * passed a texture to next frame.
-     */
-    int feedback_pass;
   } video_shader;
   ///}
 

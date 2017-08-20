@@ -71,8 +71,6 @@ namespace ADDON
                              public KODI::SHADER::IVideoShaderPresetLoader
   {
   public:
-    //static AddonPtr FromExtension(CAddonInfo addonInfo, const cp_extension_t* ext);
-
     CShaderPresetAddon(const BinaryAddonBasePtr& addonInfo);
     ~CShaderPresetAddon(void) override;
 

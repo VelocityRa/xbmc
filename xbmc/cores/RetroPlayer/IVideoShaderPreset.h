@@ -110,9 +110,6 @@ namespace SHADER
     std::vector<VideoShaderPass> passes;
     std::vector<VideoShaderLut> luts;
     std::vector<VideoShaderParameter> parameters;
-
-    //! @todo
-    int m_feedbackPass = -1;
   };
 }
 }
