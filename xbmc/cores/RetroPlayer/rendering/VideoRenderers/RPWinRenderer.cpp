@@ -32,18 +32,6 @@ CRPWinRenderer::CRPWinRenderer()
   : CWinRenderer()
   , m_shadersNeedUpdate(true)
 {
-  SetShaderPreset("ntsc/ntsc.cgp");
-  //SetShaderPreset("cgp/gameboy-screen-grid.cgp");
-  //SetShaderPreset("borders/gameboy-player/gameboy-player+crt-easymode.cgp");
-  //SetShaderPreset("reshade/lut.cgp");
-  //SetShaderPreset("borders/color-grid.cgp");
-  //SetShaderPreset("borders/mudlord.cgp");
-  //SetShaderPreset("crt/4xbr-hybrid-crt.cgp");
-  //SetShaderPreset("crt/4xbr-hybrid-crt-b.cgp");
-  //SetShaderPreset("anti-aliasing/reverse-aa.cgp");
-  //SetShaderPreset("bilinear.cgp");
-  //SetShaderPreset("nearest.cgp");
-  //SetShaderPreset("crt/shaders/phosphor.cgp");
 }
 
 CRPWinRenderer::~CRPWinRenderer()

@@ -119,10 +119,6 @@ bool CVideoShaderManager::Update()
 
     DisposeVideoShaders();
 
-    static const auto shaderFormat = "hlsl";  // "hlsl" or "glsl" - Windows uses HLSL shaders
-    // todo: Kodi probably shouldn't know about the add-on's relative path below
-    auto presetPath = URIUtils::AddFileToFolder("resources/libretro", shaderFormat, m_videoShaderPath);
-
     if(!m_pPreset)
       m_pPreset.reset(new SHADERPRESET::CVideoShaderPreset());
 
@@ -130,9 +126,9 @@ bool CVideoShaderManager::Update()
     if (!m_pPreset->Init())
       return false;
 
-    if (!m_pPreset->ReadPresetFile(presetPath))
+    if (!m_pPreset->ReadPresetFile(m_videoShaderPath))
     {
-      CLog::Log(LOGERROR, "%s - couldn't load shader preset %s or the shaders it references", __FUNCTION__, presetPath);
+      CLog::Log(LOGERROR, "%s - couldn't load shader preset %s or the shaders it references", __FUNCTION__, m_videoShaderPath.c_str());
       return false;
     }
 
@@ -290,8 +286,6 @@ bool CVideoShaderManager::CreateShaders()
   auto numPasses = m_pPreset->Preset().passes.size();
   auto numParameters = m_pPreset->Preset().parameters.size();
   m_textureSize = GetOptimalTextureSize(m_videoSize); // todo: replace with per-shader texture size
-  // TODO: Bad! Should pass full paths at add-on side like we did with shader paths
-  auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/resources/libretro/hlsl", m_videoShaderPath);
 
   // todo: is this pass specific?
   ShaderLUTs passLUTs;
@@ -300,7 +294,7 @@ bool CVideoShaderManager::CreateShaders()
     const VideoShaderLut& lutStruct = m_pPreset->Preset().luts[i];
 
     ID3D11SamplerState* lutSampler(CreateLUTSampler(lutStruct));
-    CDXTexture* lutTexture(CreateLUTexture(lutStruct, presetDirectory));
+    CDXTexture* lutTexture(CreateLUTexture(lutStruct, m_videoShaderPath));
 
     if (!lutSampler || !lutTexture)
     {

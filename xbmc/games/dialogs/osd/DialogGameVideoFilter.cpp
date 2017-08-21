@@ -25,9 +25,11 @@
 #include "settings/GameSettings.h"
 #include "settings/MediaSettings.h"
 #include "utils/log.h"
+#include "utils/URIUtils.h"
 #include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"
 #include "FileItem.h"
+#include "URL.h"
 
 #include <stdlib.h>
 
@@ -48,12 +50,13 @@ void CDialogGameVideoFilter::PreInit()
   // TODO: Have the add-on give us the xml as a string (or parse it)
   static const std::string addonPath = std::string("special://xbmcbinaddons/") + PRESETS_ADDON_NAME;
   static const std::string xmlPath = addonPath + "/resources/ShaderPresetsDefault.xml";
+  std::string basePath = URIUtils::GetBasePath(xmlPath);
 
   CXBMCTinyXML xml = CXBMCTinyXML(xmlPath);
 
   if (!xml.LoadFile())
   {
-    CLog::Log(LOGERROR, "%s - Couldn't load shader presets default .xml, %s", __FUNCTION__, xmlPath);
+    CLog::Log(LOGERROR, "%s - Couldn't load shader presets default .xml, %s", __FUNCTION__, CURL::GetRedacted(xmlPath).c_str());
     return;
   }
 
@@ -64,7 +67,7 @@ void CDialogGameVideoFilter::PreInit()
   {
     VideoFilterProperties videoFilter;
 
-    videoFilter.path = addonPath + "/resources/libretro/hlsl/" + child->FirstChild("path")->FirstChild()->Value();
+    videoFilter.path = URIUtils::AddFileToFolder(basePath, child->FirstChild("path")->FirstChild()->Value());
     videoFilter.nameIndex = atoi(child->FirstChild("name")->FirstChild()->Value());
     videoFilter.categoryIndex = atoi(child->FirstChild("category")->FirstChild()->Value());
     videoFilter.descriptionIndex = atoi(child->FirstChild("description")->FirstChild()->Value());
@@ -72,7 +75,7 @@ void CDialogGameVideoFilter::PreInit()
     m_videoFilters.emplace_back(videoFilter);
   }
 
-  CLog::Log(LOGDEBUG, "%s - Loaded shader presets default .xml, %s", __FUNCTION__, xmlPath);
+  CLog::Log(LOGDEBUG, "Loaded %d shader presets default .xml, %s", m_videoFilters.size(), CURL::GetRedacted(xmlPath).c_str());
 }
 
 void CDialogGameVideoFilter::GetItems(CFileItemList &items)
