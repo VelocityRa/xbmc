@@ -28,6 +28,7 @@
 #include "messaging/ApplicationMessenger.h"
 #include "cores/RetroPlayer/RetroPlayer.h"
 #include "guilib/GraphicContext.h"
+#include "settings/GameSettings.h"
 #include "settings/MediaSettings.h"
 #include "settings/VideoSettings.h"
 
@@ -59,6 +60,8 @@ void CRPRenderManager::PreInit()
   m_QueueSize = 2;
   m_QueueSkip = 0;
   m_presentstep = PRESENT_IDLE;
+
+  SetShaderPreset(CMediaSettings::GetInstance().GetCurrentGameSettings().VideoFilter());
 }
 
 void CRPRenderManager::CreateRenderer()
