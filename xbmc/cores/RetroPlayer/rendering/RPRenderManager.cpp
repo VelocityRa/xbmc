@@ -203,7 +203,9 @@ const std::string& CRPRenderManager::GetShaderPreset()
   CRPWinRenderer* winRenderer = nullptr;
   if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_pRenderer)))
     return winRenderer->GetShaderPreset();
-  return "";
+
+  static const std::string empty;
+  return empty;
 }
 
 ViewMode CRPRenderManager::GetRenderViewMode()
