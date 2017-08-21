@@ -116,7 +116,7 @@ void CShaderPresetAddon::ResetProperties(void)
   m_struct.toKodi.kodiInstance = this;
 }
 
-bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset)
+bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADER::VideoShaderPreset &shaderPreset)
 {
   bool bSuccess = false;
 
@@ -145,13 +145,13 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER:
   return bSuccess;
 }
 
-void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset)
+void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, SHADER::VideoShaderPreset &shaderPreset)
 {
   if (shader.passes != nullptr)
   {
     for (unsigned int i = 0; i < shader.pass_count; i++)
     {
-      KODI::SHADER::VideoShaderPass shaderPass;
+      SHADER::VideoShaderPass shaderPass;
       TranslateShaderPass(shader.passes[i], shaderPass);
       shaderPreset.passes.emplace_back(std::move(shaderPass));
     }
@@ -161,7 +161,7 @@ void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI:
   {
     for (unsigned int i = 0; i < shader.lut_count; i++)
     {
-      KODI::SHADER::VideoShaderLut shaderLut;
+      SHADER::VideoShaderLut shaderLut;
       TranslateShaderLut(shader.luts[i], shaderLut);
       shaderPreset.luts.emplace_back(std::move(shaderLut));
     }
@@ -171,14 +171,14 @@ void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI:
   {
     for (unsigned int i = 0; i < shader.parameter_count; i++)
     {
-      KODI::SHADER::VideoShaderParameter shaderParam;
+      SHADER::VideoShaderParameter shaderParam;
       TranslateShaderParameter(shader.parameters[i], shaderParam);
       shaderPreset.parameters.emplace_back(std::move(shaderParam));
     }
   }
 }
 
-void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass)
+void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, SHADER::VideoShaderPass &shaderPass)
 {
   shaderPass.sourcePath = pass.source_path ? pass.source_path : "";
   shaderPass.vertexSource = pass.vertex_source ? pass.vertex_source : "";
@@ -214,7 +214,7 @@ void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, KODI
   shaderPass.mipmap = pass.mipmap;
 }
 
-void CShaderPresetAddon::TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut)
+void CShaderPresetAddon::TranslateShaderLut(const video_shader_lut &lut, SHADER::VideoShaderLut &shaderLut)
 {
   shaderLut.strId = lut.id ? lut.id : "";
   shaderLut.path = lut.path ? lut.path : "";
@@ -223,7 +223,7 @@ void CShaderPresetAddon::TranslateShaderLut(const video_shader_lut &lut, KODI::S
   shaderLut.mipmap = lut.mipmap;
 }
 
-void CShaderPresetAddon::TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam)
+void CShaderPresetAddon::TranslateShaderParameter(const video_shader_parameter &param, SHADER::VideoShaderParameter &shaderParam)
 {
   shaderParam.strId = param.id ? param.id : "";
   shaderParam.description = param.desc ? param.desc : "";
