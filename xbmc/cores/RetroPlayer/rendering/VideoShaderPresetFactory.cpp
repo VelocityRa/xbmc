@@ -120,20 +120,31 @@ void CVideoShaderPresetFactory::UpdateAddons()
   // Look for new add-ons
   for (const auto &shaderAddon : addonInfos)
   {
-    const bool bIsNew = std::find_if(m_shaderAddons.begin(), m_shaderAddons.end(),
-      [&shaderAddon](const std::unique_ptr<CShaderPresetAddon> &addon)
+    auto FindAddonById = [&shaderAddon](const std::unique_ptr<CShaderPresetAddon> &addon)
       {
         return shaderAddon->ID() == addon->ID();
-      }) == m_shaderAddons.end();
+      };
 
-    if (bIsNew)
+    const bool bIsNew = std::find_if(m_shaderAddons.begin(), m_shaderAddons.end(), FindAddonById) == m_shaderAddons.end();
+
+    if (!bIsNew)
+      continue;
+
+    const bool bIsFailed = std::find_if(m_failedAddons.begin(), m_failedAddons.end(), FindAddonById) != m_failedAddons.end();
+
+    if (bIsFailed)
+      continue;
+
+    std::unique_ptr<CShaderPresetAddon> addonPtr(new CShaderPresetAddon(shaderAddon));
+    if (addonPtr->CreateAddon())
     {
-      std::unique_ptr<CShaderPresetAddon> addonPtr(new CShaderPresetAddon(shaderAddon));
-
       for (const auto &extension : addonPtr->GetExtensions())
         RegisterLoader(addonPtr.get(), extension);
-
       m_shaderAddons.emplace_back(std::move(addonPtr));
+    }
+    else
+    {
+      m_failedAddons.emplace_back(std::move(addonPtr));
     }
   }
 }
