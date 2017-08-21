@@ -35,7 +35,7 @@ namespace ADDON
   class CShaderPreset
   {
   public:
-    CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct);
+    CShaderPreset(preset_file file, AddonInstance_ShaderPreset &instanceStruct);
     ~CShaderPreset();
 
     /*!
@@ -60,7 +60,7 @@ namespace ADDON
     void FreeShaderPreset(video_shader &shader);
 
   private:
-    config_file *m_file;
+    preset_file m_file;
     AddonInstance_ShaderPreset &m_struct;
   };
 
