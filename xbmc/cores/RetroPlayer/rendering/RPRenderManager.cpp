@@ -173,48 +173,17 @@ void CRPRenderManager::FrameMove()
   ManageCaptures();
 }
 
-// Implementation of IVideoSelectCallback
-
-bool CRPRenderManager::SupportsRenderFeature(ERENDERFEATURE feature)
-{
-  return Supports(feature);
-}
-
 void CRPRenderManager::SetSpeed(double speed)
 {
   if (m_pRenderer)
     m_pRenderer->SetSpeed(speed);
 }
 
-bool CRPRenderManager::SupportsScalingMethod(ESCALINGMETHOD method)
-{
-  return Supports(method);
-}
+// Implementation of IVideoSelectCallback
 
-ViewMode CRPRenderManager::GetRenderViewMode()
+bool CRPRenderManager::SupportsRenderFeature(ERENDERFEATURE feature)
 {
-  //! @todo
-  CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
-  return static_cast<ViewMode>(videoSettings.m_ViewMode);
-}
-
-void CRPRenderManager::SetRenderViewMode(ViewMode mode)
-{
-  SetViewMode(mode);
-}
-
-ESCALINGMETHOD CRPRenderManager::GetScalingMethod()
-{
-  //! @todo
-  CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
-  return videoSettings.m_ScalingMethod;
-}
-
-void CRPRenderManager::SetScalingMethod(ESCALINGMETHOD method)
-{
-  //! @todo
-  CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
-  videoSettings.m_ScalingMethod = method;
+  return Supports(feature);
 }
 
 // TODO: Avoid casting by adding SetShaderPreset method to BaseRenderer
@@ -228,8 +197,20 @@ void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
 // TODO: Avoid casting by adding GetShaderPreset method to BaseRenderer
 const std::string& CRPRenderManager::GetShaderPreset()
 {
-   CRPWinRenderer* winRenderer = nullptr;
-   if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_pRenderer)))
-      return winRenderer->GetShaderPreset();
-   return "";
+  CRPWinRenderer* winRenderer = nullptr;
+  if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_pRenderer)))
+    return winRenderer->GetShaderPreset();
+  return "";
+}
+
+ViewMode CRPRenderManager::GetRenderViewMode()
+{
+  //! @todo
+  CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
+  return static_cast<ViewMode>(videoSettings.m_ViewMode);
+}
+
+void CRPRenderManager::SetRenderViewMode(ViewMode mode)
+{
+  SetViewMode(mode);
 }

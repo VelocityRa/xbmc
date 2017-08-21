@@ -21,64 +21,37 @@
 
 #include "addons/binary-addons/AddonInstanceHandler.h"
 #include "IVideoShaderPreset.h"
-#include "addons/ShaderPreset.h"
 
 #include <memory>
+#include <vector>
+
+namespace ADDON
+{
+  class CShaderPreset;
+  class CShaderPresetAddon;
+}
 
 namespace SHADERPRESET
 {
-  /*
-   * C++ (OOP) Wrapper class to RetroArch's video_shader struct
-   *
-   * Uses CShaderPresetAddon for parsing shader preset files
-   */
-
   class CVideoShaderPreset : public IVideoShaderPreset
   {
-  //private:
-  public:
-    // todo: probably don't need that
-    enum rarch_shader_type_ type;
-
-    unsigned m_Passes;
-    struct video_shader_pass_ m_Pass[GFX_MAX_SHADERS];
-
-    unsigned m_Luts;
-    struct video_shader_lut_ m_Lut[GFX_MAX_TEXTURES];
-
-    struct video_shader_parameter_ m_Parameters[GFX_MAX_PARAMETERS];
-    unsigned m_NumParameters;
-
-    unsigned m_Variables;
-    struct state_tracker_uniform_info_ m_Variable[GFX_MAX_VARIABLES];
-
-    /* If < 0, no feedback pass is used. Otherwise,
-    * the FBO after pass #N is passed a texture to next frame. */
-    int m_FeedbackPass;
-
   public:
     // Instance of CShaderPreset
-    static std::unique_ptr<CShaderPresetAddon> shaderPresetAddon;
+    static std::unique_ptr<ADDON::CShaderPresetAddon> shaderPresetAddon;
     explicit CVideoShaderPreset();
-    explicit CVideoShaderPreset(std::string presetPath);
 
     // Initializes CShaderPresetAddon instance that's used for calling the add-on's functions
     bool Init() override;
     void Destroy() override;
 
-    bool ReadPresetFile(std::string presetPath) override;
-    bool ReadPresetConfig(config_file_t_* presetConf) override;
-    bool ReadPresetString(std::string presetString) override;
-    void FreePresetFile(video_shader_* shader) override;
-    bool ResolveParameters() override;
-    // bool WritePresetFile(config_file_t_* presetConf) override;  // TODO?: preset file writing
+    bool ReadPresetFile(const std::string &presetPath) override;
+    // bool WritePresetFile(config_file* presetConf) override;  // TODO?: preset file writing
 
     ~CVideoShaderPreset() override;
 
-  protected:
-     static void FreeConfigFile(config_file_t_* conf);
+    const KODI::SHADER::VideoShaderPreset &Preset() const { return m_videoShader; }
+
   private:
-    config_file_t_* m_config;
-    video_shader_* m_videoShader;
+    KODI::SHADER::VideoShaderPreset m_videoShader;
   };
 } // namespace SHADERPRESET

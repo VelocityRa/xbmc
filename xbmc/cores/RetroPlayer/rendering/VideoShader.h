@@ -23,7 +23,10 @@
 #include "VideoRenderers/VideoShaders/WinVideoFilter.h"
 #include "VideoShaderLUT.h"
 
-using namespace SHADER;
+namespace KODI
+{
+namespace SHADER
+{
 
 class CVideoPixelShader : public CD3DPixelShader
 {
@@ -109,3 +112,6 @@ private:
 private:
   cbInput GetInputData(float frameCount = 0);
 };
+
+}
+}

@@ -20,7 +20,89 @@
 #pragma once
 
 #include <string>
-#include "addons/ShaderPreset.h"
+#include <vector>
+
+namespace KODI
+{
+namespace SHADER
+{
+  enum FILTER_TYPE
+  {
+    FILTER_TYPE_NONE,
+    FILTER_TYPE_LINEAR,
+    FILTER_TYPE_NEAREST
+  };
+
+  enum WRAP_TYPE
+  {
+    WRAP_TYPE_BORDER,
+    WRAP_TYPE_EDGE,
+    WRAP_TYPE_REPEAT,
+    WRAP_TYPE_MIRRORED_REPEAT,
+  };
+
+  enum SCALE_TYPE
+  {
+    SCALE_TYPE_INPUT,
+    SCALE_TYPE_ABSOLUTE,
+    SCALE_TYPE_VIEWPORT,
+  };
+
+  struct FboScaleAxis
+  {
+    SCALE_TYPE type = SCALE_TYPE_INPUT;
+    float scale = 1.0;
+    unsigned int abs = 1;
+  };
+
+  struct FboScale
+  {
+    bool sRgbFramebuffer = false;
+    bool floatFramebuffer = false;
+    FboScaleAxis scaleX;
+    FboScaleAxis scaleY;
+  };
+
+  struct VideoShaderPass
+  {
+    std::string sourcePath;
+    std::string vertexSource;
+    std::string fragmentSource;
+    FILTER_TYPE filter = FILTER_TYPE_NONE;
+    WRAP_TYPE wrap = WRAP_TYPE_BORDER;
+    unsigned int frameCountMod = 0;
+    FboScale fbo;
+    bool mipmap = false;
+  };
+
+  struct VideoShaderLut
+  {
+    std::string strId;
+    std::string path;
+    FILTER_TYPE filter = FILTER_TYPE_NONE;
+    WRAP_TYPE wrap = WRAP_TYPE_BORDER;
+    bool mipmap = false;
+  };
+
+  struct VideoShaderParameter
+  {
+    std::string strId;
+    std::string description;
+    float current = 0.0f;
+    float minimum = 0.0f;
+    float initial = 0.0f;
+    float maximum = 0.0f;
+    float step = 0.0f;
+  };
+
+  struct VideoShaderPreset
+  {
+    std::vector<VideoShaderPass> passes;
+    std::vector<VideoShaderLut> luts;
+    std::vector<VideoShaderParameter> parameters;
+  };
+}
+}
 
 namespace SHADERPRESET
 {
@@ -32,7 +114,7 @@ namespace SHADERPRESET
   public:
     virtual ~IVideoShaderPreset() = default;
 
-    /**
+    /*!
      * \brief Perform initialization of the object
      *        Implementation may choose to perform it if the object is
      *        used without having this having been called.
@@ -40,54 +122,20 @@ namespace SHADERPRESET
      */
     virtual bool Init() = 0;
 
-    /**
+    /*!
      * \brief Perform deinitialization of the object.
      *        May be used to get rid of unneded resources.
      */
     virtual void Destroy() = 0;
 
-
-    /**
+    /*!
      * \brief Reads/Parses a shader preset file and loads its state to the
      *        object. What this state is is implementation specific.
      * \param presetPath Full path of the preset file.
      * \return True on successful parsing, false on failed.
      */
-    virtual bool ReadPresetFile(std::string presetPath) = 0;
+    virtual bool ReadPresetFile(const std::string &presetPath) = 0;
 
-    /**
-    * \brief Reads a shader preset already parsed in a config_file_t_
-    *        and loads its state to the object. What this state is
-    *        is implementation specific.
-    * \param presetConf Configuration file of the preset file that's been parsed.
-    * \return True if successfully read, false on failure.
-    */
-    virtual bool ReadPresetConfig(config_file_t_* presetConf) = 0;
-
-    /**
-    * \brief Reads/Parses a shader preset already loaded in memory as a
-    *        string and loads its state to the object. What this state
-    *        is is implementation specific.
-    * \param presetString String of the preset file.
-    * \return True on successful parsing, false on failed.
-    */
-    virtual bool ReadPresetString(std::string presetString) = 0;
-
-    /**
-    * \brief Frees all state related to shader
-    * \param shader Object to free.
-    */
-    virtual void FreePresetFile(video_shader_* shader) = 0;
-
-    /**
-    * ShaderPresetResolveParameters:
-    *
-    * Resolves all shader parameters belonging to shaders.
-    *
-    * Returns: True if successful, otherwise false false.
-    **/
-    virtual bool ResolveParameters() = 0;
-
-    // virtual bool WritePresetFile(conf_file_t* presetConf) = 0;
+    // virtual bool WritePresetFile() = 0;
   };
-} // namespace SHADERPRESET
+}

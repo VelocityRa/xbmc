@@ -21,13 +21,15 @@
 
 #include <memory>
 #include <string>
+#include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 #include "system.h"
 #include "VideoShaderUtils.h"
+#include "cores/RetroPlayer/IVideoShaderPreset.h"
 
-struct video_shader_lut_;
-enum gfx_wrap_type_;
 class CDXTexture;
 
+namespace KODI
+{
 namespace SHADER
 {
   struct ShaderLUT
@@ -70,12 +72,13 @@ namespace SHADER
     ShaderLUT& operator=(const ShaderLUT& rhs) = delete;
   };
 
-  ID3D11SamplerState* CreateLUTSampler(const video_shader_lut_ lut);
-  CDXTexture* CreateLUTexture(const video_shader_lut_ lut, const std::string& presetDirectory);
+  ID3D11SamplerState* CreateLUTSampler(const VideoShaderLut &lut);
+  CDXTexture* CreateLUTexture(const VideoShaderLut &lut, const std::string& presetDirectory);
 
   // Returns smallest possible power-of-two sized texture
   float2 GetOptimalTextureSize(float2 videoSize);
-  D3D11_TEXTURE_ADDRESS_MODE TranslateWrapType(const gfx_wrap_type_ wrap);
+  D3D11_TEXTURE_ADDRESS_MODE TranslateWrapType(WRAP_TYPE wrap);
 
   typedef std::vector<std::shared_ptr<ShaderLUT>> ShaderLUTs;
+}
 }

@@ -22,6 +22,8 @@
 #include <map>
 #include <algorithm>
 
+namespace KODI
+{
 namespace SHADER
 {
   typedef std::map<std::string, float> ShaderParameters;
@@ -62,4 +64,5 @@ namespace SHADER
     FLOAT x, y, z;  // vertex positions
     FLOAT tu, tv;   // texture coordinates
   };
+}
 }

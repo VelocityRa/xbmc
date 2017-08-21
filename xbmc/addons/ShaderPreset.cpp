@@ -19,20 +19,94 @@
  */
 
 #include "ShaderPreset.h"
+#include "addons/binary-addons/BinaryAddonBase.h"
+#include "addons/AddonManager.h"
+#include "filesystem/SpecialProtocol.h"
+#include "utils/log.h"
 #include "utils/URIUtils.h"
 
 using namespace KODI;
-using namespace SHADERPRESET;
+using namespace ADDON;
 
-CShaderPresetAddon::CShaderPresetAddon(const ADDON::BinaryAddonBasePtr& addonBase)
+// --- CShaderPreset -----------------------------------------------------------
+
+CShaderPreset::CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct) :
+  m_file(file),
+  m_struct(instanceStruct)
+{
+}
+
+CShaderPreset::~CShaderPreset()
+{
+  m_struct.toAddon.config_file_free(&m_struct, m_file);
+}
+
+bool CShaderPreset::ReadShaderPreset(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_read(&m_struct, m_file, &shader);
+}
+
+void CShaderPreset::WriteShaderPreset(const video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_write(&m_struct, m_file, &shader);
+}
+
+/*
+void CShaderPresetAddon::ShaderPresetResolveRelative(video_shader &shader, const std::string &ref_path)
+{
+  return m_struct.toAddon.video_shader_resolve_relative(&m_struct, &shader, ref_path.c_str());
+}
+
+bool CShaderPresetAddon::ShaderPresetResolveCurrentParameters(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_resolve_current_parameters(&m_struct, m_file, &shader);
+}
+*/
+
+bool CShaderPreset::ResolveParameters(video_shader &shader)
+{
+  return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, m_file, &shader);
+}
+
+void CShaderPreset::FreeShaderPreset(video_shader &shader)
+{
+  m_struct.toAddon.video_shader_free(&m_struct, &shader);
+}
+
+// --- CShaderPresetAddon ------------------------------------------------------
+
+CShaderPresetAddon::CShaderPresetAddon(const BinaryAddonBasePtr& addonBase)
   : IAddonInstanceHandler(ADDON_INSTANCE_SHADERPRESET, addonBase)
 {
   ResetProperties();
+  m_extensions = StringUtils::Split(addonBase->Type(ADDON_SHADERDLL)->GetValue("@extensions").asString(), "|");
 }
 
 CShaderPresetAddon::~CShaderPresetAddon(void)
 {
   DestroyAddon();
+}
+
+bool CShaderPresetAddon::CreateAddon(void)
+{
+  CExclusiveLock lock(m_dllSection);
+
+  // Reset all properties to defaults
+  ResetProperties();
+
+  // Initialise the add-on
+  CLog::Log(LOGDEBUG, "%s - creating ShaderPreset add-on instance '%s'", __FUNCTION__, Name().c_str());
+
+  if (CreateInstance(&m_struct) != ADDON_STATUS_OK)
+    return false;
+
+  return true;
+}
+
+void CShaderPresetAddon::DestroyAddon()
+{
+  CExclusiveLock lock(m_dllSection);
+  DestroyInstance();
 }
 
 void CShaderPresetAddon::ResetProperties(void)
@@ -42,60 +116,171 @@ void CShaderPresetAddon::ResetProperties(void)
   m_struct.toKodi.kodiInstance = this;
 }
 
-const char* CShaderPresetAddon::GetLibraryBasePath()
+bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset)
 {
-  if (m_strLibraryPath.empty())
+  bool bSuccess = false;
+
+  std::string translatedPath = CSpecialProtocol::TranslatePath(presetPath);
+
+  config_file *file = m_struct.toAddon.config_file_new(&m_struct, translatedPath.c_str());
+
+  if (file != nullptr)
   {
-    std::string strLibPath = Addon()->LibPath();
-    m_strLibraryPath = URIUtils::GetBasePath(CSpecialProtocol::TranslatePath(strLibPath));
+    std::unique_ptr<CShaderPreset> shaderPresetAddon(new CShaderPreset(file, m_struct));
+
+    video_shader videoShader = { };
+    if (shaderPresetAddon->ReadShaderPreset(videoShader))
+    {
+      if (shaderPresetAddon->ResolveParameters(videoShader))
+      {
+        TranslateShaderPreset(videoShader, shaderPreset);
+        bSuccess = true;
+      }
+      shaderPresetAddon->FreeShaderPreset(videoShader);
+    }
+
+    m_struct.toAddon.config_file_free(&m_struct, file);
   }
-  return m_strLibraryPath.c_str();
+
+  return bSuccess;
 }
 
-
-config_file_t_ *CShaderPresetAddon::ConfigFileNew(const char *path)
+void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset)
 {
-  m_strConfigPath = URIUtils::AddFileToFolder(GetLibraryBasePath(), path);
-  m_strConfigBasePath = URIUtils::GetBasePath(m_strConfigPath);
-  return m_struct.toAddon.config_file_new(&m_struct, m_strConfigPath.c_str(), m_strConfigBasePath.c_str());
+  if (shader.passes != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.pass_count; i++)
+    {
+      KODI::SHADER::VideoShaderPass shaderPass;
+      TranslateShaderPass(shader.passes[i], shaderPass);
+      shaderPreset.passes.emplace_back(std::move(shaderPass));
+    }
+  }
+
+  if (shader.luts != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.lut_count; i++)
+    {
+      KODI::SHADER::VideoShaderLut shaderLut;
+      TranslateShaderLut(shader.luts[i], shaderLut);
+      shaderPreset.luts.emplace_back(std::move(shaderLut));
+    }
+  }
+
+  if (shader.parameters != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.parameter_count; i++)
+    {
+      KODI::SHADER::VideoShaderParameter shaderParam;
+      TranslateShaderParameter(shader.parameters[i], shaderParam);
+      shaderPreset.parameters.emplace_back(std::move(shaderParam));
+    }
+  }
 }
 
-config_file_t_ *CShaderPresetAddon::ConfigFileNewFromString(const char *from_string)
+void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass)
 {
-  return m_struct.toAddon.config_file_new_from_string(&m_struct, from_string);
+  shaderPass.sourcePath = pass.source_path ? pass.source_path : "";
+  shaderPass.vertexSource = pass.vertex_source ? pass.vertex_source : "";
+  shaderPass.fragmentSource = pass.fragment_source ? pass.fragment_source : "";
+  shaderPass.filter = TranslateFilterType(pass.filter);
+  shaderPass.wrap = TranslateWrapType(pass.wrap);
+  shaderPass.frameCountMod = pass.frame_count_mod;
+  
+  const auto &fbo = pass.fbo;
+  auto &shaderFbo = shaderPass.fbo;
+
+  shaderFbo.scaleX.type = TranslateScaleType(fbo.scale_x.type);
+  switch (fbo.scale_x.type)
+  {
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    shaderFbo.scaleX.abs = fbo.scale_x.abs;
+    break;
+  default:
+    shaderFbo.scaleX.scale = fbo.scale_x.scale;
+    break;
+  }
+  shaderFbo.scaleY.type = TranslateScaleType(fbo.scale_y.type);
+  switch (fbo.scale_y.type)
+  {
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    shaderFbo.scaleY.abs = fbo.scale_y.abs;
+    break;
+  default:
+    shaderFbo.scaleY.scale = fbo.scale_y.scale;
+    break;
+  }
+
+  shaderPass.mipmap = pass.mipmap;
 }
 
-void CShaderPresetAddon::ConfigFileFree(config_file_t_ *conf)
+void CShaderPresetAddon::TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut)
 {
-  return m_struct.toAddon.config_file_free(&m_struct, conf);
+  shaderLut.strId = lut.id ? lut.id : "";
+  shaderLut.path = lut.path ? lut.path : "";
+  shaderLut.filter = TranslateFilterType(lut.filter);
+  shaderLut.wrap = TranslateWrapType(lut.wrap);
+  shaderLut.mipmap = lut.mipmap;
 }
 
-bool CShaderPresetAddon::ShaderPresetRead(config_file_t_ *conf, video_shader_ *shader)
+void CShaderPresetAddon::TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam)
 {
-  return m_struct.toAddon.video_shader_read_conf_cgp(&m_struct, conf, shader);
+  shaderParam.strId = param.id ? param.id : "";
+  shaderParam.description = param.desc ? param.desc : "";
+  shaderParam.current = param.current;
+  shaderParam.minimum = param.minimum;
+  shaderParam.initial = param.initial;
+  shaderParam.maximum = param.maximum;
+  shaderParam.step = param.step;
 }
 
-void CShaderPresetAddon::ShaderPresetWrite(config_file_t_ *conf, video_shader_ *shader)
+SHADER::FILTER_TYPE CShaderPresetAddon::TranslateFilterType(SHADER_FILTER_TYPE type)
 {
-  return m_struct.toAddon.video_shader_write_conf_cgp(&m_struct, conf, shader);
+  switch (type)
+  {
+  case SHADER_FILTER_TYPE_LINEAR:
+    return SHADER::FILTER_TYPE_LINEAR;
+  case SHADER_FILTER_TYPE_NEAREST:
+    return SHADER::FILTER_TYPE_NEAREST;
+  default:
+    break;
+  }
+
+  return SHADER::FILTER_TYPE_NONE;
 }
 
-void CShaderPresetAddon::ShaderPresetResolveRelative(video_shader_ *shader, const char *ref_path)
+SHADER::WRAP_TYPE CShaderPresetAddon::TranslateWrapType(SHADER_WRAP_TYPE type)
 {
-  return m_struct.toAddon.video_shader_resolve_relative(&m_struct, shader, ref_path);
+  switch (type)
+  {
+  case SHADER_WRAP_TYPE_BORDER:
+    return SHADER::WRAP_TYPE_BORDER;
+  case SHADER_WRAP_TYPE_EDGE:
+    return SHADER::WRAP_TYPE_EDGE;
+  case SHADER_WRAP_TYPE_REPEAT:
+    return SHADER::WRAP_TYPE_REPEAT;
+  case SHADER_WRAP_TYPE_MIRRORED_REPEAT:
+    return SHADER::WRAP_TYPE_MIRRORED_REPEAT;
+  default:
+    break;
+  }
+
+  return SHADER::WRAP_TYPE_BORDER;
 }
 
-bool CShaderPresetAddon::ShaderPresetResolveCurrentParameters(config_file_t_ *conf, video_shader_ *shader)
+SHADER::SCALE_TYPE CShaderPresetAddon::TranslateScaleType(SHADER_SCALE_TYPE type)
 {
-  return m_struct.toAddon.video_shader_resolve_current_parameters(&m_struct, conf, shader);
-}
+  switch (type)
+  {
+  case SHADER_SCALE_TYPE_INPUT:
+    return SHADER::SCALE_TYPE_INPUT;
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    return SHADER::SCALE_TYPE_ABSOLUTE;
+  case SHADER_SCALE_TYPE_VIEWPORT:
+    return SHADER::SCALE_TYPE_VIEWPORT;
+  default:
+    break;
+  }
 
-bool CShaderPresetAddon::ShaderPresetResolveParameters(config_file_t_ *conf, video_shader_ *shader)
-{
-  return m_struct.toAddon.video_shader_resolve_parameters(&m_struct, conf, shader);
-}
-
-void CShaderPresetAddon::VideoShaderFree(video_shader_ *shader)
-{
-  return m_struct.toAddon.video_shader_free(&m_struct, shader);
+  return SHADER::SCALE_TYPE_INPUT;
 }

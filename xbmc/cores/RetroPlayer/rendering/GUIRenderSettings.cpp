@@ -18,16 +18,39 @@
  *
  */
 
-#include "GameSettings.h"
+#include "GUIRenderSettings.h"
+#include "settings/GameSettings.h"
+#include "settings/MediaSettings.h"
 
-void CGameSettings::Reset()
+using namespace KODI;
+using namespace RETRO;
+
+void CGUIRenderSettings::Reset()
 {
   m_videoFilter.clear();
-  m_viewMode = ViewModeNormal;
+  m_viewMode = -1;
 }
 
-bool CGameSettings::operator==(const CGameSettings &rhs) const
+bool CGUIRenderSettings::operator==(const CGUIRenderSettings &rhs) const
 {
   return m_videoFilter == rhs.m_videoFilter &&
          m_viewMode == rhs.m_viewMode;
+}
+
+std::string CGUIRenderSettings::GetVideoFilter() const
+{
+  if (HasVideoFilter())
+    return m_videoFilter;
+
+  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
+  return gameSettings.VideoFilter();
+}
+
+ViewMode CGUIRenderSettings::GetRenderViewMode() const
+{
+  if (HasRenderViewMode())
+    return static_cast<ViewMode>(m_viewMode);
+  
+  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
+  return gameSettings.ViewMode();
 }

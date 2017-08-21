@@ -19,6 +19,7 @@
  */
 #pragma once
 
+#include "cores/RetroPlayer/rendering/GUIRenderSettings.h"
 #include "guilib/GUIControl.h"
 #include "guilib/GUIInfoTypes.h"
 
@@ -28,6 +29,7 @@ namespace KODI
 {
 namespace RETRO
 {
+class CGUIRenderSettings;
 
 class CGUIGameControl : public CGUIControl
 {
@@ -37,6 +39,8 @@ public:
 
   void SetViewMode(const CGUIInfoLabel &viewMode);
   void SetVideoFilter(const CGUIInfoLabel &videoFilter);
+
+  const CGUIRenderSettings &GetRenderSettings() const { return m_renderSettings; }
 
   // implementation of CGUIControl
   CGUIGameControl *Clone() const override { return new CGUIGameControl(*this); };
@@ -53,8 +57,7 @@ private:
   CGUIInfoLabel m_viewModeInfo;
   CGUIInfoLabel m_videoFilterInfo;
 
-  int m_viewMode = -1;
-  int m_scalingMethod = -1;
+  CGUIRenderSettings m_renderSettings;
 };
 
 }

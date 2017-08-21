@@ -25,12 +25,12 @@
 #include "windowing/WindowingFactory.h"
 #include "cores/RetroPlayer/rendering/VideoShader.h"
 #include "cores/RetroPlayer/rendering/VideoShaderLUT.h"
-#include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
 
 #include <regex>
 #include "cores/RetroPlayer/RetroPlayer.h"
 #include "settings/DisplaySettings.h"
 
+using namespace KODI;
 using namespace SHADER;
 
 CVideoShaderManager::CVideoShaderManager(CBaseRenderer& rendererRef, unsigned videoWidth, unsigned videoHeight)
@@ -42,9 +42,6 @@ CVideoShaderManager::CVideoShaderManager(CBaseRenderer& rendererRef, unsigned vi
   , m_pSampLinear(nullptr)
 {
   m_videoSize = { videoWidth, videoHeight };
-
-  m_pVideoShaders.reserve(GFX_MAX_SHADERS);
-  m_pShaderTextures.reserve(GFX_MAX_SHADERS);
 
   CRect viewPort;
   g_Windowing.GetViewPort(viewPort);
@@ -205,44 +202,44 @@ bool CVideoShaderManager::CreateShaderTextures()
 
   float2 prevSize = m_videoSize;
 
-  auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
+  auto numPasses = m_pPreset->Preset().passes.size();
 
   for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
-    auto& pass = m_pPreset->m_Pass[shaderIdx];
+    auto& pass = m_pPreset->Preset().passes[shaderIdx];
 
     // resolve final texture resolution, taking scale type and scale multiplier into account
 
     UINT textureX;
     UINT textureY;
-    switch (pass.fbo.type_x)
+    switch (pass.fbo.scaleX.type)
     {
-    case RARCH_SCALE_ABSOLUTE_:
-      textureX = pass.fbo.abs_x;
+    case SCALE_TYPE_ABSOLUTE:
+      textureX = pass.fbo.scaleX.abs;
       break;
-    case RARCH_SCALE_VIEWPORT_:
+    case SCALE_TYPE_VIEWPORT:
       textureX = m_outputSize.x;
       break;
-    case RARCH_SCALE_INPUT_:
+    case SCALE_TYPE_INPUT:
     default:
       textureX = prevSize.x;
       break;
     }
-    switch (pass.fbo.type_y)
+    switch (pass.fbo.scaleY.type)
     {
-    case RARCH_SCALE_ABSOLUTE_:
-      textureY = pass.fbo.abs_y;
+    case SCALE_TYPE_ABSOLUTE:
+      textureY = pass.fbo.scaleY.abs;
       break;
-    case RARCH_SCALE_VIEWPORT_:
+    case SCALE_TYPE_VIEWPORT:
       textureY = m_outputSize.y;
       break;
-    case RARCH_SCALE_INPUT_:
+    case SCALE_TYPE_INPUT:
     default:
       textureY = prevSize.y;
       break;
     }
 
     // if the scale was unspecified
-    if (pass.fbo.scale_x == 0 && pass.fbo.scale_y == 0)
+    if (pass.fbo.scaleX.scale == 0 && pass.fbo.scaleY.scale == 0)
     {
       // if the last shader has the scale unspecified
       if (shaderIdx == numPasses - 1)
@@ -255,8 +252,8 @@ bool CVideoShaderManager::CreateShaderTextures()
     }
     else
     {
-      textureX *= pass.fbo.scale_x;
-      textureY *= pass.fbo.scale_y;
+      textureX *= pass.fbo.scaleX.scale;
+      textureY *= pass.fbo.scaleY.scale;
     }
 
     // For reach pass, create the texture
@@ -264,18 +261,18 @@ bool CVideoShaderManager::CreateShaderTextures()
 
     // Determine the framebuffer data format
     DXGI_FORMAT textureFormat;
-    if (pass.fbo.fp_fbo)
+    if (pass.fbo.floatFramebuffer)
       // Give priority to float framebuffer parameter (we can't use both float and sRGB)
       textureFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
     else
-      if (pass.fbo.srgb_fbo)
+      if (pass.fbo.sRgbFramebuffer)
         textureFormat = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
       else
         textureFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 
     if (!texture->Create(textureX, textureY, 1, D3D11_USAGE_DEFAULT, textureFormat, nullptr, 0))
     {
-      CLog::Log(LOGERROR, "Couldn't create a texture for video shader %s.", pass.source.path);
+      CLog::Log(LOGERROR, "Couldn't create a texture for video shader %s.", pass.sourcePath.c_str());
       return false;
     }
     m_pShaderTextures.push_back(std::move(texture));
@@ -290,45 +287,45 @@ bool CVideoShaderManager::CreateShaderTextures()
 
 bool CVideoShaderManager::CreateShaders()
 {
-  auto numPasses = std::min(m_pPreset->m_Passes, static_cast<unsigned>(GFX_MAX_SHADERS));
-  auto numParameters = std::min(m_pPreset->m_NumParameters, static_cast<unsigned>(GFX_MAX_PARAMETERS));
+  auto numPasses = m_pPreset->Preset().passes.size();
+  auto numParameters = m_pPreset->Preset().parameters.size();
   m_textureSize = GetOptimalTextureSize(m_videoSize); // todo: replace with per-shader texture size
   // TODO: Bad! Should pass full paths at add-on side like we did with shader paths
   auto presetDirectory = URIUtils::AddFileToFolder("special://xbmcbinaddons/game.shader.presets/resources/libretro/hlsl", m_videoShaderPath);
 
   // todo: is this pass specific?
   ShaderLUTs passLUTs;
-  for(unsigned i = 0; i < m_pPreset->m_Luts; ++i)
+  for(unsigned i = 0; i < m_pPreset->Preset().luts.size(); ++i)
   {
-    video_shader_lut_& lutStruct = m_pPreset->m_Lut[i];
+    const VideoShaderLut& lutStruct = m_pPreset->Preset().luts[i];
 
     ID3D11SamplerState* lutSampler(CreateLUTSampler(lutStruct));
     CDXTexture* lutTexture(CreateLUTexture(lutStruct, presetDirectory));
 
     if (!lutSampler || !lutTexture)
     {
-      CLog::Log(LOGWARNING, "%s - Couldn't create a LUT sampler or texture for LUT %s", __FUNCTION__, lutStruct.id);
+      CLog::Log(LOGWARNING, "%s - Couldn't create a LUT sampler or texture for LUT %s", __FUNCTION__, lutStruct.strId);
       delete lutSampler;
       delete lutTexture;
     }
     else
-      passLUTs.emplace_back(new ShaderLUT(lutStruct.id, lutStruct.path, lutSampler, lutTexture));
+      passLUTs.emplace_back(new ShaderLUT(lutStruct.strId, lutStruct.path, lutSampler, lutTexture));
   }
 
   for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
-    auto& pass = m_pPreset->m_Pass[shaderIdx];
+    const auto& pass = m_pPreset->Preset().passes[shaderIdx];
 
     // For reach pass, create the shader
     std::unique_ptr<CVideoShader> videoShader(new CVideoShader());
 
-    auto shaderSrc = pass.source.string.vertex; // also contains fragment source
-    auto shaderPath = pass.source.path;
+    auto shaderSrc = pass.vertexSource; // also contains fragment source
+    auto shaderPath = pass.sourcePath;
 
     // Get only the parameters belonging to this specific shader
-    ShaderParameters passParameters = GetShaderParameters(m_pPreset->m_Parameters, numParameters, pass.source.string.vertex);
+    ShaderParameters passParameters = GetShaderParameters(m_pPreset->Preset().parameters, pass.vertexSource);
     ID3D11SamplerState* passSampler = pass.filter ? m_pSampLinear : m_pSampNearest;
 
-    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, passLUTs, m_outputSize, pass.frame_count_mod))
+    if (!videoShader->Create(shaderSrc, shaderPath, passParameters, passSampler, passLUTs, m_outputSize, pass.frameCountMod))
     {
       CLog::Log(LOGERROR, "Couldn't create a video shader");
       return false;
@@ -394,8 +391,7 @@ bool CVideoShaderManager::CreateBuffers()
   return true;
 }
 
-ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter_* parameters,
-   unsigned numParameters, const std::string& sourceStr) const
+ShaderParameters CVideoShaderManager::GetShaderParameters(const std::vector<VideoShaderParameter> &parameters, const std::string& sourceStr) const
 {
    static const std::regex pragmaParamRegex("#pragma parameter ([a-zA-Z_][a-zA-Z0-9_]*)");
    std::smatch matches;
@@ -410,8 +406,8 @@ ShaderParameters CVideoShaderManager::GetShaderParameters(video_shader_parameter
 
    ShaderParameters matchParams;
    for (const auto& match : validParams)   // for each param found in the source code
-      for (unsigned i = 0; i < numParameters; ++i)  // for each param found in the preset file
-         if (match == parameters[i].id)  // if they match
+      for (unsigned i = 0; i < parameters.size(); ++i)  // for each param found in the preset file
+         if (match == parameters[i].strId)  // if they match
          {
             // The add-on has already handled parsing and overwriting default
             // parameter values from the preset file. The final value we

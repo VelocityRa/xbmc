@@ -26,10 +26,13 @@
 #include "cores/VideoPlayer/VideoRenderers/BaseRenderer.h"
 #include "guilib/Texture.h"
 
-using namespace SHADER;
+namespace KODI
+{
+namespace SHADER
+{
 
 class CVideoShader;
-struct video_shader_parameter_;
+struct VideoShaderParameter;
 
 // TODO: renderer independence
 class CVideoShaderManager
@@ -49,8 +52,7 @@ public:
 
 private:
   bool CreateShaderTextures();
-  ShaderParameters GetShaderParameters(video_shader_parameter_* parameters,
-    unsigned numParameters, const std::string& sourceStr) const;
+  ShaderParameters GetShaderParameters(const std::vector<VideoShaderParameter> &parameters, const std::string& sourceStr) const;
   bool CreateShaders();
   //bool CreateIntermediateShader();
   bool CreateSamplers();
@@ -104,3 +106,6 @@ private:
 
   double m_speed = 0.0;
 };
+
+}
+}

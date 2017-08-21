@@ -22,10 +22,12 @@
 #include "cores/RetroPlayer/rendering/IRenderSettingsCallback.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/WindowIDs.h"
-#include "utils/Variant.h"
-#include "FileItem.h"
+#include "settings/GameSettings.h"
+#include "settings/MediaSettings.h"
 #include "utils/log.h"
+#include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"
+#include "FileItem.h"
 
 #include <stdlib.h>
 
@@ -62,7 +64,7 @@ void CDialogGameVideoFilter::PreInit()
   {
     VideoFilterProperties videoFilter;
 
-    videoFilter.path = child->FirstChild("path")->FirstChild()->Value();
+    videoFilter.path = addonPath + "/resources/libretro/hlsl/" + child->FirstChild("path")->FirstChild()->Value();
     videoFilter.nameIndex = atoi(child->FirstChild("name")->FirstChild()->Value());
     videoFilter.categoryIndex = atoi(child->FirstChild("category")->FirstChild()->Value());
     videoFilter.descriptionIndex = atoi(child->FirstChild("description")->FirstChild()->Value());
@@ -82,6 +84,7 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 
     CFileItemPtr item = std::make_shared<CFileItem>(localizedName);
     item->SetLabel2(localizedCategory);
+    item->SetProperty("game.videofilter", CVariant{ videoFilter.path });
 
     items.Add(std::move(item));
   }
@@ -95,15 +98,17 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 {
-  if (index < m_videoFilters.size() && m_callback != nullptr)
+  if (index < m_videoFilters.size())
   {
     const std::string &presetToSet = m_videoFilters[index].path;
-    bool presetChanged = (m_shaderPresetPath != presetToSet);
 
-    if (presetChanged)
+    CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
+    if (gameSettings.VideoFilter() != presetToSet)
     {
-      m_callback->SetShaderPreset(presetToSet);
-      m_shaderPresetPath = presetToSet;
+      gameSettings.SetVideoFilter(presetToSet);
+
+      if (m_callback != nullptr)
+        m_callback->SetShaderPreset(presetToSet);
     }
   }
 }

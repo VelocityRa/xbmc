@@ -28,19 +28,25 @@ namespace RETRO
   class CGUIRenderSettings
   {
   public:
-    void EnableGuiRenderSettings(bool bEnabled) { m_guiRender = bEnabled; }
-    bool IsGuiRenderSettingsEnabled() const { return m_guiRender; }
+    CGUIRenderSettings() { Reset(); }
 
-    ViewMode GetRenderViewMode() { return m_viewMode; }
-    void SetRenderViewMode(ViewMode mode) { m_viewMode = mode; }
+    void Reset();
 
-    ESCALINGMETHOD GetScalingMethod() { return m_scalingMethod; }
-    void SetScalingMethod(ESCALINGMETHOD method) { m_scalingMethod = method; }
+    bool operator==(const CGUIRenderSettings &rhs) const;
+
+    std::string GetVideoFilter() const;
+    bool HasVideoFilter() const { return !m_videoFilter.empty(); }
+    void SetVideoFilter(const std::string &videoFilter) { m_videoFilter = videoFilter; }
+    void ResetVideoFilter() { m_videoFilter.clear(); }
+
+    ViewMode GetRenderViewMode() const;
+    bool HasRenderViewMode() const { return m_viewMode != -1; }
+    void SetRenderViewMode(ViewMode mode) { m_viewMode = static_cast<int>(mode); }
+    void ResetRenderViewMode() { m_viewMode = -1; }
 
   private:
-    bool m_guiRender = false;
-    ViewMode m_viewMode = ViewModeNormal;
-    ESCALINGMETHOD m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
+    std::string m_videoFilter;
+    int m_viewMode;
   };
 }
 }

@@ -21,24 +21,61 @@
 
 #include "addons/binary-addons/AddonInstanceHandler.h"
 #include "addons/kodi-addon-dev-kit/include/kodi/addon-instance/ShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaderPresetFactory.h"
 #include "threads/CriticalSection.h"
 #include "threads/SharedSection.h"
-#include "filesystem/SpecialProtocol.h"
-#include "binary-addons/BinaryAddonBase.h"
 
-namespace SHADERPRESET
+#include <string>
+#include <vector>
+
+struct cp_extension_t;
+
+namespace ADDON
 {
+  class CShaderPreset
+  {
+  public:
+    CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct);
+    ~CShaderPreset();
+
+    /*!
+     * \brief @todo document
+     */
+    bool ReadShaderPreset(video_shader &shader);
+
+    /*!
+    * \brief @todo document
+    */
+    void WriteShaderPreset(const video_shader &shader);
+
+    //void ResolveRelative(video_shader &shader, const std::string &ref_path);
+
+    //bool ResolveCurrentParameters(video_shader &shader);
+
+    /*!
+    * \brief @todo document
+    */
+    bool ResolveParameters(video_shader &shader);
+
+    void FreeShaderPreset(video_shader &shader);
+
+  private:
+    config_file *m_file;
+    AddonInstance_ShaderPreset &m_struct;
+  };
+
   /*
    *  Wrapper class that wraps the shader presets add-on
    */
-  class CShaderPresetAddon : public ADDON::IAddonInstanceHandler
+  class CShaderPresetAddon : public IAddonInstanceHandler,
+                             public KODI::SHADER::IVideoShaderPresetLoader
   {
   public:
-    CShaderPresetAddon(const ADDON::BinaryAddonBasePtr& addonInfo);
+    CShaderPresetAddon(const BinaryAddonBasePtr& addonInfo);
     ~CShaderPresetAddon(void) override;
 
     /*!
-     * @brief Initialise the instance of this add-on
+     * \brief Initialise the instance of this add-on
      */
     bool CreateAddon(void);
 
@@ -47,93 +84,27 @@ namespace SHADERPRESET
      */
     void DestroyAddon();
 
-  /// ======== config_file_ ========
+    /*!
+     * \brief Get the shader preset extensions supported by this add-on
+     */
+    const std::vector<std::string> &GetExtensions() const { return m_extensions; }
 
-  /* Loads a config file. Returns NULL if file doesn't exist.
-   * NULL path will create an empty config file. */
-  config_file_t_* ConfigFileNew(const char *path);
-
-  /* Load a config file from a string. */
-  config_file_t_* ConfigFileNewFromString(const char *from_string);
-
-  /* Frees config file. */
-  void ConfigFileFree(config_file_t_ *conf);
-
-
-  /// ==== video_shader__PARSE =====
-
-  /**
-   * ShaderPresetRead:
-   * @conf              : Preset file to read from.
-   * @shader            : Shader passes handle.
-   *
-   * Loads preset file and all associated state (passes,
-   * textures, imports, etc).
-   *
-   * Returns: true (1) if successful, otherwise false (0).
-   **/
-  bool ShaderPresetRead(config_file_t_* conf,
-                        video_shader_* shader);
-
-  /**
-   * ShaderPresetWrite:
-   * @conf              : Preset file to read from.
-   * @shader            : Shader passes handle.
-   *
-   * Saves preset and all associated state (passes,
-   * textures, imports, etc) to disk.
-   **/
-  void ShaderPresetWrite(config_file_t_ *conf,
-    struct video_shader_ *shader);
-
-  /**
-   * ShaderPresetResolveRelative:
-   * @shader            : Shader pass handle.
-   * @ref_path          : Relative shader path.
-   *
-   * Resolves relative shader path (@ref_path) into absolute
-   * shader paths.
-   **/
-  void ShaderPresetResolveRelative(struct video_shader_ *shader,
-    const char *ref_path);
-
-  /**
-   * ShaderPresetResolveCurrentParameters:
-   * @conf              : Preset file to read from.
-   * @shader            : Shader passes handle.
-   *
-   * Reads the current value for all parameters from config file.
-   *
-   * Returns: true (1) if successful, otherwise false (0).
-   **/
-  bool ShaderPresetResolveCurrentParameters(config_file_t_ *conf,
-    struct video_shader_ *shader);
-
-  /**
-   * ShaderPresetResolveParameters:
-   * @conf              : Preset file to read from.
-   * @shader            : Shader passes handle.
-   *
-   * Resolves all shader parameters belonging to shaders.
-   *
-   * Returns: true (1) if successful, otherwise false (0).
-   **/
-  bool ShaderPresetResolveParameters(config_file_t_ *conf,
-    struct video_shader_ *shader);
-    void VideoShaderFree(video_shader_* shader);
-
-    /**
-  * GetLibraryBasePath:
-  * @brief Returns the full/absolute path of the dynamic library file.
-  *
-  **/
-  const char* GetLibraryBasePath(void);
+    // implementation of IVideoShaderPresetLoader
+    bool LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset) override;
 
   private:
     /*!
      * @brief Reset all class members to their defaults. Called by the constructors
      */
     void ResetProperties(void);
+
+    static void TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset);
+    static void TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass);
+    static void TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut);
+    static void TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam);
+    static KODI::SHADER::FILTER_TYPE TranslateFilterType(SHADER_FILTER_TYPE type);
+    static KODI::SHADER::WRAP_TYPE TranslateWrapType(SHADER_WRAP_TYPE type);
+    static KODI::SHADER::SCALE_TYPE TranslateScaleType(SHADER_SCALE_TYPE type);
 
     /* @brief Cache for const char* members in PERIPHERAL_PROPERTIES */
 
@@ -144,7 +115,7 @@ namespace SHADERPRESET
     std::string         m_strClientPath;  /*!< @brief translated path to this add-on */
 
     /* @brief Add-on properties */
-    bool                m_bTestBoolProp;
+    std::vector<std::string> m_extensions;
 
     /* @brief Thread synchronization */
     CCriticalSection    m_critSection;
@@ -153,4 +124,4 @@ namespace SHADERPRESET
 
     CSharedSection      m_dllSection;
   };
-} // namespace SHADERPRESET
+}

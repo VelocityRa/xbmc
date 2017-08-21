@@ -25,6 +25,7 @@
 #include "RetroPlayerVideo.h"
 #include "addons/AddonManager.h"
 #include "cores/DataCacheCore.h"
+#include "cores/RetroPlayer/guicontrols/GUIGameControlManager.h"
 #include "cores/RetroPlayer/rendering/GUIRenderSettings.h"
 #include "cores/RetroPlayer/rendering/RPRenderManager.h"
 #include "cores/VideoPlayer/Process/ProcessInfo.h"
@@ -82,7 +83,6 @@ bool CRetroPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options
 
   //! @todo - Remove this when RetroPlayer has a renderer
   CVideoSettings &videoSettings = CMediaSettings::GetInstance().GetCurrentVideoSettings();
-  videoSettings.m_ScalingMethod = CMediaSettings::GetInstance().GetCurrentGameSettings().ScalingMethod();
   videoSettings.m_ViewMode = CMediaSettings::GetInstance().GetCurrentGameSettings().ViewMode();
 
   CSingleLock lock(m_mutex);
@@ -467,23 +467,24 @@ void CRetroPlayer::FrameMove()
 
 void CRetroPlayer::Render(bool clear, uint32_t alpha /* = 255 */, bool gui /* = true */)
 {
-  RETRO::CGUIRenderSettings &renderSettings = CServiceBroker::GetGameServices().RenderSettings();
+  CGUIGameControlManager &gameControls = CServiceBroker::GetGameServices().GameControls();
 
+  const std::string &shaderPreset = m_renderManager->GetShaderPreset();
   ViewMode viewMode = m_renderManager->GetRenderViewMode();
-  ESCALINGMETHOD scalingMedthod = m_renderManager->GetScalingMethod();
 
-  if (renderSettings.IsGuiRenderSettingsEnabled())
+  if (gameControls.IsControlActive())
   {
+    const CGUIRenderSettings &renderSettings = gameControls.GetRenderSettings();
+    m_renderManager->SetShaderPreset(renderSettings.GetVideoFilter());
     m_renderManager->SetRenderViewMode(renderSettings.GetRenderViewMode());
-    m_renderManager->SetScalingMethod(renderSettings.GetScalingMethod());
   }
 
   m_renderManager->Render(clear, 0, alpha, gui);
 
-  if (renderSettings.IsGuiRenderSettingsEnabled())
+  if (gameControls.IsControlActive())
   {
+    m_renderManager->SetShaderPreset(shaderPreset);
     m_renderManager->SetRenderViewMode(viewMode);
-    m_renderManager->SetScalingMethod(scalingMedthod);
   }
 }
 

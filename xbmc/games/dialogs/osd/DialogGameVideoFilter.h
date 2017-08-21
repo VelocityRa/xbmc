@@ -52,9 +52,6 @@ namespace GAME
     std::vector<VideoFilterProperties> m_videoFilters;
 
     static std::string GetLocalizedString(uint32_t code);
-
-    // relative path of currently loaded shader preset
-    std::string m_shaderPresetPath;
   };
 }
 }

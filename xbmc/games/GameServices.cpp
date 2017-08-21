@@ -19,7 +19,8 @@
  */
 
 #include "GameServices.h"
-#include "cores/RetroPlayer/rendering/GUIRenderSettings.h"
+#include "cores/RetroPlayer/guicontrols/GUIGameControlManager.h"
+#include "cores/RetroPlayer/rendering/VideoShaderPresetFactory.h"
 #include "controllers/Controller.h"
 #include "controllers/ControllerManager.h"
 #include "games/ports/PortManager.h"
@@ -28,10 +29,11 @@
 using namespace KODI;
 using namespace GAME;
 
-CGameServices::CGameServices(CControllerManager &controllerManager, PERIPHERALS::CPeripherals& peripheralManager) :
+CGameServices::CGameServices(CControllerManager &controllerManager, PERIPHERALS::CPeripherals& peripheralManager, ADDON::CAddonMgr &addons, ADDON::CBinaryAddonManager &binaryAddons) :
   m_controllerManager(controllerManager),
   m_portManager(new CPortManager(peripheralManager)),
-  m_renderSettings(new RETRO::CGUIRenderSettings)
+  m_gameControlManager(new RETRO::CGUIGameControlManager),
+  m_videoShaders(new SHADER::CVideoShaderPresetFactory(addons, binaryAddons))
 {
 }
 
