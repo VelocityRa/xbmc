@@ -124,7 +124,7 @@ void CVideoShaderPresetFactory::UpdateAddons()
       [&shaderAddon](const std::unique_ptr<CShaderPresetAddon> &addon)
       {
         return shaderAddon->ID() == addon->ID();
-      }) != m_shaderAddons.end();
+      }) == m_shaderAddons.end();
 
     if (bIsNew)
     {
