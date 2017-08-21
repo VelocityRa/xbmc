@@ -84,17 +84,13 @@ namespace ADDON
      */
     void DestroyAddon();
 
+    /*!
+     * \brief Get the shader preset extensions supported by this add-on
+     */
+    const std::vector<std::string> &GetExtensions() const { return m_extensions; }
+
     // implementation of IVideoShaderPresetLoader
     bool LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset) override;
-
-    /**
-     * GetLibraryBasePath:
-     * @brief Returns the full/absolute path of the dynamic library file.
-     *
-     */
-    const char* GetLibraryBasePath(void);
-
-    const std::vector<std::string> &GetExtensions() const { return m_extensions; }
 
   private:
     /*!
@@ -103,6 +99,12 @@ namespace ADDON
     void ResetProperties(void);
 
     static void TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset);
+    static void TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass);
+    static void TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut);
+    static void TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam);
+    static KODI::SHADER::FILTER_TYPE TranslateFilterType(SHADER_FILTER_TYPE type);
+    static KODI::SHADER::WRAP_TYPE TranslateWrapType(SHADER_WRAP_TYPE type);
+    static KODI::SHADER::SCALE_TYPE TranslateScaleType(SHADER_SCALE_TYPE type);
 
     /* @brief Cache for const char* members in PERIPHERAL_PROPERTIES */
 

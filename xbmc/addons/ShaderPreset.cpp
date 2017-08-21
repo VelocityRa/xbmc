@@ -116,29 +116,19 @@ void CShaderPresetAddon::ResetProperties(void)
   m_struct.toKodi.kodiInstance = this;
 }
 
-const char* CShaderPresetAddon::GetLibraryBasePath()
-{
-  if (m_strLibraryPath.empty())
-  {
-    std::string strLibPath = Addon()->LibPath();
-    m_strLibraryPath = URIUtils::GetBasePath(CSpecialProtocol::TranslatePath(strLibPath));
-  }
-  return m_strLibraryPath.c_str();
-}
-
 bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER::VideoShaderPreset &shaderPreset)
 {
   bool bSuccess = false;
 
-  //! @todo Resolve special protocol
+  std::string translatedPath = CSpecialProtocol::TranslatePath(presetPath);
 
-  config_file *file = m_struct.toAddon.config_file_new(&m_struct, presetPath.c_str());
+  config_file *file = m_struct.toAddon.config_file_new(&m_struct, translatedPath.c_str());
 
   if (file != nullptr)
   {
     std::unique_ptr<CShaderPreset> shaderPresetAddon(new CShaderPreset(file, m_struct));
 
-    video_shader videoShader;
+    video_shader videoShader = { };
     if (shaderPresetAddon->ReadShaderPreset(videoShader))
     {
       if (shaderPresetAddon->ResolveParameters(videoShader))
@@ -157,5 +147,140 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, KODI::SHADER:
 
 void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, KODI::SHADER::VideoShaderPreset &shaderPreset)
 {
-  //! @todo
+  if (shader.passes != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.pass_count; i++)
+    {
+      KODI::SHADER::VideoShaderPass shaderPass;
+      TranslateShaderPass(shader.passes[i], shaderPass);
+      shaderPreset.passes.emplace_back(std::move(shaderPass));
+    }
+  }
+
+  if (shader.luts != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.lut_count; i++)
+    {
+      KODI::SHADER::VideoShaderLut shaderLut;
+      TranslateShaderLut(shader.luts[i], shaderLut);
+      shaderPreset.luts.emplace_back(std::move(shaderLut));
+    }
+  }
+
+  if (shader.parameters != nullptr)
+  {
+    for (unsigned int i = 0; i < shader.parameter_count; i++)
+    {
+      KODI::SHADER::VideoShaderParameter shaderParam;
+      TranslateShaderParameter(shader.parameters[i], shaderParam);
+      shaderPreset.parameters.emplace_back(std::move(shaderParam));
+    }
+  }
+}
+
+void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass)
+{
+  shaderPass.sourcePath = pass.source_path ? pass.source_path : "";
+  shaderPass.vertexSource = pass.vertex_source ? pass.vertex_source : "";
+  shaderPass.fragmentSource = pass.fragment_source ? pass.fragment_source : "";
+  shaderPass.filter = TranslateFilterType(pass.filter);
+  shaderPass.wrap = TranslateWrapType(pass.wrap);
+  shaderPass.frameCountMod = pass.frame_count_mod;
+  
+  const auto &fbo = pass.fbo;
+  auto &shaderFbo = shaderPass.fbo;
+
+  shaderFbo.scaleX.type = TranslateScaleType(fbo.scale_x.type);
+  switch (fbo.scale_x.type)
+  {
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    shaderFbo.scaleX.abs = fbo.scale_x.abs;
+    break;
+  default:
+    shaderFbo.scaleX.scale = fbo.scale_x.scale;
+    break;
+  }
+  shaderFbo.scaleY.type = TranslateScaleType(fbo.scale_y.type);
+  switch (fbo.scale_y.type)
+  {
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    shaderFbo.scaleY.abs = fbo.scale_y.abs;
+    break;
+  default:
+    shaderFbo.scaleY.scale = fbo.scale_y.scale;
+    break;
+  }
+
+  shaderPass.mipmap = pass.mipmap;
+}
+
+void CShaderPresetAddon::TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut)
+{
+  shaderLut.strId = lut.id ? lut.id : "";
+  shaderLut.path = lut.path ? lut.path : "";
+  shaderLut.filter = TranslateFilterType(lut.filter);
+  shaderLut.wrap = TranslateWrapType(lut.wrap);
+  shaderLut.mipmap = lut.mipmap;
+}
+
+void CShaderPresetAddon::TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam)
+{
+  shaderParam.strId = param.id ? param.id : "";
+  shaderParam.description = param.desc ? param.desc : "";
+  shaderParam.current = param.current;
+  shaderParam.minimum = param.minimum;
+  shaderParam.initial = param.initial;
+  shaderParam.maximum = param.maximum;
+  shaderParam.step = param.step;
+}
+
+SHADER::FILTER_TYPE CShaderPresetAddon::TranslateFilterType(SHADER_FILTER_TYPE type)
+{
+  switch (type)
+  {
+  case SHADER_FILTER_TYPE_LINEAR:
+    return SHADER::FILTER_TYPE_LINEAR;
+  case SHADER_FILTER_TYPE_NEAREST:
+    return SHADER::FILTER_TYPE_NEAREST;
+  default:
+    break;
+  }
+
+  return SHADER::FILTER_TYPE_NONE;
+}
+
+SHADER::WRAP_TYPE CShaderPresetAddon::TranslateWrapType(SHADER_WRAP_TYPE type)
+{
+  switch (type)
+  {
+  case SHADER_WRAP_TYPE_BORDER:
+    return SHADER::WRAP_TYPE_BORDER;
+  case SHADER_WRAP_TYPE_EDGE:
+    return SHADER::WRAP_TYPE_EDGE;
+  case SHADER_WRAP_TYPE_REPEAT:
+    return SHADER::WRAP_TYPE_REPEAT;
+  case SHADER_WRAP_TYPE_MIRRORED_REPEAT:
+    return SHADER::WRAP_TYPE_MIRRORED_REPEAT;
+  default:
+    break;
+  }
+
+  return SHADER::WRAP_TYPE_BORDER;
+}
+
+SHADER::SCALE_TYPE CShaderPresetAddon::TranslateScaleType(SHADER_SCALE_TYPE type)
+{
+  switch (type)
+  {
+  case SHADER_SCALE_TYPE_INPUT:
+    return SHADER::SCALE_TYPE_INPUT;
+  case SHADER_SCALE_TYPE_ABSOLUTE:
+    return SHADER::SCALE_TYPE_ABSOLUTE;
+  case SHADER_SCALE_TYPE_VIEWPORT:
+    return SHADER::SCALE_TYPE_VIEWPORT;
+  default:
+    break;
+  }
+
+  return SHADER::SCALE_TYPE_INPUT;
 }
