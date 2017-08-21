@@ -56,7 +56,7 @@ void CVideoShaderPresetFactory::RegisterLoader(IVideoShaderPresetLoader *loader,
     if (extension[0] != '.')
       strExtension.insert(strExtension.begin(), '.');
 
-    m_loaders.insert(std::make_pair(std::move(extension), loader));
+    m_loaders.insert(std::make_pair(std::move(strExtension), loader));
   }
 }
 
