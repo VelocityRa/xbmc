@@ -30,7 +30,7 @@ using namespace ADDON;
 
 // --- CShaderPreset -----------------------------------------------------------
 
-CShaderPreset::CShaderPreset(config_file *file, AddonInstance_ShaderPreset &instanceStruct) :
+CShaderPreset::CShaderPreset(preset_file file, AddonInstance_ShaderPreset &instanceStruct) :
   m_file(file),
   m_struct(instanceStruct)
 {
@@ -38,7 +38,7 @@ CShaderPreset::CShaderPreset(config_file *file, AddonInstance_ShaderPreset &inst
 
 CShaderPreset::~CShaderPreset()
 {
-  m_struct.toAddon.config_file_free(&m_struct, m_file);
+  m_struct.toAddon.preset_file_free(&m_struct, m_file);
 }
 
 bool CShaderPreset::ReadShaderPreset(video_shader &shader)
@@ -122,7 +122,7 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADER::Video
 
   std::string translatedPath = CSpecialProtocol::TranslatePath(presetPath);
 
-  config_file *file = m_struct.toAddon.config_file_new(&m_struct, translatedPath.c_str());
+  preset_file file = m_struct.toAddon.preset_file_new(&m_struct, translatedPath.c_str());
 
   if (file != nullptr)
   {
@@ -139,7 +139,7 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADER::Video
       shaderPresetAddon->FreeShaderPreset(videoShader);
     }
 
-    m_struct.toAddon.config_file_free(&m_struct, file);
+    m_struct.toAddon.preset_file_free(&m_struct, file);
   }
 
   return bSuccess;
