@@ -71,6 +71,7 @@ namespace SHADER
 
     std::map<std::string, IVideoShaderPresetLoader*> m_loaders;
     std::vector<std::unique_ptr<ADDON::CShaderPresetAddon>> m_shaderAddons;
+    std::vector<std::unique_ptr<ADDON::CShaderPresetAddon>> m_failedAddons;
   };
 }
 }
