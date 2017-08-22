@@ -138,8 +138,6 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADER::Video
       }
       shaderPresetAddon->FreeShaderPreset(videoShader);
     }
-
-    m_struct.toAddon.preset_file_free(&m_struct, file);
   }
 
   return bSuccess;
