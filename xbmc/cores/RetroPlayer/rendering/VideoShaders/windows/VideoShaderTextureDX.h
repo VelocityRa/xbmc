@@ -33,88 +33,124 @@ class CShaderSamplerDX : public IShaderSampler
 {
 public:
   CShaderSamplerDX(ID3D11SamplerState* sampler)
-    : sampler(sampler)
+    : m_sampler(sampler)
   {
   }
-  operator ID3D11SamplerState*() { return sampler; }
-  operator ID3D11SamplerState&() { return *sampler; }
+  operator ID3D11SamplerState*() { return m_sampler; }
+  operator ID3D11SamplerState&() { return *m_sampler; }
 
   ~CShaderSamplerDX()
   {
-    SAFE_RELEASE(sampler);
+    SAFE_RELEASE(m_sampler);
   }
 private:
-  ID3D11SamplerState* sampler;
+  ID3D11SamplerState* m_sampler;
 };
 
-// Texture type can be both CD3DTexture and CDXTexture, so use a template arg
-template<typename TextureType>
-class CShaderTextureDX : public IShaderTexture
+class CShaderTextureCD3D : public IShaderTexture
 {
+  using TextureType = CD3DTexture;
 public:
-  CShaderTextureDX(TextureType* texture_) : texture(texture_) {}
-  CShaderTextureDX(TextureType& texture_) : texture(&texture_) {}
+  CShaderTextureCD3D() : m_texture(nullptr) {}
+  CShaderTextureCD3D(TextureType* texture) : m_texture(texture) {}
+  CShaderTextureCD3D(TextureType& texture) : m_texture(&texture) {}
 
-  float GetWidth() override { return static_cast<float>(texture->GetWidth()); }
-  float GetHeight() override { return static_cast<float>(texture->GetHeight()); }
+  float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
+  float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
 
-  void SetTexture(TextureType* newTexture) { texture = newTexture; }
+  void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
 
-  void *GetShaderResource() { return texture->GetShaderResource(); }
+  void *GetShaderResource() const { return m_texture->GetShaderResource(); }
 
-  operator TextureType&() const { return *texture; }
-  operator TextureType*() const { return texture; }
-  TextureType* operator->() const { return texture; }
-  TextureType* Get() { return texture; }
+  operator TextureType&() const { return *m_texture; }
+  operator TextureType*() const { return m_texture; }
+  TextureType* operator->() const { return m_texture; }
+  TextureType* Get() const { return m_texture; }
 
   // Move assignment operator
-  CShaderTextureDX &operator=(CShaderTextureDX &&other) noexcept
+  CShaderTextureCD3D &operator=(CShaderTextureCD3D &&other) noexcept
   {
     if (this != &other)
-      texture = std::move(other.texture);
+      m_texture = std::move(other.m_texture);
     return *this;
   }
 
   // Copy constructor
-  CShaderTextureDX(const CShaderTextureDX& other) = default;
+  CShaderTextureCD3D(const CShaderTextureCD3D& other) = default;
 
   // Copy assignment operator
-  CShaderTextureDX& operator=(const CShaderTextureDX& rhs) = delete;
+  CShaderTextureCD3D& operator=(const CShaderTextureCD3D& rhs) = delete;
 
   // Destructor
   // Don't delete texture since it wasn't created here
-  ~CShaderTextureDX() {};
+  ~CShaderTextureCD3D() {}
 private:
-  TextureType* texture;
+  TextureType* m_texture;
 };
 
-// Shorthands for texture types
-// LUTs use CDXTexture, off screen textures use CD3DTexture
-using CShaderTextureCD3D = CShaderTextureDX<CD3DTexture>;
-using CShaderTextureCDX = CShaderTextureDX<CDXTexture>;
+class CShaderTextureCDX : public IShaderTexture
+{
+  using TextureType = CDXTexture;
+public:
+  CShaderTextureCDX() : m_texture(nullptr) {}
+  CShaderTextureCDX(TextureType* texture) : m_texture(texture) {}
+  CShaderTextureCDX(TextureType& texture) : m_texture(&texture) {}
+
+  float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
+  float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
+
+  void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
+
+  void *GetShaderResource() const { return m_texture->GetShaderResource(); }
+
+  operator TextureType&() const { return *m_texture; }
+  operator TextureType*() const { return m_texture; }
+  TextureType* operator->() const { return m_texture; }
+  TextureType* Get() const { return m_texture; }
+
+  // Move assignment operator
+  CShaderTextureCDX  &operator=(CShaderTextureCDX  &&other) noexcept
+  {
+    if (this != &other)
+      m_texture = std::move(other.m_texture);
+    return *this;
+  }
+
+  // Copy constructor
+  CShaderTextureCDX(const CShaderTextureCDX& other) = default;
+
+  // Copy assignment operator
+  CShaderTextureCDX& operator=(const CShaderTextureCDX& rhs) = delete;
+
+  // Destructor
+  // Don't delete texture since it wasn't created here
+  ~CShaderTextureCDX() {}
+private:
+  TextureType* m_texture;
+};
 
 
 class ShaderLutDX: public IShaderLut
 {
 public:
 
-  ShaderLutDX() : IShaderLut(), sampler(nullptr), texture(nullptr) {}
-  ShaderLutDX(std::string id_, std::string path_, IShaderSampler* sampler_, IShaderTexture* texture_)
-    : IShaderLut(id_, path_)
+  ShaderLutDX() : IShaderLut(), m_sampler(nullptr), m_texture(nullptr) {}
+  ShaderLutDX(std::string id, std::string path, IShaderSampler* sampler, IShaderTexture* texture)
+    : IShaderLut(id, path)
   {
-    sampler.reset(sampler_);
-    texture.reset(texture_);
+    m_sampler.reset(sampler);
+    m_texture.reset(texture);
   }
 
   // Move assignment operator
   ShaderLutDX &operator=(ShaderLutDX &&other) noexcept
   {
-    id = other.path;
-    path = other.id;
+    m_id = other.m_path;
+    m_path = other.m_id;
     if (this != &other)
     {
-      sampler = std::move(other.sampler);
-      texture = std::move(other.texture);
+      m_sampler = std::move(other.m_sampler);
+      m_texture = std::move(other.m_texture);
     }
     return *this;
   }
@@ -125,21 +161,20 @@ public:
   // Copy assignment operator
   ShaderLutDX& operator=(const ShaderLutDX& rhs) = delete;
 
-  IShaderSampler* GetSampler() override { return static_cast<IShaderSampler*>(sampler.get()); }
-  IShaderTexture* GetTexture() override { return static_cast<IShaderTexture*>(&*texture); }
+  IShaderSampler* GetSampler() override { return m_sampler.get(); }
+  IShaderTexture* GetTexture() override { return m_texture.get(); }
 
   // Destructor
-  // Don't delete texture since it wasn't created here
-  ~ShaderLutDX() {}
+  ~ShaderLutDX() = default;
 private:
-  std::unique_ptr<IShaderSampler> sampler;
-  std::unique_ptr<IShaderTexture> texture;
+  std::unique_ptr<IShaderSampler> m_sampler;
+  std::unique_ptr<IShaderTexture> m_texture;
 };
 
 
 IShaderSampler* CreateLUTSampler(const VideoShaderLut &lut);
 IShaderTexture* CreateLUTexture(const VideoShaderLut &lut);
-ShaderTextureWrapType TranslateWrapType(WRAP_TYPE wrap);
+D3D11_TEXTURE_ADDRESS_MODE TranslateWrapType(WRAP_TYPE wrap);
 
 using ShaderLutsDX = std::vector<std::shared_ptr<ShaderLutDX>>;
 }

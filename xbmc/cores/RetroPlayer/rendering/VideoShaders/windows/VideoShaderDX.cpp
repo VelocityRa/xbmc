@@ -21,10 +21,8 @@
 #include "VideoShaderDX.h"
 
 #include "Application.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShader.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderUtilsDX.h"
-#include "guilib/Texture.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "windowing/WindowingFactory.h"
@@ -44,6 +42,7 @@ CVideoShaderDX::~CVideoShaderDX()
 {
   SAFE_RELEASE(m_pInputBuffer);
 }
+
 bool CVideoShaderDX::Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
   IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod)
 {

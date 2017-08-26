@@ -42,26 +42,26 @@ namespace SHADER
   class IShaderLut
   {
   public:
-    IShaderLut() : id(""), path("") {}
-    IShaderLut(const std::string& id_, const std::string& path_)
-      : id(id_), path(path_) {}
+    IShaderLut() : m_id(""), m_path("") {}
+    IShaderLut(const std::string& id, const std::string& path)
+      : m_id(id), m_path(path) {}
 
-    const std::string& GetID() { return id; }
-    const std::string& GetPath() { return path; }
+    const std::string& GetID() { return m_id; }
+    const std::string& GetPath() { return m_path; }
     virtual const IShaderSampler* GetSampler() = 0;
     virtual const IShaderTexture* GetTexture() = 0;
 
     IShaderLut &operator=(IShaderLut&& other)
     {
-      id = other.id;
-      path = other.path;
+      m_id = other.m_id;
+      m_path = other.m_path;
       return *this;
     }
 
     virtual ~IShaderLut() = default;
   protected:
-    std::string id;
-    std::string path;
+    std::string m_id;
+    std::string m_path;
 
   };
 

@@ -21,7 +21,7 @@
 #include "VideoShaderTextureDX.h"
 
 #include "cores/RetroPlayer/IVideoShaderPreset.h"
-#include "guilib/Texture.h"
+#include "d3d11.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
 
@@ -35,7 +35,7 @@ IShaderSampler* SHADER::CreateLUTSampler(const VideoShaderLut &lut)
   ID3D11SamplerState* samp;
   D3D11_SAMPLER_DESC sampDesc;
 
-  auto wrapType = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(TranslateWrapType(lut.wrap));
+  auto wrapType = TranslateWrapType(lut.wrap);
   auto filterType = lut.filter ? D3D11_FILTER_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_POINT;
 
   ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -56,7 +56,7 @@ IShaderSampler* SHADER::CreateLUTSampler(const VideoShaderLut &lut)
     return nullptr;
   }
   // todo: take care of allocation(?)
-  return static_cast<IShaderSampler*>(new CShaderSamplerDX(samp));
+  return new CShaderSamplerDX(samp);
 }
 
 IShaderTexture* SHADER::CreateLUTexture(const VideoShaderLut &lut)
@@ -73,23 +73,26 @@ IShaderTexture* SHADER::CreateLUTexture(const VideoShaderLut &lut)
   if (texture)
     texture->LoadToGPU();
   // todo: take care of allocation(?)
-  return static_cast<IShaderTexture*>(new CShaderTextureCDX(texture));
+  return new CShaderTextureCDX(texture);
 }
 
-ShaderTextureWrapType SHADER::TranslateWrapType(WRAP_TYPE wrap)
+D3D11_TEXTURE_ADDRESS_MODE SHADER::TranslateWrapType(WRAP_TYPE wrap)
 {
   D3D11_TEXTURE_ADDRESS_MODE dxWrap;
   switch(wrap)
   {
   case WRAP_TYPE_EDGE:
     dxWrap = D3D11_TEXTURE_ADDRESS_CLAMP;
+    break;
   case WRAP_TYPE_REPEAT:
     dxWrap = D3D11_TEXTURE_ADDRESS_WRAP;
+    break;
   case WRAP_TYPE_MIRRORED_REPEAT:
     dxWrap = D3D11_TEXTURE_ADDRESS_MIRROR;
+    break;
   case WRAP_TYPE_BORDER:
   default:
     dxWrap = D3D11_TEXTURE_ADDRESS_BORDER;
   }
-  return static_cast<ShaderTextureWrapType>(dxWrap);
+  return dxWrap;
 }

@@ -22,13 +22,13 @@
 #include <memory>
 #include <vector>
 
+#include "VideoShaderDX.h"
 #include "addons/binary-addons/AddonInstanceHandler.h"
 #include "cores/RetroPlayer/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderPresetFactory.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "games/GameServices.h"
 #include "guilib/Geometry.h"
-#include "VideoShaderDX.h"
 
 namespace ADDON
 {
@@ -64,6 +64,7 @@ public:
 
   bool Update();
   bool SetShaderPreset(const std::string& shaderPresetPath) override;
+  const std::string& GetShaderPreset() const override;
   void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) override;
   bool RenderUpdate(CPoint dest[], IShaderTexture& source, IShaderTexture& target) override;
 
@@ -88,7 +89,7 @@ private:
   std::string m_presetPath;
 
   // VideoShaders for the shader passes
-  std::vector<std::unique_ptr<CVideoShaderDX>> m_pVideoShaders;
+  std::vector<std::unique_ptr<IVideoShader>> m_pVideoShaders;
 
   // Intermediate textures used for pixel shader passes
   std::vector<std::unique_ptr<CShaderTextureCD3D>> m_pShaderTextures;

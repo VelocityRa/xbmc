@@ -101,9 +101,9 @@ bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, I
 
   // At this point, the input video has been rendered to the first texture ("source", not m_pShaderTextures[0])
 
-  CVideoShaderDX& firstShader = *m_pVideoShaders.front();
+  IVideoShader& firstShader = *m_pVideoShaders.front();
   CShaderTextureCD3D& firstShaderTexture = *m_pShaderTextures.front();
-  CVideoShaderDX& lastShader = *m_pVideoShaders.back();
+  IVideoShader& lastShader = *m_pVideoShaders.back();
 
   const unsigned passesNum = m_pShaderTextures.size();
 
@@ -124,7 +124,7 @@ bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, I
     // Apply all passes except the first and last one (which needs to be applied to the backbuffer)
     for (unsigned shaderIdx = 1; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
     {
-      CVideoShaderDX& shader = *m_pVideoShaders[shaderIdx];
+      IVideoShader& shader = *m_pVideoShaders[shaderIdx];
       CShaderTextureCD3D& prevTexture = *m_pShaderTextures[shaderIdx - 1];
       CShaderTextureCD3D& texture = *m_pShaderTextures[shaderIdx];
       RenderShader(shader, prevTexture, texture);
@@ -465,6 +465,11 @@ bool CVideoShaderPresetDX::SetShaderPreset(const std::string& shaderPresetPath)
     return Update();
   }
   return false;
+}
+
+const std::string& CVideoShaderPresetDX::GetShaderPreset() const
+{
+  return m_presetPath;
 }
 
 void CVideoShaderPresetDX::SetVideoSize(const unsigned videoWidth, const unsigned videoHeight)

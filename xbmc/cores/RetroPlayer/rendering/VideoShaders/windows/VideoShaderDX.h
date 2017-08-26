@@ -32,26 +32,26 @@ namespace SHADER
 // TODO: make renderer independent
 // libretro's "Common shaders"
 // Spec here: https://github.com/libretro/common-shaders/blob/master/docs/README
-  class CVideoShaderDX : public CWinShader, public IVideoShader
+class CVideoShaderDX : public CWinShader, public IVideoShader
 {
 public:
   CVideoShaderDX();
   ~CVideoShaderDX();
+
+  // implementation of IVideoShader
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
     IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod = 0) override;
   void Render(IShaderTexture& source, IShaderTexture& target) override;
-  void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount);
+  void SetSizes(const float2& prevSize, const float2& nextSize) override;
+  void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount) override;
   CD3DEffect& GetEffect();
-  void UpdateMVP();
-  bool CreateInputBuffer();
+  void UpdateMVP() override;
+  bool CreateInputBuffer() override;
   void UpdateInputBuffer(float frameCountFloat);
 
   // expose these from CWinShader
   bool CreateVertexBuffer(unsigned vertCount, unsigned vertSize) override;
   bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC *layout, unsigned numElements) override;
-
-  // IVideoShader implementation
-  void SetSizes(const float2& prevSize, const float2& nextSize) override;
 
 protected:
   void SetShaderParameters(CD3DTexture& sourceTexture);

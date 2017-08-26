@@ -20,9 +20,10 @@
 
 #include "RPRenderManager.h"
 
+#include "RPRenderFactory.h"
+#include "cores/RetroPlayer/rendering/VideoRenderers/RPBaseRenderer.h"
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
-#include "RPRenderFactory.h"
 #include "settings/MediaSettings.h"
 #include "threads/SingleLock.h"
 //todo
@@ -170,26 +171,14 @@ void CRPRenderManager::SetSpeed(double speed)
     m_renderer->SetSpeed(speed);
 }
 
-// TODO: Avoid casting by having CRPRenderManager own CVideoShaderManager
 void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
 {
-#if defined(TARGET_WINDOWS)
-  CRPWinRenderer* winRenderer = nullptr;
-  if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_renderer.get())))
-    winRenderer->SetShaderPreset(shaderPresetPath);
-#endif
+  m_renderer->SetShaderPreset(shaderPresetPath);
 }
 
-// TODO: Avoid casting by having CRPRenderManager own CVideoShaderManager
 const std::string& CRPRenderManager::GetShaderPreset() const
 {
-#if defined(TARGET_WINDOWS)
-  CRPWinRenderer* winRenderer = nullptr;
-  if ((winRenderer = dynamic_cast<CRPWinRenderer*>(m_renderer.get())))
-    return winRenderer->GetShaderPreset();
-#endif
-  static const std::string empty;
-  return empty;
+  return m_renderer->GetShaderPreset();
 }
 
 void CRPRenderManager::UpdateResolution()

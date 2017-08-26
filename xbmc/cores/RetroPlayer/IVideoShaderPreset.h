@@ -132,6 +132,7 @@ public:
   virtual void SetSpeed(double speed) = 0;
   virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) = 0;
   virtual bool SetShaderPreset(const std::string& shaderPresetPath) = 0;
+  virtual const std::string& GetShaderPreset() const = 0;
 
   virtual VideoShaderPasses& GetPasses() = 0;
 };

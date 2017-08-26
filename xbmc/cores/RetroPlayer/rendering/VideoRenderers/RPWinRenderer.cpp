@@ -49,15 +49,14 @@ void CRPWinRenderer::Register()
   CRPRendererFactory::RegisterRenderer(CRPWinRenderer::Create);
 }
 
-CRPWinRenderer::CRPWinRenderer() :
-  m_bQueued(false),
-  m_intermediateTarget(new SHADER::CShaderTextureCD3D(new CD3DTexture())),
-  m_outputShader(new COutputShader),
-  m_shadersNeedUpdate(true),
-  m_useShaderPreset(true)
+CRPWinRenderer::CRPWinRenderer()
+  : m_bQueued(false)
+  , m_intermediateTarget(new CShaderTextureCD3D(new CD3DTexture()))
+  , m_outputShader(new COutputShader)
+  , m_targetTexture(CShaderTextureCD3D())
 {
   // Initialize CRPBaseRenderer
-  m_scalingMethod = VS_SCALINGMETHOD_LINEAR;
+  m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
 
   m_shaderPreset.reset(new SHADERPRESET::CVideoShaderPresetDX());
 }
@@ -242,9 +241,8 @@ void CRPWinRenderer::Render(CD3DTexture *target)
     }
 
     // Render shaders and ouput to display
-    static auto targetTexture = CShaderTextureCD3D(target);
-    targetTexture.SetTexture(target);
-    if (!m_shaderPreset->RenderUpdate(destPoints, *m_intermediateTarget, targetTexture))
+    m_targetTexture.SetTexture(target);
+    if (!m_shaderPreset->RenderUpdate(destPoints, *m_intermediateTarget, m_targetTexture))
     {
       m_shadersNeedUpdate = false;
       m_useShaderPreset = false;
@@ -261,36 +259,4 @@ void CRPWinRenderer::Render(CD3DTexture *target)
     }
   }
   g_Windowing.ApplyStateBlock();
-}
-
-void CRPWinRenderer::SetShaderPreset(const std::string presetPath)
-{
-  if (presetPath != m_shaderPresetPath)
-  {
-    m_shaderPresetPath = presetPath;
-    m_shadersNeedUpdate = true;
-  }
-}
-
-const std::string& CRPWinRenderer::GetShaderPreset()
-{
-  return m_shaderPresetPath;
-}
-
-void CRPWinRenderer::UpdateVideoShaders()
-{
-  if (m_shadersNeedUpdate)
-  {
-    m_shadersNeedUpdate = false;
-
-    if (m_shaderPreset)
-    {
-      auto sourceWidth = static_cast<unsigned>(m_sourceRect.Width());
-      auto sourceHeight = static_cast<unsigned>(m_sourceRect.Height());
-
-      // We need to set this here because m_sourceRect isn't valid on init/pre-init
-      m_shaderPreset->SetVideoSize(sourceWidth, sourceHeight);
-      m_useShaderPreset = m_shaderPreset->SetShaderPreset(m_shaderPresetPath);
-    }
-  }
 }
