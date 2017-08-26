@@ -19,12 +19,11 @@
  */
 #pragma once
 
-#include "IRenderSettingsCallback.h"
-#include "threads/CriticalSection.h"
-
-#include "libavutil/pixfmt.h"
-
 #include <memory>
+
+#include "IRenderSettingsCallback.h"
+#include "libavutil/pixfmt.h"
+#include "threads/CriticalSection.h"
 
 namespace KODI
 {

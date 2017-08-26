@@ -48,7 +48,7 @@ void CGUIGameControl::SetVideoFilter(const CGUIInfoLabel &videoFilter)
   m_videoFilterInfo = videoFilter;
 }
 
-void CGUIGameControl::SetScalingMode(const CGUIInfoLabel &scalingMode)
+void CGUIGameControl::SetScalingMethod(const CGUIInfoLabel &scalingMode)
 {
   m_scalingModeInfo = scalingMode;
 }

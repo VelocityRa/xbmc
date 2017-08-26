@@ -19,15 +19,16 @@
  */
 
 #include "RPWinRenderer.h"
+
 #include "cores/RetroPlayer/rendering/RPRenderFactory.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderPresetDX.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 #include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h" //! @todo
-#include "guilib/GraphicContext.h"
 #include "guilib/D3DResource.h"
+#include "guilib/GraphicContext.h"
+#include "settings/MediaSettings.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
-#include "settings/MediaSettings.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderPresetDX.h"
 
 extern "C" {
 #include "libswscale/swscale.h"

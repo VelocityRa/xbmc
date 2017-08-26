@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <string>
+
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderTexture.h"
 #include "guilib/Texture.h"
 

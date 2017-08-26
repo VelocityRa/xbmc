@@ -23,16 +23,15 @@
 #include <regex>
 
 #include "addons/binary-addons/BinaryAddonBase.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderDX.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderUtilsDX.h"
+#include "settings/DisplaySettings.h"
+#include "settings/MediaSettings.h"
+#include "utils/log.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/log.h"
-#include "settings/MediaSettings.h"
 #include "windowing/WindowingFactory.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderDX.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderUtilsDX.h"
-
-#include "settings/DisplaySettings.h"
 
 using namespace KODI;
 using namespace SHADER;

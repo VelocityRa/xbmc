@@ -19,10 +19,10 @@
  *
  */
 
-#include "guilib/D3DResource.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShader.h"
-#include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
+#include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h"
+#include "guilib/D3DResource.h"
 
 namespace KODI
 {

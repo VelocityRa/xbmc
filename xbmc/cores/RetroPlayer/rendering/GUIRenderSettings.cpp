@@ -28,6 +28,7 @@ using namespace RETRO;
 void CGUIRenderSettings::Reset()
 {
   m_videoFilter.clear();
+  m_scalingMethod = -1;
   m_viewMode = -1;
 }
 

@@ -21,12 +21,14 @@
 #pragma once
 
 #include "RPBaseRenderer.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
+
 #include <atomic>
 #include <memory>
 #include <stdint.h>
 #include <vector>
+
+#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 
 struct SwsContext;
 class CD3DTexture;

@@ -20,7 +20,7 @@
  */
 
 #include "cores/RetroPlayer/IVideoShaderPreset.h"
-#include "VideoShaderUtils.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 
 class CDXTexture;
 

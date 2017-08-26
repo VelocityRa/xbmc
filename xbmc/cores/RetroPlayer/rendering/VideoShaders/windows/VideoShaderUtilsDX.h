@@ -19,10 +19,6 @@
  *
  */
 
-#include <map>
-#include <algorithm>
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
-#include <directxmath.h>
 #include <minwindef.h>
 
 namespace KODI

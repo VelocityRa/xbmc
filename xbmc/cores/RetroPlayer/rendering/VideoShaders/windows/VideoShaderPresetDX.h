@@ -22,12 +22,12 @@
 #include <memory>
 #include <vector>
 
+#include "addons/binary-addons/AddonInstanceHandler.h"
 #include "cores/RetroPlayer/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderPresetFactory.h"
-#include "addons/binary-addons/AddonInstanceHandler.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "games/GameServices.h"
 #include "guilib/Geometry.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "VideoShaderDX.h"
 
 namespace ADDON

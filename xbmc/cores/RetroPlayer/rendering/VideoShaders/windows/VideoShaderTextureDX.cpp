@@ -19,10 +19,11 @@
  */
 
 #include "VideoShaderTextureDX.h"
+
+#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "guilib/Texture.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
-#include "guilib/Texture.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
 
 #include <regex>
 

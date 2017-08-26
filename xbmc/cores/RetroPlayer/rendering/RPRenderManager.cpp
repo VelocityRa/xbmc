@@ -19,9 +19,10 @@
  */
 
 #include "RPRenderManager.h"
-#include "RPRenderFactory.h"
+
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
+#include "RPRenderFactory.h"
 #include "settings/MediaSettings.h"
 #include "threads/SingleLock.h"
 //todo
