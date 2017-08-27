@@ -27,8 +27,6 @@
 #include <string>
 #include <vector>
 
-struct cp_extension_t;
-
 using namespace KODI;
 using namespace SHADER;
 
