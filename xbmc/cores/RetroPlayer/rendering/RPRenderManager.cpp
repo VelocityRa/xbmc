@@ -19,17 +19,12 @@
  */
 
 #include "RPRenderManager.h"
-
 #include "RPRenderFactory.h"
 #include "cores/RetroPlayer/rendering/VideoRenderers/RPBaseRenderer.h"
 #include "guilib/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
 #include "settings/MediaSettings.h"
 #include "threads/SingleLock.h"
-//todo
-#if defined(TARGET_WINDOWS)
-#include "cores/RetroPlayer/rendering/VideoRenderers/RPWinRenderer.h"
-#endif
 
 using namespace KODI;
 using namespace RETRO;
