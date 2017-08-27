@@ -30,14 +30,6 @@
 using namespace KODI;
 using namespace SHADER;
 
-CVideoShaderDX::CVideoShaderDX()
-  :  m_shaderParameters()
-  ,  m_pSampler(nullptr)
-  ,  m_pInputBuffer(nullptr)
-  ,  m_frameCountMod(0)
-{
-}
-
 CVideoShaderDX::~CVideoShaderDX()
 {
   SAFE_RELEASE(m_pInputBuffer);

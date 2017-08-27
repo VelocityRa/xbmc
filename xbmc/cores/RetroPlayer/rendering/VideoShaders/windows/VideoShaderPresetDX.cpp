@@ -38,15 +38,9 @@ using namespace SHADER;
 using namespace SHADERPRESET;
 
 CVideoShaderPresetDX::CVideoShaderPresetDX(unsigned videoWidth, unsigned videoHeight)
-  : m_bPresetNeedsUpdate(true)
-  , m_presetPath()
-  , m_textureSize()
-  , m_videoSize(videoWidth, videoHeight)
-  , m_frameCount(0)
-  , m_pSampNearest(nullptr)
-  , m_pSampLinear(nullptr)
+  : m_videoSize(videoWidth, videoHeight)
 {
-  SetVideoSize(videoWidth, videoHeight);
+  m_textureSize = GetOptimalTextureSize(m_videoSize);
 
   CRect viewPort;
   g_Windowing.GetViewPort(viewPort);

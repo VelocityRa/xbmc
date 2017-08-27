@@ -98,7 +98,7 @@ private:
   std::unique_ptr<CShaderTextureCD3D> firstTexture;
 
   // Was the shader preset changed during the last frame?
-  bool m_bPresetNeedsUpdate;
+  bool m_bPresetNeedsUpdate = true;
 
   // Size of the viewport
   float2 m_outputSize;
@@ -111,13 +111,13 @@ private:
   float2 m_videoSize;
 
   // Number of frames that have passed
-  float m_frameCount;
+  float m_frameCount = 0.0f;
 
   // Point/nearest neighbor sampler
-  ID3D11SamplerState* m_pSampNearest;
+  ID3D11SamplerState* m_pSampNearest = nullptr;
 
   // Linear sampler
-  ID3D11SamplerState* m_pSampLinear;
+  ID3D11SamplerState* m_pSampLinear = nullptr;
 
   // Set of paths of presets that are known to not load correctly
   std::set<std::string> m_failedPaths;

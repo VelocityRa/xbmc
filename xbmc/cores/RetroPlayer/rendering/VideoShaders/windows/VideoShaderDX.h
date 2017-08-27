@@ -35,7 +35,7 @@ namespace SHADER
 class CVideoShaderDX : public CWinShader, public IVideoShader
 {
 public:
-  CVideoShaderDX();
+  CVideoShaderDX() = default;
   ~CVideoShaderDX() override;
 
   // implementation of IVideoShader
@@ -76,7 +76,7 @@ private:
   ShaderParameters m_shaderParameters;
 
   // Sampler state
-  ID3D11SamplerState* m_pSampler;
+  ID3D11SamplerState* m_pSampler = nullptr;
 
   // Look-up textures that the shader uses
   IShaderLuts m_luts; // todo: back to DX maybe
@@ -94,14 +94,14 @@ private:
   //float2 m_textureSize;
 
   // Holds the data bount to the input cbuffer (cbInput here)
-  ID3D11Buffer* m_pInputBuffer;
+  ID3D11Buffer* m_pInputBuffer = nullptr;
 
   // Projection matrix
   XMFLOAT4X4 m_MVP;
 
   // Value to modulo (%) frame count with
   // Unused if 0
-  unsigned m_frameCountMod;
+  unsigned m_frameCountMod = 0;
 
 private:
   cbInput GetInputData(float frameCount = 0);

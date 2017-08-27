@@ -53,7 +53,7 @@ class CShaderTextureCD3D : public IShaderTexture
 {
   using TextureType = CD3DTexture;
 public:
-  CShaderTextureCD3D() : m_texture(nullptr) {}
+  CShaderTextureCD3D() = default;
   CShaderTextureCD3D(TextureType* texture) : m_texture(texture) {}
   CShaderTextureCD3D(TextureType& texture) : m_texture(&texture) {}
 
@@ -88,14 +88,14 @@ public:
   CShaderTextureCD3D& operator=(const CShaderTextureCD3D& rhs) = delete;
 
 private:
-  TextureType* m_texture;
+  TextureType* m_texture = nullptr;
 };
 
 class CShaderTextureCDX : public IShaderTexture
 {
   using TextureType = CDXTexture;
 public:
-  CShaderTextureCDX() : m_texture(nullptr) {}
+  CShaderTextureCDX() = default;
   CShaderTextureCDX(TextureType* texture) : m_texture(texture) {}
   CShaderTextureCDX(TextureType& texture) : m_texture(&texture) {}
 
@@ -130,7 +130,7 @@ public:
   CShaderTextureCDX& operator=(const CShaderTextureCDX& rhs) = delete;
 
 private:
-  TextureType* m_texture;
+  TextureType* m_texture = nullptr;
 };
 
 
