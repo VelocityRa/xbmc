@@ -73,20 +73,6 @@ public:
   TextureType* operator->() const { return m_texture; }
   TextureType* Get() const { return m_texture; }
 
-  // Move assignment operator
-  CShaderTextureCD3D &operator=(CShaderTextureCD3D &&other) noexcept
-  {
-    if (this != &other)
-      m_texture = std::move(other.m_texture);
-    return *this;
-  }
-
-  // Copy constructor
-  CShaderTextureCD3D(const CShaderTextureCD3D& other) = default;
-
-  // Copy assignment operator
-  CShaderTextureCD3D& operator=(const CShaderTextureCD3D& rhs) = delete;
-
 private:
   TextureType* m_texture = nullptr;
 };
@@ -115,24 +101,9 @@ public:
   TextureType* operator->() const { return m_texture; }
   TextureType* Get() const { return m_texture; }
 
-  // Move assignment operator
-  CShaderTextureCDX  &operator=(CShaderTextureCDX  &&other) noexcept
-  {
-    if (this != &other)
-      m_texture = std::move(other.m_texture);
-    return *this;
-  }
-
-  // Copy constructor
-  CShaderTextureCDX(const CShaderTextureCDX& other) = default;
-
-  // Copy assignment operator
-  CShaderTextureCDX& operator=(const CShaderTextureCDX& rhs) = delete;
-
 private:
   TextureType* m_texture = nullptr;
 };
-
 
 class ShaderLutDX: public IShaderLut
 {
@@ -148,25 +119,6 @@ public:
   // Destructor
   ~ShaderLutDX() override = default;
 
-  // Move assignment operator
-  ShaderLutDX &operator=(ShaderLutDX &&other) noexcept
-  {
-    m_id = other.m_path;
-    m_path = other.m_id;
-    if (this != &other)
-    {
-      m_sampler = std::move(other.m_sampler);
-      m_texture = std::move(other.m_texture);
-    }
-    return *this;
-  }
-
-  // Copy constructor
-  ShaderLutDX(const ShaderLutDX& other) = default;
-
-  // Copy assignment operator
-  ShaderLutDX& operator=(const ShaderLutDX& rhs) = delete;
-
   IShaderSampler* GetSampler() override { return m_sampler.get(); }
   IShaderTexture* GetTexture() override { return m_texture.get(); }
 
@@ -174,7 +126,6 @@ private:
   std::unique_ptr<IShaderSampler> m_sampler;
   std::unique_ptr<IShaderTexture> m_texture;
 };
-
 
 IShaderSampler* CreateLUTSampler(const VideoShaderLut &lut);
 IShaderTexture* CreateLUTexture(const VideoShaderLut &lut);

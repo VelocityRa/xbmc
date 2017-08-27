@@ -55,15 +55,9 @@ namespace SHADER
 
     const std::string& GetID() { return m_id; }
     const std::string& GetPath() { return m_path; }
+
     virtual const IShaderSampler* GetSampler() = 0;
     virtual const IShaderTexture* GetTexture() = 0;
-
-    IShaderLut &operator=(IShaderLut&& other)
-    {
-      m_id = other.m_id;
-      m_path = other.m_path;
-      return *this;
-    }
 
   protected:
     std::string m_id;
