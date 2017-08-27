@@ -42,9 +42,6 @@ public:
     SAFE_RELEASE(m_sampler);
   }
 
-  operator ID3D11SamplerState*() { return m_sampler; }
-  operator ID3D11SamplerState&() { return *m_sampler; }
-
 private:
   ID3D11SamplerState* m_sampler;
 };
@@ -68,10 +65,7 @@ public:
 
   ID3D11ShaderResourceView *GetShaderResource() const { return m_texture->GetShaderResource(); }
 
-  operator TextureType&() const { return *m_texture; }
-  operator TextureType*() const { return m_texture; }
-  TextureType* operator->() const { return m_texture; }
-  TextureType* Get() const { return m_texture; }
+  TextureType* GetPointer() { return m_texture; }
 
 private:
   TextureType* m_texture = nullptr;
@@ -96,10 +90,7 @@ public:
 
   ID3D11ShaderResourceView *GetShaderResource() const { return m_texture->GetShaderResource(); }
 
-  operator TextureType&() const { return *m_texture; }
-  operator TextureType*() const { return m_texture; }
-  TextureType* operator->() const { return m_texture; }
-  TextureType* Get() const { return m_texture; }
+  TextureType* GetPointer() { return m_texture; }
 
 private:
   TextureType* m_texture = nullptr;

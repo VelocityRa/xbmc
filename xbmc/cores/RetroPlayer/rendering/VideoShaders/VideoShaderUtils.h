@@ -42,7 +42,7 @@ namespace SHADER
 
     //todo: remove
 #ifdef _WIN32
-    operator DirectX::XMFLOAT2() const
+    DirectX::XMFLOAT2 ToDXVector() const
     {
       return DirectX::XMFLOAT2(static_cast<float>(x), static_cast<float>(y));
     }

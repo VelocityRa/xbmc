@@ -75,8 +75,8 @@ void CVideoShaderDX::Render(IShaderTexture* source, IShaderTexture* target)
   auto* targetDX = static_cast<CShaderTextureCD3D*>(target);
   // TODO: Doesn't work. Investigate calling this in Execute or binding the SRV first
   //g_Windowing.Get3D11Context()->PSSetSamplers(2, 1, &m_pSampler);
-  SetShaderParameters( *sourceDX );
-  Execute({ *targetDX }, 4);
+  SetShaderParameters( *sourceDX->GetPointer() );
+  Execute({ targetDX->GetPointer() }, 4);
 }
 
 void CVideoShaderDX::SetShaderParameters(CD3DTexture& sourceTexture)
@@ -223,13 +223,13 @@ CVideoShaderDX::cbInput CVideoShaderDX::GetInputData(float frameCountFloat)
 
   cbInput input = {
     // Resution of texture passed to the shader
-    { m_inputSize },    // video_size
+    { m_inputSize.ToDXVector() },    // video_size
     // Shaders don't (and shouldn't) know about _actual_ texture
     // size, because D3D gives them correct texture coordinates
-    { m_inputSize },    // texture_size
+    { m_inputSize.ToDXVector() },    // texture_size
     // As per the spec, this is the viewport resolution (not the
     // output res of each shader
-    { m_viewportSize }, // output_size
+    { m_viewportSize.ToDXVector() }, // output_size
     // Current frame count that can be modulo'ed
     { frameCount },     // frame_count
     // Time always flows forward

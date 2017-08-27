@@ -80,7 +80,7 @@ bool CRPWinRenderer::Configure(AVPixelFormat format, unsigned int width, unsigne
   if (g_Windowing.IsFormatSupport(DXGI_FORMAT_B8G8R8A8_UNORM, D3D11_USAGE_DYNAMIC))
     m_targetDxFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 
-  if (!m_intermediateTarget->Get()->Create(m_sourceWidth, m_sourceHeight, 1, D3D11_USAGE_DYNAMIC, m_targetDxFormat))
+  if (!m_intermediateTarget->GetPointer()->Create(m_sourceWidth, m_sourceHeight, 1, D3D11_USAGE_DYNAMIC, m_targetDxFormat))
   {
     CLog::Log(LOGERROR, "%s: intermediate render target creation failed", __FUNCTION__);
     return false;
@@ -145,7 +145,7 @@ void CRPWinRenderer::RenderUpdate(bool clear, unsigned int alpha)
 
 void CRPWinRenderer::Deinitialize()
 {
-  m_intermediateTarget->Get()->Release();
+  m_intermediateTarget->GetPointer()->Release();
 }
 
 bool CRPWinRenderer::Supports(ERENDERFEATURE feature) const
@@ -178,7 +178,7 @@ void CRPWinRenderer::SetSpeed(double speed)
 bool CRPWinRenderer::UploadTexture()
 {
   D3D11_MAPPED_SUBRESOURCE destlr;
-  if (!m_intermediateTarget->Get()->LockRect(0, &destlr, D3D11_MAP_WRITE_DISCARD))
+  if (!m_intermediateTarget->GetPointer()->LockRect(0, &destlr, D3D11_MAP_WRITE_DISCARD))
   {
     CLog::Log(LOGERROR, "%s: failed to lock swtarget texture into memory", __FUNCTION__);
     return false;
@@ -209,7 +209,7 @@ bool CRPWinRenderer::UploadTexture()
     sws_scale(m_swsContext, src, srcStride, 0, m_sourceHeight, dst, dstStride);
   }
 
-  if (!m_intermediateTarget->Get()->UnlockRect(0))
+  if (!m_intermediateTarget->GetPointer()->UnlockRect(0))
   {
     CLog::Log(LOGERROR, "%s: failed to unlock swtarget texture", __FUNCTION__);
     return false;
@@ -252,7 +252,7 @@ void CRPWinRenderer::Render(CD3DTexture *target)
     // Ouput to display directly
     if (m_outputShader)
     {
-      m_outputShader->Render(*m_intermediateTarget, m_sourceWidth, m_sourceHeight,
+      m_outputShader->Render(*m_intermediateTarget->GetPointer(), m_sourceWidth, m_sourceHeight,
         m_sourceRect, m_rotatedDestCoords, target,
         g_Windowing.UseLimitedColor() ? 1 : 0, 0.5f, 0.5f);
     }
