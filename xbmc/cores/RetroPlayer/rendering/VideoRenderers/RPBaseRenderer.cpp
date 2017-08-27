@@ -19,6 +19,7 @@
  */
 
 #include "RPBaseRenderer.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIWindowManager.h"
 #include "settings/GameSettings.h"

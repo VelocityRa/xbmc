@@ -22,13 +22,17 @@
 #include <stdint.h>
 
 #include "cores/IPlayer.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 #include "guilib/Geometry.h"
 #include "libavutil/pixfmt.h"
 
 
 namespace KODI
 {
+namespace SHADER
+{
+  class IVideoShaderPreset;
+}
+
 namespace RETRO
 {
   class CRPBaseRenderer
