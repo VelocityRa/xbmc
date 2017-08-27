@@ -468,6 +468,9 @@ void CRetroPlayer::FrameMove()
 
 void CRetroPlayer::Render(bool clear, uint32_t alpha /* = 255 */, bool gui /* = true */)
 {
+  if (!gui)
+    return;
+
   CGUIGameControlManager &gameControls = CServiceBroker::GetGameServices().GameControls();
 
   const std::string &shaderPreset = m_renderManager->GetShaderPreset();
@@ -476,7 +479,7 @@ void CRetroPlayer::Render(bool clear, uint32_t alpha /* = 255 */, bool gui /* = 
   //m_renderManager->SetShaderPreset(renderSettings.GetVideoFilter());
   //m_renderManager->SetRenderViewMode(renderSettings.GetRenderViewMode());
 
-  m_renderManager->Render(clear, alpha, gui);
+  m_renderManager->Render(clear, alpha);
 
   //m_renderManager->SetShaderPreset(shaderPreset);
   //m_renderManager->SetRenderViewMode(viewMode);
