@@ -19,17 +19,16 @@
  *
  */
 
+#include "VideoShaderUtils.h"
 #include "cores/RetroPlayer/IVideoShaderPreset.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 
-class CDXTexture;
+#include <memory>
+#include <string>
 
 namespace KODI
 {
 namespace SHADER
 {
-  struct VideoShaderLut;
-
   class IShaderTexture
   {
   public:
