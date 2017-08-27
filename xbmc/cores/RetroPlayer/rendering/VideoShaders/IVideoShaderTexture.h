@@ -19,8 +19,8 @@
  *
  */
 
+#include "IVideoShaderPreset.h"
 #include "VideoShaderUtils.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
 
 #include <memory>
 #include <string>
@@ -65,8 +65,5 @@ namespace SHADER
   };
 
   using IShaderLuts = std::vector<std::shared_ptr<IShaderLut>>;
-
-  // Returns smallest possible power-of-two sized texture
-  float2 GetOptimalTextureSize(float2 videoSize);
 }
 }

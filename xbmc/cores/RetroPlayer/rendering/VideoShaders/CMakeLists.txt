@@ -1,9 +1,11 @@
 set(SOURCES VideoShaderPresetFactory.cpp
-            VideoShaderTexture.cpp
+            VideoShaderUtils.cpp
 )
 
-set(HEADERS VideoShaderPresetFactory.h
-            VideoShaderTexture.h
+set(HEADERS IVideoShader.h
+            IVideoShaderPreset.h
+            IVideoShaderTexture.h
+            VideoShaderPresetFactory.h
             VideoShaderUtils.h
 )
 

@@ -92,7 +92,7 @@ namespace ADDON
     const std::vector<std::string> &GetExtensions() const { return m_extensions; }
 
     // implementation of IVideoShaderPresetLoader
-    bool LoadPreset(const std::string &presetPath, SHADERPRESET::IVideoShaderPreset &shaderPreset) override;
+    bool LoadPreset(const std::string &presetPath, SHADER::IVideoShaderPreset &shaderPreset) override;
 
   private:
     /*!
@@ -100,7 +100,7 @@ namespace ADDON
      */
     void ResetProperties(void);
 
-    static void TranslateShaderPreset(const video_shader &shader, SHADERPRESET::IVideoShaderPreset& shaderPreset);
+    static void TranslateShaderPreset(const video_shader &shader, SHADER::IVideoShaderPreset& shaderPreset);
     static void TranslateShaderPass(const video_shader_pass &pass, VideoShaderPass &shaderPass);
     static void TranslateShaderLut(const video_shader_lut &lut, VideoShaderLut &shaderLut);
     static void TranslateShaderParameter(const video_shader_parameter &param, VideoShaderParameter &shaderParam);

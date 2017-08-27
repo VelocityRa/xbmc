@@ -71,7 +71,7 @@ void CVideoShaderPresetFactory::UnregisterLoader(IVideoShaderPresetLoader *loade
   }
 }
 
-bool CVideoShaderPresetFactory::LoadPreset(const std::string &presetPath, SHADERPRESET::IVideoShaderPreset &shaderPreset)
+bool CVideoShaderPresetFactory::LoadPreset(const std::string &presetPath, IVideoShaderPreset &shaderPreset)
 {
   bool bSuccess = false;
 

@@ -19,15 +19,11 @@
  */
 #pragma once
 
+#include "IVideoShaderPreset.h"
 #include "addons/Addon.h"
-#include "xbmc/cores/RetroPlayer/IVideoShaderPreset.h"
 
 #include <map>
 #include <string>
-
-namespace SHADERPRESET {
-  class CVideoShaderPreset;
-}
 
 namespace ADDON
 {
@@ -46,7 +42,7 @@ namespace SHADER
   public:
     virtual ~IVideoShaderPresetLoader() = default;
 
-    virtual bool LoadPreset(const std::string &presetPath, SHADERPRESET::IVideoShaderPreset &shaderPreset) = 0;
+    virtual bool LoadPreset(const std::string &presetPath, IVideoShaderPreset &shaderPreset) = 0;
   };
 
   class CVideoShaderPresetFactory
@@ -62,7 +58,7 @@ namespace SHADER
     void RegisterLoader(IVideoShaderPresetLoader *loader, const std::string &extension);
     void UnregisterLoader(IVideoShaderPresetLoader *loader);
 
-    bool LoadPreset(const std::string &presetPath, SHADERPRESET::IVideoShaderPreset &shaderPreset);
+    bool LoadPreset(const std::string &presetPath, IVideoShaderPreset &shaderPreset);
     bool CanLoadPreset(const std::string &presetPath);
 
   private:

@@ -19,7 +19,7 @@
  *
  */
 
-#include "VideoShaderTexture.h"
+#include "IVideoShaderTexture.h"
 #include "guilib/Geometry.h"
 
 #include <string>

@@ -24,7 +24,7 @@
 
 #include "VideoShaderDX.h"
 #include "addons/binary-addons/AddonInstanceHandler.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderPresetFactory.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "games/GameServices.h"
@@ -36,11 +36,11 @@ namespace ADDON
   class CShaderPresetAddon;
 }
 
-using namespace KODI;
-using namespace SHADER;
-
-namespace SHADERPRESET
+namespace KODI
 {
+namespace SHADER
+{
+
 class CVideoShaderPresetDX : public IVideoShaderPreset
 {
 public:
@@ -133,4 +133,6 @@ private:
 
   VideoShaderPasses m_passes;
 };
-} // namespace SHADERPRESET
+
+}
+}

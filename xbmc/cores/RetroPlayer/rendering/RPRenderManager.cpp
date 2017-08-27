@@ -98,9 +98,9 @@ void CRPRenderManager::FrameMove()
   }
 }
 
-void CRPRenderManager::Render(bool clear, DWORD alpha, bool gui)
+void CRPRenderManager::Render(bool clear, DWORD alpha)
 {
-  if (!m_renderer || !gui)
+  if (!m_renderer)
     return;
 
   CSingleExit exitLock(g_graphicsContext);

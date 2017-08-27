@@ -35,12 +35,11 @@
 
 using namespace KODI;
 using namespace SHADER;
-using namespace SHADERPRESET;
 
 CVideoShaderPresetDX::CVideoShaderPresetDX(unsigned videoWidth, unsigned videoHeight)
   : m_videoSize(videoWidth, videoHeight)
 {
-  m_textureSize = GetOptimalTextureSize(m_videoSize);
+  m_textureSize = CVideoShaderUtils::GetOptimalTextureSize(m_videoSize);
 
   CRect viewPort;
   g_Windowing.GetViewPort(viewPort);
@@ -313,7 +312,7 @@ bool CVideoShaderPresetDX::CreateShaders()
   auto numPasses = m_passes.size();
   // todo: replace with per-shader texture size
   // todo: actually use this
-  m_textureSize = GetOptimalTextureSize(m_videoSize);
+  m_textureSize = CVideoShaderUtils::GetOptimalTextureSize(m_videoSize);
 
   // todo: is this pass specific?
   IShaderLuts passLUTsDX;
@@ -479,7 +478,7 @@ const std::string& CVideoShaderPresetDX::GetShaderPreset() const
 void CVideoShaderPresetDX::SetVideoSize(const unsigned videoWidth, const unsigned videoHeight)
 {
   m_videoSize = { videoWidth, videoHeight };
-  m_textureSize = GetOptimalTextureSize(m_videoSize);
+  m_textureSize = CVideoShaderUtils::GetOptimalTextureSize(m_videoSize);
 }
 
 void CVideoShaderPresetDX::UpdateMVPs()
