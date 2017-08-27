@@ -61,8 +61,8 @@ public:
   // Don't delete texture since it wasn't created here
   ~CShaderTextureCD3D() override = default;
 
-  float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
-  float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
+  float GetWidth() const override { return static_cast<float>(m_texture->GetWidth()); }
+  float GetHeight() const override { return static_cast<float>(m_texture->GetHeight()); }
 
   void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
 
@@ -89,8 +89,8 @@ public:
   // Don't delete texture since it wasn't created here
   ~CShaderTextureCDX() override = default;
 
-  float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
-  float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
+  float GetWidth() const override { return static_cast<float>(m_texture->GetWidth()); }
+  float GetHeight() const override { return static_cast<float>(m_texture->GetHeight()); }
 
   void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
 

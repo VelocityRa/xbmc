@@ -83,7 +83,7 @@ private:
   void DisposeVideoShaders();
   void PrepareParameters(IShaderTexture& texture, CPoint dest[]);
   static void RenderShader(IVideoShader& shader, IShaderTexture& source, IShaderTexture& target);
-  bool HasPathFailed(const std::string& path);
+  bool HasPathFailed(const std::string& path) const;
 
   // Relative path of the currently loaded shader preset
   std::string m_presetPath;

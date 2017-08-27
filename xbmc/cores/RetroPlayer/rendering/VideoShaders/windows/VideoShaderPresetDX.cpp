@@ -431,7 +431,7 @@ void CVideoShaderPresetDX::PrepareParameters(IShaderTexture& texture, CPoint des
   }
 }
 
-bool CVideoShaderPresetDX::HasPathFailed(const std::string& path)
+bool CVideoShaderPresetDX::HasPathFailed(const std::string& path) const
 {
   return m_failedPaths.find(path) != m_failedPaths.end();
 }

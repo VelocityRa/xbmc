@@ -40,8 +40,8 @@ namespace SHADER
   public:
     virtual ~IShaderTexture() = default;
 
-    virtual float GetWidth() = 0;
-    virtual float GetHeight() = 0;
+    virtual float GetWidth() const = 0;
+    virtual float GetHeight() const = 0;
   };
 
   class IShaderLut
@@ -53,11 +53,11 @@ namespace SHADER
 
     virtual ~IShaderLut() = default;
 
-    const std::string& GetID() { return m_id; }
-    const std::string& GetPath() { return m_path; }
+    const std::string& GetID() const { return m_id; }
+    const std::string& GetPath() const { return m_path; }
 
-    virtual const IShaderSampler* GetSampler() = 0;
-    virtual const IShaderTexture* GetTexture() = 0;
+    virtual IShaderSampler* GetSampler() = 0;
+    virtual IShaderTexture* GetTexture() = 0;
 
   protected:
     std::string m_id;
