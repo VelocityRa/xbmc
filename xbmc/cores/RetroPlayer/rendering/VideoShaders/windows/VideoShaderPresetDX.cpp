@@ -331,8 +331,6 @@ bool CVideoShaderPresetDX::CreateShaders()
       if (!lutSampler || !lutTexture)
       {
         CLog::Log(LOGWARNING, "%s - Couldn't create a LUT sampler or texture for LUT %s", __FUNCTION__, lutStruct.strId);
-        for (unsigned s = 0; s <= i; ++s)
-          delete &passLUTsDX[s];
         return false;
       }
       else
