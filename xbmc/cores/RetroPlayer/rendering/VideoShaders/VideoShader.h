@@ -20,12 +20,17 @@
  */
 
 #include "VideoShaderTexture.h"
+#include "guilib/Geometry.h"
+
+#include <string>
+#include <stdint.h>
 
 namespace KODI
 {
 namespace SHADER
 {
   struct float2;
+  class IShaderSampler;
   class IShaderTexture;
 
   class IVideoShader
@@ -38,7 +43,7 @@ namespace SHADER
     virtual bool CreateVertexBuffer(unsigned vertCount, unsigned vertSize) = 0;
     virtual bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* layout, unsigned numElements) = 0;
     virtual bool CreateInputBuffer() = 0;
-    virtual void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount) = 0;
+    virtual void PrepareParameters(CPoint dest[4], bool isLastPass, uint64_t frameCount) = 0;
     virtual void UpdateMVP() = 0;
 
     virtual ~IVideoShader() = default;

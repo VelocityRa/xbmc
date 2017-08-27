@@ -96,7 +96,7 @@ void CVideoShaderDX::SetShaderParameters(CD3DTexture& sourceTexture)
   }
 }
 
-void CVideoShaderDX::PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount)
+void CVideoShaderDX::PrepareParameters(CPoint dest[4], bool isLastPass, uint64_t frameCount)
 {
   UpdateInputBuffer(frameCount);
 
@@ -197,7 +197,7 @@ bool CVideoShaderDX::CreateInputBuffer()
   return true;
 }
 
-void CVideoShaderDX::UpdateInputBuffer(float frameCount)
+void CVideoShaderDX::UpdateInputBuffer(uint64_t frameCount)
 {
   auto pContext = g_Windowing.Get3D11Context();
 
@@ -215,9 +215,8 @@ void CVideoShaderDX::UpdateInputBuffer(float frameCount)
   }
 }
 
-CVideoShaderDX::cbInput CVideoShaderDX::GetInputData(float frameCountFloat)
+CVideoShaderDX::cbInput CVideoShaderDX::GetInputData(uint64_t frameCount)
 {
-  unsigned frameCount = static_cast<unsigned>(frameCountFloat);
   if (m_frameCountMod != 0)
     frameCount %= m_frameCountMod;
 
@@ -231,7 +230,7 @@ CVideoShaderDX::cbInput CVideoShaderDX::GetInputData(float frameCountFloat)
     // output res of each shader
     { m_viewportSize.ToDXVector() }, // output_size
     // Current frame count that can be modulo'ed
-    { frameCount },     // frame_count
+    { static_cast<float>(frameCount) },     // frame_count
     // Time always flows forward
     { 1.0f }               // frame_direction
   };

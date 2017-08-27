@@ -24,6 +24,8 @@
 #include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h"
 #include "guilib/D3DResource.h"
 
+#include <stdint.h>
+
 namespace KODI
 {
 namespace SHADER
@@ -43,11 +45,11 @@ public:
     IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod = 0) override;
   void Render(IShaderTexture* source, IShaderTexture* target) override;
   void SetSizes(const float2& prevSize, const float2& nextSize) override;
-  void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount) override;
+  void PrepareParameters(CPoint dest[4], bool isLastPass, uint64_t frameCount) override;
   CD3DEffect& GetEffect();
   void UpdateMVP() override;
   bool CreateInputBuffer() override;
-  void UpdateInputBuffer(float frameCountFloat);
+  void UpdateInputBuffer(uint64_t frameCount);
 
   // expose these from CWinShader
   bool CreateVertexBuffer(unsigned vertCount, unsigned vertSize) override;
@@ -104,7 +106,7 @@ private:
   unsigned m_frameCountMod = 0;
 
 private:
-  cbInput GetInputData(float frameCount = 0);
+  cbInput GetInputData(uint64_t frameCount = 0);
 };
 
 }
