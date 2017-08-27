@@ -154,7 +154,7 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 {
-  if (index < m_items.Size())
+  if (static_cast<int>(index) < m_items.Size())
   {
     CFileItemPtr item = m_items[index];
 
@@ -183,7 +183,7 @@ unsigned int CDialogGameVideoFilter::GetFocusedItem() const
 {
   CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
 
-  for (unsigned int i = 0; i < m_items.Size(); i++)
+  for (int i = 0; i < m_items.Size(); i++)
   {
     std::string presetToSet;
     ESCALINGMETHOD scalingMethod;
