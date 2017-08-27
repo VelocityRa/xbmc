@@ -60,14 +60,15 @@ namespace RETRO
     float GetAspectRatio() const;
 
     /**
-    * \brief Gets the shader preset path currently loaded
-    * \returns Preset relative path
-    */
+     * \brief Gets the shader preset path currently loaded
+     * \returns Preset path
+     */
     const std::string& GetShaderPreset() const;
+
     /**
-    * \brief Sets the shader preset path to be loaded and used from the next frame
-    * \param presetPath Relative path to preset file
-    */
+     * \brief Sets the shader preset path to be loaded and used from the next frame
+     * \param presetPath Path to preset file
+     */
     void SetShaderPreset(const std::string presetPath);
 
     ESCALINGMETHOD GetScalingMethod() const { return m_scalingMethod; }
