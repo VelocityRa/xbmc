@@ -238,7 +238,6 @@ CVideoShaderDX::cbInput CVideoShaderDX::GetInputData(float frameCountFloat)
   return input;
 }
 
-
 void CVideoShaderDX::SetSizes(const float2& prevSize, const float2& nextSize)
 {
   m_inputSize = prevSize;

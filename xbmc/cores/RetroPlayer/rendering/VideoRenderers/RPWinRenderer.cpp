@@ -175,7 +175,6 @@ void CRPWinRenderer::SetSpeed(double speed)
     m_shaderPreset->SetSpeed(speed);
 }
 
-
 bool CRPWinRenderer::UploadTexture()
 {
   D3D11_MAPPED_SUBRESOURCE destlr;

@@ -62,15 +62,19 @@ ShaderParameters CVideoShaderPresetDX::GetShaderParameters(const std::vector<Vid
 
   ShaderParameters matchParams;
   for (const auto& match : validParams)   // for each param found in the source code
-    for (unsigned i = 0; i < parameters.size(); ++i)  // for each param found in the preset file
-      if (match == parameters[i].strId)  // if they match
+  {
+    for (const auto& parameter : parameters)   // for each param found in the preset file
+    {
+      if (match == parameter.strId)  // if they match
       {
         // The add-on has already handled parsing and overwriting default
         // parameter values from the preset file. The final value we
         // should use is in the 'current' field.
-        matchParams[match] = parameters[i].current;
+        matchParams[match] = parameter.current;
         break;
       }
+    }
+  }
 
   return matchParams;
 }
@@ -219,7 +223,8 @@ bool CVideoShaderPresetDX::CreateShaderTextures()
 
   auto numPasses = m_passes.size();
 
-  for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
+  for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx)
+  {
     auto& pass = m_passes[shaderIdx];
 
     // resolve final texture resolution, taking scale type and scale multiplier into account
@@ -275,13 +280,17 @@ bool CVideoShaderPresetDX::CreateShaderTextures()
     // Determine the framebuffer data format
     DXGI_FORMAT textureFormat;
     if (pass.fbo.floatFramebuffer)
+    {
       // Give priority to float framebuffer parameter (we can't use both float and sRGB)
       textureFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    }
     else
+    {
       if (pass.fbo.sRgbFramebuffer)
         textureFormat = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
       else
         textureFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+    }
 
     CD3DTexture* texture(new CD3DTexture());
     if (!texture->Create(scaledSize.x, scaledSize.y, 1, D3D11_USAGE_DEFAULT, textureFormat, nullptr, 0))
@@ -308,7 +317,8 @@ bool CVideoShaderPresetDX::CreateShaders()
 
   // todo: is this pass specific?
   IShaderLuts passLUTsDX;
-  for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx) {
+  for (unsigned shaderIdx = 0; shaderIdx < numPasses; ++shaderIdx)
+  {
     const auto& pass = m_passes[shaderIdx];
 
     for (unsigned i = 0; i < pass.luts.size(); ++i)
@@ -413,6 +423,7 @@ void CVideoShaderPresetDX::PrepareParameters(IShaderTexture& texture, CPoint des
     auto& videoShader = m_pVideoShaders[shaderIdx];
     videoShader->PrepareParameters(m_dest, false, m_frameCount);
   }
+
   // prepare params for last shader
   m_pVideoShaders.back()->PrepareParameters(m_dest, true, m_frameCount);
 
@@ -423,6 +434,7 @@ void CVideoShaderPresetDX::PrepareParameters(IShaderTexture& texture, CPoint des
   {
     for (size_t i = 0; i < 4; ++i)
       m_dest[i] = dest[i];
+
     m_outputSize = { texture.GetWidth(), texture.GetHeight() };
 
     // Update projection matrix and update video shaders
