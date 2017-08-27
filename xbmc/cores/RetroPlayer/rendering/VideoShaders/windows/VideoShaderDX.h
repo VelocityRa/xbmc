@@ -36,7 +36,7 @@ class CVideoShaderDX : public CWinShader, public IVideoShader
 {
 public:
   CVideoShaderDX();
-  ~CVideoShaderDX();
+  ~CVideoShaderDX() override;
 
   // implementation of IVideoShader
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,

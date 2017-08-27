@@ -41,7 +41,7 @@ namespace SHADER
     virtual void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount) = 0;
     virtual void UpdateMVP() = 0;
 
-    ~IVideoShader() {};
+    virtual ~IVideoShader() = default;
   };
 }
 }

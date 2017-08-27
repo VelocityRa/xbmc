@@ -46,7 +46,7 @@ class CVideoShaderPresetDX : public IVideoShaderPreset
 public:
   // Instance of CShaderPreset
   explicit CVideoShaderPresetDX(unsigned videoWidth = 0, unsigned videoHeight = 0);
-  ~CVideoShaderPresetDX();
+  ~CVideoShaderPresetDX() override;
 
   /*!
   * \brief Reads/Parses a shader preset file and loads its state to the

@@ -36,13 +36,15 @@ public:
     : m_sampler(sampler)
   {
   }
-  operator ID3D11SamplerState*() { return m_sampler; }
-  operator ID3D11SamplerState&() { return *m_sampler; }
 
-  ~CShaderSamplerDX()
+  ~CShaderSamplerDX() override
   {
     SAFE_RELEASE(m_sampler);
   }
+
+  operator ID3D11SamplerState*() { return m_sampler; }
+  operator ID3D11SamplerState&() { return *m_sampler; }
+
 private:
   ID3D11SamplerState* m_sampler;
 };
@@ -54,6 +56,10 @@ public:
   CShaderTextureCD3D() : m_texture(nullptr) {}
   CShaderTextureCD3D(TextureType* texture) : m_texture(texture) {}
   CShaderTextureCD3D(TextureType& texture) : m_texture(&texture) {}
+
+  // Destructor
+  // Don't delete texture since it wasn't created here
+  ~CShaderTextureCD3D() override = default;
 
   float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
   float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
@@ -81,9 +87,6 @@ public:
   // Copy assignment operator
   CShaderTextureCD3D& operator=(const CShaderTextureCD3D& rhs) = delete;
 
-  // Destructor
-  // Don't delete texture since it wasn't created here
-  ~CShaderTextureCD3D() {}
 private:
   TextureType* m_texture;
 };
@@ -95,6 +98,10 @@ public:
   CShaderTextureCDX() : m_texture(nullptr) {}
   CShaderTextureCDX(TextureType* texture) : m_texture(texture) {}
   CShaderTextureCDX(TextureType& texture) : m_texture(&texture) {}
+
+  // Destructor
+  // Don't delete texture since it wasn't created here
+  ~CShaderTextureCDX() override = default;
 
   float GetWidth() override { return static_cast<float>(m_texture->GetWidth()); }
   float GetHeight() override { return static_cast<float>(m_texture->GetHeight()); }
@@ -122,9 +129,6 @@ public:
   // Copy assignment operator
   CShaderTextureCDX& operator=(const CShaderTextureCDX& rhs) = delete;
 
-  // Destructor
-  // Don't delete texture since it wasn't created here
-  ~CShaderTextureCDX() {}
 private:
   TextureType* m_texture;
 };
@@ -133,14 +137,16 @@ private:
 class ShaderLutDX: public IShaderLut
 {
 public:
-
-  ShaderLutDX() : IShaderLut(), m_sampler(nullptr), m_texture(nullptr) {}
+  ShaderLutDX() = default;
   ShaderLutDX(std::string id, std::string path, IShaderSampler* sampler, IShaderTexture* texture)
     : IShaderLut(id, path)
   {
     m_sampler.reset(sampler);
     m_texture.reset(texture);
   }
+
+  // Destructor
+  ~ShaderLutDX() override = default;
 
   // Move assignment operator
   ShaderLutDX &operator=(ShaderLutDX &&other) noexcept
@@ -164,8 +170,6 @@ public:
   IShaderSampler* GetSampler() override { return m_sampler.get(); }
   IShaderTexture* GetTexture() override { return m_texture.get(); }
 
-  // Destructor
-  ~ShaderLutDX() = default;
 private:
   std::unique_ptr<IShaderSampler> m_sampler;
   std::unique_ptr<IShaderTexture> m_texture;

@@ -108,9 +108,11 @@ namespace SHADER
 
   //todo: move to other file
 
-  class IShaderSampler {};
-
-  using ShaderTextureWrapType = unsigned int;
+  class IShaderSampler
+  {
+  public:
+    virtual ~IShaderSampler() = default;
+  };
 }
 }
 

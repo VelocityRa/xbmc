@@ -33,7 +33,7 @@ namespace SHADER
   class IShaderTexture
   {
   public:
-    virtual ~IShaderTexture() {}
+    virtual ~IShaderTexture() = default;
 
     virtual float GetWidth() = 0;
     virtual float GetHeight() = 0;
@@ -42,9 +42,11 @@ namespace SHADER
   class IShaderLut
   {
   public:
-    IShaderLut() : m_id(""), m_path("") {}
+    IShaderLut() = default;
     IShaderLut(const std::string& id, const std::string& path)
       : m_id(id), m_path(path) {}
+
+    virtual ~IShaderLut() = default;
 
     const std::string& GetID() { return m_id; }
     const std::string& GetPath() { return m_path; }
@@ -58,11 +60,9 @@ namespace SHADER
       return *this;
     }
 
-    virtual ~IShaderLut() = default;
   protected:
     std::string m_id;
     std::string m_path;
-
   };
 
   using IShaderLuts = std::vector<std::shared_ptr<IShaderLut>>;
