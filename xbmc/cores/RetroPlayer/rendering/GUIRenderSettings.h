@@ -39,7 +39,7 @@ namespace RETRO
     void SetVideoFilter(const std::string &videoFilter) { m_videoFilter = videoFilter; }
     void ResetVideoFilter() { m_videoFilter.clear(); }
 
-    int GetScalingMethod() const;
+    ESCALINGMETHOD GetScalingMethod() const;
     bool HasScalingMethod() const { return m_scalingMethod != -1; }
     void SetScalingMethod(ESCALINGMETHOD method) { m_scalingMethod = static_cast<int>(method); }
     void ResetScalingMethod() { m_scalingMethod = -1; }

@@ -188,8 +188,9 @@
 						<control type="gamewindow">
 							<width>444</width>
 							<height>250</height>
-							<viewmode>$INFO[ListItem.Property(game.viewmode)]</viewmode>
 							<videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+							<scalingmethod>$INFO[ListItem.Property(game.scalingmethod)]</scalingmethod>
+							<viewmode>$INFO[ListItem.Property(game.viewmode)]</viewmode>
 						</control>
 						<control type="label">
 							<top>250</top>
@@ -218,8 +219,9 @@
 						<control type="gamewindow">
 							<width>444</width>
 							<height>250</height>
-							<viewmode>$INFO[ListItem.Property(game.viewmode)]</viewmode>
 							<videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+							<scalingmethod>$INFO[ListItem.Property(game.scalingmethod)]</scalingmethod>
+							<viewmode>$INFO[ListItem.Property(game.viewmode)]</viewmode>
 						</control>
 						<control type="label">
 							<top>250</top>

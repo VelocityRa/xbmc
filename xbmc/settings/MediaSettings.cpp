@@ -161,6 +161,10 @@ bool CMediaSettings::Load(const TiXmlNode *settings)
     if (XMLUtils::GetString(pElement, "videofilter", videoFilter))
       m_defaultGameSettings.SetVideoFilter(videoFilter);
 
+    int scalingMethod;
+    if (XMLUtils::GetInt(pElement, "scalingmethod", scalingMethod, VS_SCALINGMETHOD_NEAREST, VS_SCALINGMETHOD_LINEAR))
+      m_defaultGameSettings.SetScalingMethod(static_cast<ESCALINGMETHOD>(scalingMethod));
+
     int viewMode;
     if (XMLUtils::GetInt(pElement, "viewmode", viewMode, ViewModeNormal, ViewModeZoom110Width))
       m_defaultGameSettings.SetViewMode(static_cast<ViewMode>(viewMode));
@@ -274,6 +278,7 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
     return false;
 
   XMLUtils::SetString(pNode, "videofilter", m_defaultGameSettings.VideoFilter());
+  XMLUtils::SetInt(pNode, "scalingmethod", m_defaultGameSettings.ScalingMethod());
   XMLUtils::SetInt(pNode, "viewmode", m_defaultGameSettings.ViewMode());
 
   // mymusic

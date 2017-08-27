@@ -34,14 +34,14 @@ namespace RETRO
     virtual bool SupportsRenderFeature(ERENDERFEATURE feature) const = 0;
     virtual bool SupportsScalingMethod(ESCALINGMETHOD method) const = 0;
 
+    virtual void SetShaderPreset(const std::string& shaderPresetPath) = 0;
+    virtual const std::string &GetShaderPreset() const = 0;
+
     virtual ESCALINGMETHOD GetScalingMethod() const = 0;
     virtual void SetScalingMethod(ESCALINGMETHOD scalingMethod) = 0;
 
     virtual ViewMode GetRenderViewMode() const = 0;
     virtual void SetRenderViewMode(ViewMode mode) = 0;
-
-    virtual void SetShaderPreset(const std::string& shaderPresetPath) = 0;
-    virtual const std::string &GetShaderPreset() const = 0;
   };
 }
 }

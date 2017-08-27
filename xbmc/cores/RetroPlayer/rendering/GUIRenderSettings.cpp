@@ -48,10 +48,10 @@ std::string CGUIRenderSettings::GetVideoFilter() const
   return gameSettings.VideoFilter();
 }
 
-int CGUIRenderSettings::GetScalingMethod() const
+ESCALINGMETHOD CGUIRenderSettings::GetScalingMethod() const
 {
   if (HasScalingMethod())
-    return m_scalingMethod;
+    return static_cast<ESCALINGMETHOD>(m_scalingMethod);
 
   CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
   return gameSettings.ScalingMethod();

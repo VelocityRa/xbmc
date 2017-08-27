@@ -25,6 +25,7 @@
 #include "settings/GameSettings.h"
 #include "settings/MediaSettings.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"
@@ -41,6 +42,22 @@ using namespace GAME;
 
 #define PRESETS_ADDON_NAME "game.shader.presets"
 
+namespace
+{
+  struct ScalingMethodProperties
+  {
+    int nameIndex;
+    int categoryIndex;
+    ESCALINGMETHOD scalingMethod;
+  };
+
+  const std::vector<ScalingMethodProperties> scalingMethods =
+  {
+    { 16298, 16301, VS_SCALINGMETHOD_NEAREST },
+    { 16299, 16302, VS_SCALINGMETHOD_LINEAR },
+  };
+}
+
 CDialogGameVideoFilter::CDialogGameVideoFilter() :
   CDialogGameVideoSelect(WINDOW_DIALOG_GAME_VIDEO_FILTER)
 {
@@ -48,9 +65,38 @@ CDialogGameVideoFilter::CDialogGameVideoFilter() :
 
 void CDialogGameVideoFilter::PreInit()
 {
-  m_videoFilters.clear();
+  m_items.Clear();
 
+  InitScalingMethods();
+  InitVideoFilters();
 
+  if (m_items.Size() == 0)
+  {
+    CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(231)); // "None"
+    m_items.Add(std::move(item));
+  }
+}
+
+void CDialogGameVideoFilter::InitScalingMethods()
+{
+  if (m_callback != nullptr)
+  {
+    for (const auto &scalingMethodProps : scalingMethods)
+    {
+      if (m_callback->SupportsScalingMethod(scalingMethodProps.scalingMethod))
+      {
+        CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(scalingMethodProps.nameIndex));
+        item->SetLabel2(g_localizeStrings.Get(scalingMethodProps.categoryIndex));
+        item->SetProperty("game.scalingmethod", CVariant{ scalingMethodProps.scalingMethod });
+        m_items.Add(std::move(item));
+      }
+    }
+  }
+}
+
+void CDialogGameVideoFilter::InitVideoFilters()
+{
+  std::vector<VideoFilterProperties> videoFilters;
 
   // TODO: Have the add-on give us the xml as a string (or parse it)
   static const std::string addonPath = std::string("special://xbmcbinaddons/") + PRESETS_ADDON_NAME;
@@ -77,15 +123,12 @@ void CDialogGameVideoFilter::PreInit()
     videoFilter.categoryIndex = atoi(child->FirstChild("category")->FirstChild()->Value());
     videoFilter.descriptionIndex = atoi(child->FirstChild("description")->FirstChild()->Value());
 
-    m_videoFilters.emplace_back(videoFilter);
+    videoFilters.emplace_back(videoFilter);
   }
 
-  CLog::Log(LOGDEBUG, "Loaded %d shader presets from default .xml, %s", m_videoFilters.size(), CURL::GetRedacted(xmlPath).c_str());
-}
+  CLog::Log(LOGDEBUG, "Loaded %d shader presets from default .xml, %s", videoFilters.size(), CURL::GetRedacted(xmlPath).c_str());
 
-void CDialogGameVideoFilter::GetItems(CFileItemList &items)
-{
-  for (const auto &videoFilter : m_videoFilters)
+  for (const auto &videoFilter : videoFilters)
   {
     bool canLoadPreset = CServiceBroker::GetGameServices().VideoShaders().CanLoadPreset(videoFilter.path);
 
@@ -99,50 +142,79 @@ void CDialogGameVideoFilter::GetItems(CFileItemList &items)
     item->SetLabel2(localizedCategory);
     item->SetProperty("game.videofilter", CVariant{ videoFilter.path });
 
-    items.Add(std::move(item));
+    m_items.Add(std::move(item));
   }
+}
 
-  if (items.Size() == 0)
-  {
-    CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(231)); // "None"
-    items.Add(std::move(item));
-  }
+void CDialogGameVideoFilter::GetItems(CFileItemList &items)
+{
+  for (const auto &item : m_items)
+    items.Add(item);
 }
 
 void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 {
-  if (index < m_videoFilters.size())
+  if (index < m_items.Size())
   {
-    const std::string &presetToSet = m_videoFilters[index].path;
+    CFileItemPtr item = m_items[index];
+
+    std::string presetToSet;
+    ESCALINGMETHOD scalingMethod;
+    GetProperties(*item, presetToSet, scalingMethod);
 
     CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
-    if (gameSettings.VideoFilter() != presetToSet)
+
+    if (gameSettings.VideoFilter() != presetToSet ||
+        gameSettings.ScalingMethod() != scalingMethod)
     {
       gameSettings.SetVideoFilter(presetToSet);
+      gameSettings.SetScalingMethod(scalingMethod);
 
       if (m_callback != nullptr)
+      {
         m_callback->SetShaderPreset(presetToSet);
+        m_callback->SetScalingMethod(scalingMethod);
+      }
     }
   }
 }
 
 unsigned int CDialogGameVideoFilter::GetFocusedItem() const
 {
-  for (unsigned int i = 0; i < m_videoFilters.size(); i++)
+  CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
+
+  for (unsigned int i = 0; i < m_items.Size(); i++)
   {
-    std::string preset = m_callback->GetShaderPreset();
-    if (preset == m_videoFilters[i].path)
-       return i;
+    std::string presetToSet;
+    ESCALINGMETHOD scalingMethod;
+    GetProperties(*m_items[i], presetToSet, scalingMethod);
+
+    if (presetToSet == gameSettings.VideoFilter() &&
+        scalingMethod == gameSettings.ScalingMethod())
+    {
+      return i;
+    }
   }
+
   return 0;
 }
 
 void CDialogGameVideoFilter::PostExit()
 {
-  m_videoFilters.clear();
+  m_items.Clear();
 }
 
 std::string CDialogGameVideoFilter::GetLocalizedString(uint32_t code)
 {
   return g_localizeStrings.GetAddonString(PRESETS_ADDON_NAME, code);
+}
+
+void CDialogGameVideoFilter::GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod)
+{
+  videoPreset = item.GetProperty("game.videofilter").asString();
+  scalingMethod = VS_SCALINGMETHOD_NEAREST;
+
+  std::string strScalingMethod = item.GetProperty("game.scalingmethod").asString();
+  if (StringUtils::IsNaturalNumber(strScalingMethod))
+    scalingMethod = static_cast<ESCALINGMETHOD>(item.GetProperty("game.scalingmethod").asUnsignedInteger());
 }

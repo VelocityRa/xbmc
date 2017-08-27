@@ -50,7 +50,7 @@ void CGUIGameControl::SetVideoFilter(const CGUIInfoLabel &videoFilter)
 
 void CGUIGameControl::SetScalingMethod(const CGUIInfoLabel &scalingMode)
 {
-  m_scalingModeInfo = scalingMode;
+  m_scalingMethodInfo = scalingMode;
 }
 
 void CGUIGameControl::SetViewMode(const CGUIInfoLabel &viewMode)
@@ -138,6 +138,14 @@ void CGUIGameControl::UpdateInfo(const CGUIListItem *item /* = nullptr */)
     if (!videoFilter.empty())
       m_renderSettings.SetVideoFilter(videoFilter);
 
+    std::string strScalingMethod = m_scalingMethodInfo.GetItemLabel(item);
+    if (StringUtils::IsNaturalNumber(strScalingMethod))
+    {
+      unsigned int scalingMethod;
+      std::istringstream(std::move(strScalingMethod)) >> scalingMethod;
+      m_renderSettings.SetScalingMethod(static_cast<ESCALINGMETHOD>(scalingMethod));
+    }
+
     std::string strViewMode = m_viewModeInfo.GetItemLabel(item);
     if (StringUtils::IsNaturalNumber(strViewMode))
     {
@@ -145,7 +153,6 @@ void CGUIGameControl::UpdateInfo(const CGUIListItem *item /* = nullptr */)
       std::istringstream(std::move(strViewMode)) >> viewMode;
       m_renderSettings.SetRenderViewMode(static_cast<ViewMode>(viewMode));
     }
-    // todo: scaling mode
   }
 }
 
