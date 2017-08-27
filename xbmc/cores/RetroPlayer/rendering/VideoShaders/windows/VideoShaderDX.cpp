@@ -90,10 +90,9 @@ void CVideoShaderDX::SetShaderParameters(CD3DTexture& sourceTexture)
     m_effect.SetFloatArray(param.first.c_str(), &param.second, 1);
   for (const auto& lut : m_luts)
   {
-    auto* lutDX = static_cast<ShaderLutDX*>(&*lut);
-    auto* texture = static_cast<CShaderTextureCDX*>(lutDX->GetTexture());
-    auto* textureSRV = static_cast<ID3D11ShaderResourceView*>(texture->GetShaderResource());
-    m_effect.SetTexture(lutDX->GetID().c_str(), textureSRV);
+    auto* texture = dynamic_cast<CShaderTextureCDX*>(lut->GetTexture());
+    if (texture != nullptr)
+      m_effect.SetTexture(lut->GetID().c_str(), texture->GetShaderResource());
   }
 }
 

@@ -66,7 +66,7 @@ public:
 
   void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
 
-  void *GetShaderResource() const { return m_texture->GetShaderResource(); }
+  ID3D11ShaderResourceView *GetShaderResource() const { return m_texture->GetShaderResource(); }
 
   operator TextureType&() const { return *m_texture; }
   operator TextureType*() const { return m_texture; }
@@ -94,7 +94,7 @@ public:
 
   void SetTexture(TextureType* newTexture) { m_texture = newTexture; }
 
-  void *GetShaderResource() const { return m_texture->GetShaderResource(); }
+  ID3D11ShaderResourceView *GetShaderResource() const { return m_texture->GetShaderResource(); }
 
   operator TextureType&() const { return *m_texture; }
   operator TextureType*() const { return m_texture; }
