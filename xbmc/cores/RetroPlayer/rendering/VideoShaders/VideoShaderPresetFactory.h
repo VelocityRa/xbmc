@@ -19,13 +19,14 @@
  */
 #pragma once
 
+#include "IVideoShaderPreset.h"
 #include "addons/Addon.h"
-#include "xbmc/cores/RetroPlayer/IVideoShaderPreset.h"
 
 #include <map>
 #include <string>
 
-namespace SHADERPRESET {
+namespace SHADERPRESET
+{
   class CVideoShaderPreset;
 }
 

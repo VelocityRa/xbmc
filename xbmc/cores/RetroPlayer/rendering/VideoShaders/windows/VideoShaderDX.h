@@ -19,8 +19,8 @@
  *
  */
 
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShader.h"
-#include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
+#include "VideoShaderTextureDX.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShader.h"
 #include "cores/VideoPlayer/VideoRenderers/VideoShaders/WinVideoFilter.h"
 #include "guilib/D3DResource.h"
 

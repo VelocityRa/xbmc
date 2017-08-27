@@ -27,7 +27,7 @@
 #include <stdint.h>
 #include <vector>
 
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 
 struct SwsContext;

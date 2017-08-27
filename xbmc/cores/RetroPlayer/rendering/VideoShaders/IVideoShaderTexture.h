@@ -19,8 +19,8 @@
  *
  */
 
+#include "IVideoShaderPreset.h"
 #include "VideoShaderUtils.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
 
 #include <memory>
 #include <string>

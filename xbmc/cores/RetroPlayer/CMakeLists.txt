@@ -5,8 +5,7 @@ set(SOURCES RetroPlayer.cpp
             RetroPlayerVideo.cpp
 )
 
-set(HEADERS IVideoShaderPreset.h
-            RetroPlayer.h
+set(HEADERS RetroPlayer.h
             RetroPlayerAudio.h
             RetroPlayerAutoSave.h
             RetroPlayerDefines.h

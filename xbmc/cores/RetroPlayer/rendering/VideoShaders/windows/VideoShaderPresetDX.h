@@ -24,7 +24,7 @@
 
 #include "VideoShaderDX.h"
 #include "addons/binary-addons/AddonInstanceHandler.h"
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderPresetFactory.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderUtils.h"
 #include "games/GameServices.h"

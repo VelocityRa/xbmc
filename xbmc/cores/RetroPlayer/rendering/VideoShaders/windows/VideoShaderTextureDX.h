@@ -22,7 +22,7 @@
 #include <memory>
 #include <string>
 
-#include "cores/RetroPlayer/rendering/VideoShaders/VideoShaderTexture.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderTexture.h"
 #include "guilib/Texture.h"
 
 namespace KODI

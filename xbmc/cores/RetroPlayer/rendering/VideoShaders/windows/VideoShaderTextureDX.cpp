@@ -19,11 +19,11 @@
  */
 
 #include "VideoShaderTextureDX.h"
-
-#include "cores/RetroPlayer/IVideoShaderPreset.h"
-#include "d3d11.h"
+#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "utils/log.h"
 #include "windowing/WindowingFactory.h"
+
+#include "d3d11.h"
 
 #include <regex>
 
