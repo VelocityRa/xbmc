@@ -66,7 +66,7 @@ public:
   bool SetShaderPreset(const std::string& shaderPresetPath) override;
   const std::string& GetShaderPreset() const override;
   void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) override;
-  bool RenderUpdate(CPoint dest[], IShaderTexture& source, IShaderTexture& target) override;
+  bool RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target) override;
 
   //CShaderTextureDX* GetFirstTexture();
 
@@ -81,8 +81,8 @@ private:
   void UpdateViewPort();
   void UpdateMVPs();
   void DisposeVideoShaders();
-  void PrepareParameters(IShaderTexture& texture, CPoint dest[]);
-  static void RenderShader(IVideoShader& shader, IShaderTexture& source, IShaderTexture& target);
+  void PrepareParameters(const IShaderTexture* texture, CPoint dest[]);
+  static void RenderShader(IVideoShader* shader, IShaderTexture* source, IShaderTexture* target);
   bool HasPathFailed(const std::string& path) const;
 
   // Relative path of the currently loaded shader preset

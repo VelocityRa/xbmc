@@ -69,14 +69,14 @@ bool CVideoShaderDX::Create(const std::string& shaderSource, const std::string& 
   return true;
 }
 
-void CVideoShaderDX::Render(IShaderTexture& source, IShaderTexture& target)
+void CVideoShaderDX::Render(IShaderTexture* source, IShaderTexture* target)
 {
-  auto& sourceDX = static_cast<CShaderTextureCD3D&>(source);
-  auto& targetDX = static_cast<CShaderTextureCD3D&>(target);
+  auto* sourceDX = static_cast<CShaderTextureCD3D*>(source);
+  auto* targetDX = static_cast<CShaderTextureCD3D*>(target);
   // TODO: Doesn't work. Investigate calling this in Execute or binding the SRV first
   //g_Windowing.Get3D11Context()->PSSetSamplers(2, 1, &m_pSampler);
-  SetShaderParameters( sourceDX );
-  Execute({ targetDX }, 4);
+  SetShaderParameters( *sourceDX );
+  Execute({ *targetDX }, 4);
 }
 
 void CVideoShaderDX::SetShaderParameters(CD3DTexture& sourceTexture)

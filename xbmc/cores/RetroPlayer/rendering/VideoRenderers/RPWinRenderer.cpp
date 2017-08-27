@@ -241,7 +241,7 @@ void CRPWinRenderer::Render(CD3DTexture *target)
 
     // Render shaders and ouput to display
     m_targetTexture.SetTexture(target);
-    if (!m_shaderPreset->RenderUpdate(destPoints, *m_intermediateTarget, m_targetTexture))
+    if (!m_shaderPreset->RenderUpdate(destPoints, m_intermediateTarget.get(), &m_targetTexture))
     {
       m_shadersNeedUpdate = false;
       m_useShaderPreset = false;

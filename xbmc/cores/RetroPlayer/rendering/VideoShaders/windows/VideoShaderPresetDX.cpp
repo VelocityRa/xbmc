@@ -86,7 +86,7 @@ CVideoShaderPresetDX::~CVideoShaderPresetDX()
   g_Windowing.ApplyStateBlock();
 }
 
-bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, IShaderTexture& target)
+bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target)
 {
   // Handle resizing of the viewport (window)
   UpdateViewPort();
@@ -99,9 +99,9 @@ bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, I
 
   // At this point, the input video has been rendered to the first texture ("source", not m_pShaderTextures[0])
 
-  IVideoShader& firstShader = *m_pVideoShaders.front();
-  CShaderTextureCD3D& firstShaderTexture = *m_pShaderTextures.front();
-  IVideoShader& lastShader = *m_pVideoShaders.back();
+  IVideoShader* firstShader = m_pVideoShaders.front().get();
+  CShaderTextureCD3D* firstShaderTexture = m_pShaderTextures.front().get();
+  IVideoShader* lastShader = m_pVideoShaders.back().get();
 
   const unsigned passesNum = m_pShaderTextures.size();
 
@@ -122,14 +122,14 @@ bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, I
     // Apply all passes except the first and last one (which needs to be applied to the backbuffer)
     for (unsigned shaderIdx = 1; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
     {
-      IVideoShader& shader = *m_pVideoShaders[shaderIdx];
-      CShaderTextureCD3D& prevTexture = *m_pShaderTextures[shaderIdx - 1];
-      CShaderTextureCD3D& texture = *m_pShaderTextures[shaderIdx];
+      IVideoShader* shader = m_pVideoShaders[shaderIdx].get();
+      CShaderTextureCD3D* prevTexture = m_pShaderTextures[shaderIdx - 1].get();
+      CShaderTextureCD3D* texture = m_pShaderTextures[shaderIdx].get();
       RenderShader(shader, prevTexture, texture);
     }
 
     // Apply last pass and write to target (backbuffer) instead of the last texture
-    CShaderTextureCD3D& secToLastTexture = *m_pShaderTextures[m_pShaderTextures.size() - 2];
+    CShaderTextureCD3D* secToLastTexture = m_pShaderTextures[m_pShaderTextures.size() - 2].get();
     RenderShader(lastShader, secToLastTexture, target);
   }
 
@@ -141,15 +141,15 @@ bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture& source, I
   return true;
 }
 
-void CVideoShaderPresetDX::RenderShader(IVideoShader& shader, IShaderTexture& source, IShaderTexture& target)
+void CVideoShaderPresetDX::RenderShader(IVideoShader* shader, IShaderTexture* source, IShaderTexture* target)
 {
-  CRect newViewPort(0.f, 0.f, target.GetWidth(), target.GetHeight());
+  CRect newViewPort(0.f, 0.f, target->GetWidth(), target->GetHeight());
   CRect oldViewPort;
   g_Windowing.GetViewPort(oldViewPort);
   g_Windowing.SetViewPort(newViewPort);
   g_Windowing.SetScissors(newViewPort);
 
-  (&shader)->Render(source, target);
+  shader->Render(source, target);
 	// todo: needed?
   g_Windowing.SetViewPort(oldViewPort);
 }
@@ -413,7 +413,7 @@ bool CVideoShaderPresetDX::CreateBuffers()
   return true;
 }
 
-void CVideoShaderPresetDX::PrepareParameters(IShaderTexture& texture, CPoint dest[])
+void CVideoShaderPresetDX::PrepareParameters(const IShaderTexture* texture, CPoint dest[])
 {
   // prepare params for all shaders except the last (needs special flag)
   for (unsigned shaderIdx = 0; shaderIdx < m_pVideoShaders.size() - 1; ++shaderIdx)
@@ -427,13 +427,13 @@ void CVideoShaderPresetDX::PrepareParameters(IShaderTexture& texture, CPoint des
 
   if (m_dest[0] != dest[0] || m_dest[1] != dest[1]
     || m_dest[2] != dest[2] || m_dest[3] != dest[3]
-    || texture.GetWidth() != m_outputSize.x
-    || texture.GetHeight() != m_outputSize.y)
+    || texture->GetWidth() != m_outputSize.x
+    || texture->GetHeight() != m_outputSize.y)
   {
     for (size_t i = 0; i < 4; ++i)
       m_dest[i] = dest[i];
 
-    m_outputSize = { texture.GetWidth(), texture.GetHeight() };
+    m_outputSize = { texture->GetWidth(), texture->GetHeight() };
 
     // Update projection matrix and update video shaders
     UpdateMVPs();

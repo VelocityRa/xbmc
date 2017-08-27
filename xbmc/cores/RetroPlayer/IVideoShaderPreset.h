@@ -122,7 +122,7 @@ public:
   //todo: impl once and for all
   virtual bool ReadPresetFile(const std::string &presetPath) = 0;
 
-  virtual bool RenderUpdate(CPoint dest[], SHADER::IShaderTexture& source, SHADER::IShaderTexture& target) = 0;
+  virtual bool RenderUpdate(CPoint dest[], SHADER::IShaderTexture* source, SHADER::IShaderTexture* target) = 0;
   virtual void SetSpeed(double speed) = 0;
   virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) = 0;
   virtual bool SetShaderPreset(const std::string& shaderPresetPath) = 0;

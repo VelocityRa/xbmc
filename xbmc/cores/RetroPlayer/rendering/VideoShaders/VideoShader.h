@@ -33,7 +33,7 @@ namespace SHADER
   public:
     virtual bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
       IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod = 0) = 0;
-    virtual void Render(IShaderTexture& source, IShaderTexture& target) = 0;
+    virtual void Render(IShaderTexture* source, IShaderTexture* target) = 0;
     virtual void SetSizes(const float2& prevSize, const float2& nextSize) = 0;
     virtual bool CreateVertexBuffer(unsigned vertCount, unsigned vertSize) = 0;
     virtual bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* layout, unsigned numElements) = 0;

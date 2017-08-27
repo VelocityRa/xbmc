@@ -41,7 +41,7 @@ public:
   // implementation of IVideoShader
   bool Create(const std::string& shaderSource, const std::string& shaderPath, ShaderParameters shaderParameters,
     IShaderSampler* sampler, IShaderLuts luts, float2 viewPortSize, unsigned frameCountMod = 0) override;
-  void Render(IShaderTexture& source, IShaderTexture& target) override;
+  void Render(IShaderTexture* source, IShaderTexture* target) override;
   void SetSizes(const float2& prevSize, const float2& nextSize) override;
   void PrepareParameters(CPoint dest[4], bool isLastPass, float frameCount) override;
   CD3DEffect& GetEffect();
