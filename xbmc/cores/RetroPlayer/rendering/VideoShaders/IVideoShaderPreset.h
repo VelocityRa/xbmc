@@ -25,7 +25,6 @@
 #include "ServiceBroker.h"
 #include "guilib/Geometry.h"
 
-
 namespace KODI
 {
 namespace SHADER
@@ -105,29 +104,24 @@ namespace SHADER
   };
 
   using ShaderParameters = std::map<std::string, float>;
+
+  class IVideoShaderPreset
+  {
+  public:
+    using VideoShaderPasses = std::vector<VideoShaderPass>;
+
+    virtual ~IVideoShaderPreset() = default;
+
+    //todo: impl once and for all
+    virtual bool ReadPresetFile(const std::string &presetPath) = 0;
+
+    virtual bool RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target) = 0;
+    virtual void SetSpeed(double speed) = 0;
+    virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) = 0;
+    virtual bool SetShaderPreset(const std::string& shaderPresetPath) = 0;
+    virtual const std::string& GetShaderPreset() const = 0;
+
+    virtual VideoShaderPasses& GetPasses() = 0;
+  };
 }
-}
-
-using namespace KODI;
-
-namespace SHADERPRESET
-{
-class IVideoShaderPreset
-{
-public:
-  using VideoShaderPasses = std::vector<SHADER::VideoShaderPass>;
-
-  virtual ~IVideoShaderPreset() = default;
-
-  //todo: impl once and for all
-  virtual bool ReadPresetFile(const std::string &presetPath) = 0;
-
-  virtual bool RenderUpdate(CPoint dest[], SHADER::IShaderTexture* source, SHADER::IShaderTexture* target) = 0;
-  virtual void SetSpeed(double speed) = 0;
-  virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) = 0;
-  virtual bool SetShaderPreset(const std::string& shaderPresetPath) = 0;
-  virtual const std::string& GetShaderPreset() const = 0;
-
-  virtual VideoShaderPasses& GetPasses() = 0;
-};
 }

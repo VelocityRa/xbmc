@@ -29,6 +29,7 @@ namespace KODI
 {
 namespace SHADER
 {
+
 class CShaderSamplerDX : public IShaderSampler
 {
 public:

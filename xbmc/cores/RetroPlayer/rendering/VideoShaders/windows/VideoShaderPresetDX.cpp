@@ -35,7 +35,6 @@
 
 using namespace KODI;
 using namespace SHADER;
-using namespace SHADERPRESET;
 
 CVideoShaderPresetDX::CVideoShaderPresetDX(unsigned videoWidth, unsigned videoHeight)
   : m_videoSize(videoWidth, videoHeight)

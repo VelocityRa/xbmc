@@ -51,14 +51,14 @@ void CRPWinRenderer::Register()
 
 CRPWinRenderer::CRPWinRenderer()
   : m_bQueued(false)
-  , m_intermediateTarget(new CShaderTextureCD3D(new CD3DTexture()))
+  , m_intermediateTarget(new SHADER::CShaderTextureCD3D(new CD3DTexture()))
   , m_outputShader(new COutputShader)
-  , m_targetTexture(CShaderTextureCD3D())
+  , m_targetTexture(SHADER::CShaderTextureCD3D())
 {
   // Initialize CRPBaseRenderer
   m_scalingMethod = VS_SCALINGMETHOD_NEAREST;
 
-  m_shaderPreset.reset(new SHADERPRESET::CVideoShaderPresetDX());
+  m_shaderPreset.reset(new SHADER::CVideoShaderPresetDX());
 }
 
 CRPWinRenderer::~CRPWinRenderer()

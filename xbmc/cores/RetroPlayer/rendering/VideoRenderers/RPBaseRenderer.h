@@ -126,7 +126,7 @@ namespace RETRO
     // ====== Video Shader Members =====
   protected:
     void UpdateVideoShaders();
-    std::unique_ptr<SHADERPRESET::IVideoShaderPreset> m_shaderPreset;
+    std::unique_ptr<SHADER::IVideoShaderPreset> m_shaderPreset;
 
     std::string m_shaderPresetPath;
     bool m_shadersNeedUpdate;

@@ -116,7 +116,7 @@ void CShaderPresetAddon::ResetProperties(void)
   m_struct.toKodi.kodiInstance = this;
 }
 
-bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADERPRESET::IVideoShaderPreset& shaderPreset)
+bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADER::IVideoShaderPreset& shaderPreset)
 {
   bool bSuccess = false;
 
@@ -145,7 +145,7 @@ bool CShaderPresetAddon::LoadPreset(const std::string &presetPath, SHADERPRESET:
 
 // todo: instead of copying every parameter to every pass and resolving them later in
 //       GetShaderParameters, we should resolve which param goes to which shader in the add-on
-void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, SHADERPRESET::IVideoShaderPreset &shaderPreset)
+void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, SHADER::IVideoShaderPreset &shaderPreset)
 {
   if (shader.passes != nullptr)
   {

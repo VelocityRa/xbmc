@@ -36,11 +36,11 @@ namespace ADDON
   class CShaderPresetAddon;
 }
 
-using namespace KODI;
-using namespace SHADER;
-
-namespace SHADERPRESET
+namespace KODI
 {
+namespace SHADER
+{
+
 class CVideoShaderPresetDX : public IVideoShaderPreset
 {
 public:
@@ -133,4 +133,6 @@ private:
 
   VideoShaderPasses m_passes;
 };
-} // namespace SHADERPRESET
+
+}
+}
