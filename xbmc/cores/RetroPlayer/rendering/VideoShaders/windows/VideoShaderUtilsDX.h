@@ -32,9 +32,16 @@ namespace SHADER
   }
   */
 
-  struct CUSTOMVERTEX {
-    FLOAT x, y, z;  // vertex positions
-    FLOAT tu, tv;   // texture coordinates
+  struct CUSTOMVERTEX
+  {
+    // Vertex positions
+    FLOAT x;
+    FLOAT y;
+    FLOAT z;
+
+    // Texture coordinates
+    FLOAT tu;
+    FLOAT tv;
   };
 }
 }
