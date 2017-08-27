@@ -18,12 +18,12 @@
  *
  */
 
-#include "VideoShaderTexture.h"
+#include "VideoShaderUtils.h"
 
 using namespace KODI;
 using namespace SHADER;
 
-float2 SHADER::GetOptimalTextureSize(float2 videoSize)
+float2 CVideoShaderUtils::GetOptimalTextureSize(float2 videoSize)
 {
   unsigned sizeMax = videoSize.Max<unsigned>();
   unsigned size = 1;

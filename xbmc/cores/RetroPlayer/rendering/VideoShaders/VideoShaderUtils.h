@@ -31,7 +31,8 @@ namespace SHADER
     float2() : x(0), y(0) {}
 
     template<typename T>
-    float2(T x_, T y_) : x(static_cast<float>(x_)), y(static_cast<float>(y_)) {
+    float2(T x_, T y_) : x(static_cast<float>(x_)), y(static_cast<float>(y_))
+    {
       static_assert(std::is_arithmetic<T>::value, "Not an arithmetic type");
     }
 
@@ -47,6 +48,7 @@ namespace SHADER
       return DirectX::XMFLOAT2(static_cast<float>(x), static_cast<float>(y));
     }
 #endif
+
     float x, y;
   };
 
@@ -59,5 +61,14 @@ namespace SHADER
   {
     return !(lhs == rhs);
   }
+
+  class CVideoShaderUtils
+  {
+  public:
+    /*!
+     * \brief Returns smallest possible power-of-two sized texture
+     */
+    static float2 GetOptimalTextureSize(float2 videoSize);
+  };
 }
 }

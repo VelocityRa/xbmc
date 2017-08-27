@@ -65,8 +65,5 @@ namespace SHADER
   };
 
   using IShaderLuts = std::vector<std::shared_ptr<IShaderLut>>;
-
-  // Returns smallest possible power-of-two sized texture
-  float2 GetOptimalTextureSize(float2 videoSize);
 }
 }

@@ -1,5 +1,5 @@
 set(SOURCES VideoShaderPresetFactory.cpp
-            VideoShaderTexture.cpp
+            VideoShaderUtils.cpp
 )
 
 set(HEADERS VideoShaderPresetFactory.h
