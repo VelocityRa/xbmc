@@ -105,14 +105,6 @@ namespace SHADER
   };
 
   using ShaderParameters = std::map<std::string, float>;
-
-  //todo: move to other file
-
-  class IShaderSampler
-  {
-  public:
-    virtual ~IShaderSampler() = default;
-  };
 }
 }
 

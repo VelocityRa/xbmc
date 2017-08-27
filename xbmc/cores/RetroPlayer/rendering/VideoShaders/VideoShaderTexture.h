@@ -29,6 +29,12 @@ namespace KODI
 {
 namespace SHADER
 {
+  class IShaderSampler
+  {
+  public:
+    virtual ~IShaderSampler() = default;
+  };
+
   class IShaderTexture
   {
   public:
