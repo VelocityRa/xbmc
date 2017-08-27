@@ -27,9 +27,6 @@
 #include <string>
 #include <vector>
 
-using namespace KODI;
-using namespace SHADER;
-
 namespace ADDON
 {
   class CShaderPreset
@@ -68,7 +65,7 @@ namespace ADDON
    *  Wrapper class that wraps the shader presets add-on
    */
   class CShaderPresetAddon : public IAddonInstanceHandler,
-                             public IVideoShaderPresetLoader
+                             public KODI::SHADER::IVideoShaderPresetLoader
   {
   public:
     CShaderPresetAddon(const BinaryAddonBasePtr& addonInfo);
@@ -90,7 +87,7 @@ namespace ADDON
     const std::vector<std::string> &GetExtensions() const { return m_extensions; }
 
     // implementation of IVideoShaderPresetLoader
-    bool LoadPreset(const std::string &presetPath, SHADER::IVideoShaderPreset &shaderPreset) override;
+    bool LoadPreset(const std::string &presetPath, KODI::SHADER::IVideoShaderPreset &shaderPreset) override;
 
   private:
     /*!
@@ -98,13 +95,13 @@ namespace ADDON
      */
     void ResetProperties(void);
 
-    static void TranslateShaderPreset(const video_shader &shader, SHADER::IVideoShaderPreset& shaderPreset);
-    static void TranslateShaderPass(const video_shader_pass &pass, VideoShaderPass &shaderPass);
-    static void TranslateShaderLut(const video_shader_lut &lut, VideoShaderLut &shaderLut);
-    static void TranslateShaderParameter(const video_shader_parameter &param, VideoShaderParameter &shaderParam);
-    static FILTER_TYPE TranslateFilterType(SHADER_FILTER_TYPE type);
-    static WRAP_TYPE TranslateWrapType(SHADER_WRAP_TYPE type);
-    static SCALE_TYPE TranslateScaleType(SHADER_SCALE_TYPE type);
+    static void TranslateShaderPreset(const video_shader &shader, KODI::SHADER::IVideoShaderPreset& shaderPreset);
+    static void TranslateShaderPass(const video_shader_pass &pass, KODI::SHADER::VideoShaderPass &shaderPass);
+    static void TranslateShaderLut(const video_shader_lut &lut, KODI::SHADER::VideoShaderLut &shaderLut);
+    static void TranslateShaderParameter(const video_shader_parameter &param, KODI::SHADER::VideoShaderParameter &shaderParam);
+    static KODI::SHADER::FILTER_TYPE TranslateFilterType(SHADER_FILTER_TYPE type);
+    static KODI::SHADER::WRAP_TYPE TranslateWrapType(SHADER_WRAP_TYPE type);
+    static KODI::SHADER::SCALE_TYPE TranslateScaleType(SHADER_SCALE_TYPE type);
 
     /* @brief Cache for const char* members in PERIPHERAL_PROPERTIES */
 
