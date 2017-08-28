@@ -163,12 +163,6 @@ bool CRPWinRenderer::Supports(ESCALINGMETHOD method) const
   return false;
 }
 
-void CRPWinRenderer::SetSpeed(double speed)
-{
-  if (m_shaderPreset)
-    m_shaderPreset->SetSpeed(speed);
-}
-
 bool CRPWinRenderer::UploadTexture()
 {
   D3D11_MAPPED_SUBRESOURCE destlr;

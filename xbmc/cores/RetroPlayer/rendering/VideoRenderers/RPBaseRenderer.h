@@ -49,7 +49,7 @@ namespace RETRO
     virtual void Flush() = 0;
     virtual void RenderUpdate(bool clear, unsigned int alpha) = 0;
     virtual void Deinitialize() = 0;
-    virtual void SetSpeed(double speed) = 0;
+    void SetSpeed(double speed);
 
     // Feature support
     virtual bool Supports(ERENDERFEATURE feature) const = 0;

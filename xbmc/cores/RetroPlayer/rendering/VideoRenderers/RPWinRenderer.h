@@ -54,7 +54,6 @@ namespace RETRO
     void Deinitialize() override;
     bool Supports(ERENDERFEATURE feature) const override;
     bool Supports(ESCALINGMETHOD method) const override;
-    void SetSpeed(double speed) override;
 
   private:
     bool UploadTexture();

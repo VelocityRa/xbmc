@@ -48,7 +48,6 @@ namespace RETRO
     void Flush() override;
     void RenderUpdate(bool clear, unsigned int alpha) override;
     void Deinitialize() override;
-    void SetSpeed(double speed) override { }
     bool Supports(ERENDERFEATURE feature) const override;
     bool Supports(ESCALINGMETHOD method) const override;
 
