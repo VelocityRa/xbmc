@@ -179,7 +179,7 @@ void CShaderPresetAddon::TranslateShaderPreset(const video_shader &shader, SHADE
   }
 }
 
-void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, VideoShaderPass &shaderPass)
+void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, SHADER::VideoShaderPass &shaderPass)
 {
   shaderPass.sourcePath = pass.source_path ? pass.source_path : "";
   shaderPass.vertexSource = pass.vertex_source ? pass.vertex_source : "";

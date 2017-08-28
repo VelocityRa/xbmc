@@ -55,6 +55,8 @@ void CRPBaseRenderer::LoadGameSettings()
 {
   CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
 
+  // Transfer GUI settings to renderer
+  SetShaderPreset(gameSettings.VideoFilter());
   SetScalingMethod(gameSettings.ScalingMethod());
   SetViewMode(gameSettings.ViewMode());
 }
