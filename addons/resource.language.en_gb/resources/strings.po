@@ -8718,10 +8718,10 @@ msgctxt "#16298"
 msgid "Pixelate"
 msgstr ""
 
-#. Name of the video filter that blurs pixels to remove jagged edges
+#. Name of the video filter that smooths pixels to remove jagged edges
 #: xbmc/games/dialogs/osd/DialogGameVideoFilter.cpp
 msgctxt "#16299"
-msgid "Blur"
+msgid "Smooth"
 msgstr ""
 
 #: xbmc/video/dialogs/GUIDialogVideoSettings.cpp
