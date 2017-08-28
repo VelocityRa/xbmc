@@ -118,6 +118,9 @@ void CDialogGameVideoFilter::InitVideoFilters()
   {
     VideoFilterProperties videoFilter;
 
+    if (child->FirstChild() == nullptr)
+      continue;
+
     videoFilter.path = URIUtils::AddFileToFolder(basePath, child->FirstChild("path")->FirstChild()->Value());
     videoFilter.nameIndex = atoi(child->FirstChild("name")->FirstChild()->Value());
     videoFilter.categoryIndex = atoi(child->FirstChild("category")->FirstChild()->Value());
