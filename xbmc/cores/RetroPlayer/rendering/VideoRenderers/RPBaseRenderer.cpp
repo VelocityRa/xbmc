@@ -62,6 +62,12 @@ void CRPBaseRenderer::LoadGameSettings()
   SetViewMode(gameSettings.ViewMode());
 }
 
+void CRPBaseRenderer::SetSpeed(double speed)
+{
+  if (m_shaderPreset)
+    m_shaderPreset->SetSpeed(speed);
+}
+
 void CRPBaseRenderer::GetVideoRect(CRect &source, CRect &dest, CRect &view)
 {
   source = m_sourceRect;
