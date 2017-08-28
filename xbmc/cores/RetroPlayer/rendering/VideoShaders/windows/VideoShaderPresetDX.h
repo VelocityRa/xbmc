@@ -87,6 +87,7 @@ private:
   bool HasPathFailed(const std::string& path) const;
 
   // Relative path of the currently loaded shader preset
+  // If empty, it means that a preset is not currently loaded
   std::string m_presetPath;
 
   // VideoShaders for the shader passes
@@ -121,6 +122,7 @@ private:
   ID3D11SamplerState* m_pSampLinear = nullptr;
 
   // Set of paths of presets that are known to not load correctly
+  // Should not contain "" (empty path) because this signifies that a preset is not loaded
   std::set<std::string> m_failedPaths;
 
   // Array of vertices that comprise the full viewport

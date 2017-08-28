@@ -135,7 +135,7 @@ namespace RETRO
 
     std::string m_shaderPresetPath;
     bool m_shadersNeedUpdate;
-    bool m_useShaderPreset;
+    bool m_bUseShaderPreset;
   };
 }
 }

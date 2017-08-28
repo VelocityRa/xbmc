@@ -38,7 +38,7 @@ using namespace RETRO;
 CRPBaseRenderer::CRPBaseRenderer()
   : m_shaderPreset(nullptr)
   , m_shadersNeedUpdate(true)
-  , m_useShaderPreset(true)
+  , m_bUseShaderPreset(true)
 {
   m_oldDestRect.SetRect(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -536,7 +536,7 @@ void CRPBaseRenderer::UpdateVideoShaders()
 
       // We need to set this here because m_sourceRect isn't valid on init/pre-init
       m_shaderPreset->SetVideoSize(sourceWidth, sourceHeight);
-      m_useShaderPreset = m_shaderPreset->SetShaderPreset(m_shaderPresetPath);
+      m_bUseShaderPreset = m_shaderPreset->SetShaderPreset(m_shaderPresetPath);
     }
   }
 }

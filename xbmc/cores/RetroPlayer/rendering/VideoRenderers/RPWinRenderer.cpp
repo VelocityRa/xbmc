@@ -221,7 +221,7 @@ bool CRPWinRenderer::UploadTexture()
 void CRPWinRenderer::Render(CD3DTexture *target)
 {
   // Are we using video shaders?
-  if (m_useShaderPreset)
+  if (m_bUseShaderPreset)
   {
     // select destination rectangle
     CPoint destPoints[4];
@@ -244,7 +244,7 @@ void CRPWinRenderer::Render(CD3DTexture *target)
     if (!m_shaderPreset->RenderUpdate(destPoints, m_intermediateTarget.get(), &m_targetTexture))
     {
       m_shadersNeedUpdate = false;
-      m_useShaderPreset = false;
+      m_bUseShaderPreset = false;
     }
   }
   else

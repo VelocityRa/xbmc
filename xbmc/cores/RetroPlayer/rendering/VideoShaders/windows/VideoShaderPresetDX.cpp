@@ -166,10 +166,11 @@ bool CVideoShaderPresetDX::Update()
 
   if (m_bPresetNeedsUpdate && !HasPathFailed(m_presetPath))
   {
-    if (m_presetPath.empty())
-      return updateFailed("Preset path is empty");
-
     DisposeVideoShaders();
+
+    if (m_presetPath.empty())
+      // No preset should load, just return false, we shouldn't add "" to the failed paths
+      return false;
 
     if (!ReadPresetFile(m_presetPath))
     {
@@ -461,13 +462,9 @@ void CVideoShaderPresetDX::DisposeVideoShaders()
 
 bool CVideoShaderPresetDX::SetShaderPreset(const std::string& shaderPresetPath)
 {
-  if (shaderPresetPath != m_presetPath)
-  {
-    m_bPresetNeedsUpdate = true;
-    m_presetPath = shaderPresetPath;
-    return Update();
-  }
-  return false;
+  m_bPresetNeedsUpdate = true;
+  m_presetPath = shaderPresetPath;
+  return Update();
 }
 
 const std::string& CVideoShaderPresetDX::GetShaderPreset() const
