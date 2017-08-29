@@ -46,7 +46,7 @@ namespace GAME
     void InitVideoFilters();
 
     static std::string GetLocalizedString(uint32_t code);
-    static void GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod);
+    static void GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod, std::string &description);
 
     struct VideoFilterProperties
     {
@@ -57,6 +57,9 @@ namespace GAME
     };
 
     CFileItemList m_items;
+
+    //! \brief Set to true when a description has first been set
+    bool m_bHasDescription = false;
   };
 }
 }

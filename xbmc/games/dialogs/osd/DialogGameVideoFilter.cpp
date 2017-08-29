@@ -20,6 +20,7 @@
 
 #include "DialogGameVideoFilter.h"
 #include "cores/RetroPlayer/rendering/IRenderSettingsCallback.h"
+#include "guilib/GUITextBox.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/WindowIDs.h"
 #include "settings/GameSettings.h"
@@ -48,13 +49,14 @@ namespace
   {
     int nameIndex;
     int categoryIndex;
+    int descriptionIndex;
     ESCALINGMETHOD scalingMethod;
   };
 
   const std::vector<ScalingMethodProperties> scalingMethods =
   {
-    { 16298, 16301, VS_SCALINGMETHOD_NEAREST },
-    { 16299, 16302, VS_SCALINGMETHOD_LINEAR },
+    { 16296, 16301, 16298, VS_SCALINGMETHOD_NEAREST },
+    { 16297, 16302, 16299, VS_SCALINGMETHOD_LINEAR },
   };
 }
 
@@ -75,6 +77,8 @@ void CDialogGameVideoFilter::PreInit()
     CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(231)); // "None"
     m_items.Add(std::move(item));
   }
+
+  m_bHasDescription = false;
 }
 
 void CDialogGameVideoFilter::InitScalingMethods()
@@ -88,6 +92,7 @@ void CDialogGameVideoFilter::InitScalingMethods()
         CFileItemPtr item = std::make_shared<CFileItem>(g_localizeStrings.Get(scalingMethodProps.nameIndex));
         item->SetLabel2(g_localizeStrings.Get(scalingMethodProps.categoryIndex));
         item->SetProperty("game.scalingmethod", CVariant{ scalingMethodProps.scalingMethod });
+        item->SetProperty("game.videofilterdescription", CVariant{ g_localizeStrings.Get(scalingMethodProps.descriptionIndex) });
         m_items.Add(std::move(item));
       }
     }
@@ -148,10 +153,12 @@ void CDialogGameVideoFilter::InitVideoFilters()
 
     auto localizedName = GetLocalizedString(videoFilter.nameIndex);
     auto localizedCategory = GetLocalizedString(videoFilter.categoryIndex);
+    auto localizedDescription = GetLocalizedString(videoFilter.descriptionIndex);
 
     CFileItemPtr item = std::make_shared<CFileItem>(localizedName);
     item->SetLabel2(localizedCategory);
     item->SetProperty("game.videofilter", CVariant{ videoFilter.path });
+    item->SetProperty("game.videofilterdescription", CVariant{ localizedDescription });
 
     m_items.Add(std::move(item));
   }
@@ -171,7 +178,8 @@ void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
 
     std::string presetToSet;
     ESCALINGMETHOD scalingMethod;
-    GetProperties(*item, presetToSet, scalingMethod);
+    std::string description;
+    GetProperties(*item, presetToSet, scalingMethod, description);
 
     CGameSettings &gameSettings = CMediaSettings::GetInstance().GetCurrentGameSettings();
 
@@ -186,6 +194,14 @@ void CDialogGameVideoFilter::OnItemFocus(unsigned int index)
         m_callback->SetShaderPreset(presetToSet);
         m_callback->SetScalingMethod(scalingMethod);
       }
+
+      OnDescriptionChange(description);
+      m_bHasDescription = true;
+    }
+    else if (!m_bHasDescription)
+    {
+      OnDescriptionChange(description);
+      m_bHasDescription = true;
     }
   }
 }
@@ -198,7 +214,8 @@ unsigned int CDialogGameVideoFilter::GetFocusedItem() const
   {
     std::string presetToSet;
     ESCALINGMETHOD scalingMethod;
-    GetProperties(*m_items[i], presetToSet, scalingMethod);
+    std::string description;
+    GetProperties(*m_items[i], presetToSet, scalingMethod, description);
 
     if (presetToSet == gameSettings.VideoFilter() &&
         scalingMethod == gameSettings.ScalingMethod())
@@ -220,10 +237,11 @@ std::string CDialogGameVideoFilter::GetLocalizedString(uint32_t code)
   return g_localizeStrings.GetAddonString(PRESETS_ADDON_NAME, code);
 }
 
-void CDialogGameVideoFilter::GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod)
+void CDialogGameVideoFilter::GetProperties(const CFileItem &item, std::string &videoPreset, ESCALINGMETHOD &scalingMethod, std::string &description)
 {
   videoPreset = item.GetProperty("game.videofilter").asString();
   scalingMethod = VS_SCALINGMETHOD_NEAREST;
+  description = item.GetProperty("game.videofilterdescription").asString();
 
   std::string strScalingMethod = item.GetProperty("game.scalingmethod").asString();
   if (StringUtils::IsNaturalNumber(strScalingMethod))
