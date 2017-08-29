@@ -816,6 +816,9 @@ bool CD3DEffect::CreateEffect()
   //dwShaderFlags |= D3DCOMPILE_DEBUG;
   // Disable optimizations to further improve shader debugging
   //dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+  dwShaderFlags |= D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY;
+  dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
 #endif
 
   hr = D3DX11CompileEffectFromMemory(m_effectString.c_str(), m_effectString.length(), "", &definemacros[0], this,

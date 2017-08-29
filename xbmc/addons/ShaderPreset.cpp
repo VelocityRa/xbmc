@@ -212,6 +212,9 @@ void CShaderPresetAddon::TranslateShaderPass(const video_shader_pass &pass, SHAD
     break;
   }
 
+  shaderFbo.floatFramebuffer = fbo.fp_fbo;
+  shaderFbo.sRgbFramebuffer = fbo.srgb_fbo;
+
   shaderPass.mipmap = pass.mipmap;
 }
 

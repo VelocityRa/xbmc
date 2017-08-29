@@ -194,7 +194,7 @@ bool CVideoShaderPresetDX::Update()
       return updateFailed("Failed to create samplers");
   }
 
-  if (m_pVideoShaders.size() == 0)
+  if (m_pVideoShaders.empty())
     return false;
 
   // Each pass must have its own texture and the opposite is also true
