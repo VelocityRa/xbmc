@@ -48,29 +48,17 @@ public:
   explicit CVideoShaderPresetDX(unsigned videoWidth = 0, unsigned videoHeight = 0);
   ~CVideoShaderPresetDX() override;
 
-  /*!
-  * \brief Reads/Parses a shader preset file and loads its state to the
-  *        object. What this state is is implementation specific.
-  * \param presetPath Full path of the preset file.
-  * \return True on successful parsing, false on failed.
-  */
-  // todo: impl. once and for all
-  bool ReadPresetFile(const std::string &presetPath) override
-  {
-    return CServiceBroker::GetGameServices().VideoShaders().LoadPreset(presetPath, *this);
-  }
-
+  // implementation of IVideoShaderPreset
+  bool ReadPresetFile(const std::string& presetPath) override;
+  bool RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target) override;
+  void SetSpeed(double speed) override { m_speed = speed; }
+  void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) override;
+  bool SetShaderPreset(const std::string& shaderPresetPath) override;
+  const std::string& GetShaderPreset() const override;
   VideoShaderPasses& GetPasses() override { return m_passes; }
 
   bool Update();
-  bool SetShaderPreset(const std::string& shaderPresetPath) override;
-  const std::string& GetShaderPreset() const override;
-  void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) override;
-  bool RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target) override;
-
   //CShaderTextureDX* GetFirstTexture();
-
-  void SetSpeed(double speed) override { m_speed = speed; }
 
 private:
   bool CreateShaderTextures();

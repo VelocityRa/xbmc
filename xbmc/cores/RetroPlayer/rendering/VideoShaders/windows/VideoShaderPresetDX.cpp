@@ -85,6 +85,11 @@ CVideoShaderPresetDX::~CVideoShaderPresetDX()
   g_Windowing.ApplyStateBlock();
 }
 
+bool CVideoShaderPresetDX::ReadPresetFile(const std::string& presetPath)
+{
+  return CServiceBroker::GetGameServices().VideoShaders().LoadPreset(presetPath, *this);
+}
+
 bool CVideoShaderPresetDX::RenderUpdate(CPoint dest[], IShaderTexture* source, IShaderTexture* target)
 {
   // Save the viewport

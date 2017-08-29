@@ -40,7 +40,16 @@ namespace SHADER
   public:
     virtual ~IShaderTexture() = default;
 
+    /*!
+     * \brief Return width of texture
+     * \return Width of the texture in texels
+     */
     virtual float GetWidth() const = 0;
+
+    /*!
+    * \brief Return height of texture
+    * \return Height of the texture in texels
+    */
     virtual float GetHeight() const = 0;
   };
 
@@ -53,10 +62,28 @@ namespace SHADER
 
     virtual ~IShaderLut() = default;
 
+    /*!
+     * \brief Gets ID of LUT
+     * \return Unique name (ID) of look up texture
+     */
     const std::string& GetID() const { return m_id; }
+
+    /*!
+    * \brief Gets full path of LUT
+    * \return Full path of look up texture
+    */
     const std::string& GetPath() const { return m_path; }
 
+    /*!
+    * \brief Gets sampler of LUT
+    * \return Pointer to the sampler associated with the LUT
+    */
     virtual IShaderSampler* GetSampler() = 0;
+
+    /*!
+    * \brief Gets sampler of LUT
+    * \return Pointer to the texture where the LUT data is stored in
+    */
     virtual IShaderTexture* GetTexture() = 0;
 
   protected:
