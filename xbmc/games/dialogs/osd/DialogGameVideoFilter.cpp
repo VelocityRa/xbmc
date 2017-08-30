@@ -127,17 +127,21 @@ void CDialogGameVideoFilter::InitVideoFilters()
       continue;
 
     TiXmlNode* pathNode;
-    if(((pathNode = child->FirstChild("path"))) && ((pathNode = pathNode->FirstChild())))
-      videoFilter.path = URIUtils::AddFileToFolder(basePath, pathNode->Value());
+    if((pathNode = child->FirstChild("path")))
+      if((pathNode = pathNode->FirstChild()))
+        videoFilter.path = URIUtils::AddFileToFolder(basePath, pathNode->Value());
     TiXmlNode* nameIndexNode;
-    if (((nameIndexNode = child->FirstChild("name"))) && ((nameIndexNode = nameIndexNode->FirstChild())))
-      videoFilter.nameIndex = atoi(nameIndexNode->Value());
+    if ((nameIndexNode = child->FirstChild("name")))
+      if ((nameIndexNode = nameIndexNode->FirstChild()))
+        videoFilter.nameIndex = atoi(nameIndexNode->Value());
     TiXmlNode* categoryIndexNode;
-    if (((categoryIndexNode = child->FirstChild("category"))) && ((categoryIndexNode = categoryIndexNode->FirstChild())))
-      videoFilter.categoryIndex = atoi(categoryIndexNode->Value());
+    if ((categoryIndexNode = child->FirstChild("category")))
+      if ((categoryIndexNode = categoryIndexNode->FirstChild()))
+        videoFilter.categoryIndex = atoi(categoryIndexNode->Value());
     TiXmlNode* descriptionNode;
-    if (((descriptionNode = child->FirstChild("description"))) && ((descriptionNode = descriptionNode->FirstChild())))
-      videoFilter.descriptionIndex = atoi(descriptionNode->Value());
+    if ((descriptionNode = child->FirstChild("description")))
+      if((descriptionNode = descriptionNode->FirstChild()))
+        videoFilter.descriptionIndex = atoi(descriptionNode->Value());
 
     videoFilters.emplace_back(videoFilter);
   }
