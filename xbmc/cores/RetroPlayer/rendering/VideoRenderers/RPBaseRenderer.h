@@ -45,7 +45,7 @@ namespace RETRO
     virtual bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) = 0;
     virtual void AddFrame(const uint8_t* data, unsigned int size) = 0;
     virtual void Flush() = 0;
-    virtual void RenderUpdate(bool clear, unsigned int alpha) = 0;
+    virtual void RenderUpdate() = 0;
     virtual void Deinitialize() = 0;
     virtual void SetSpeed(double speed) = 0;
 
@@ -83,6 +83,16 @@ namespace RETRO
 
     bool IsNonLinearStretch() const { return m_bNonLinearStretch; }
 
+    /*!
+     * \brief Performs whatever nessesary before rendering the frame. Must be called before RenderUpdate()
+     */
+    void PreRender(bool clear, unsigned int alpha);
+
+    /*!
+    * \brief Performs whatever nessesary after a frame has been rendered. Must be called after RenderUpdate()
+    */
+    void PostRender();
+
   protected:
     /*!
      * \brief Call this from the base class to initialize render settings
@@ -102,6 +112,7 @@ namespace RETRO
     unsigned int m_sourceWidth = 0;
     unsigned int m_sourceHeight = 0;
     unsigned int m_renderOrientation = 0; // Degrees counter-clockwise
+    CPoint m_destPoints[4];
 
     /*!
      * \brief Orientation of the previous frame

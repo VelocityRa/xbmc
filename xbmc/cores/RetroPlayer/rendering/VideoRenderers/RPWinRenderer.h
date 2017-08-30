@@ -51,7 +51,7 @@ namespace RETRO
     bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) override;
     void AddFrame(const uint8_t* data, unsigned int size) override;
     void Flush() override;
-    void RenderUpdate(bool clear, unsigned int alpha) override;
+    void RenderUpdate() override;
     void Deinitialize() override;
     bool Supports(ERENDERFEATURE feature) const override;
     bool Supports(ESCALINGMETHOD method) const override;

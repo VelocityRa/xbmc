@@ -120,19 +120,10 @@ void CRPWinRenderer::Flush()
   m_bQueued = false;
 }
 
-void CRPWinRenderer::RenderUpdate(bool clear, unsigned int alpha)
+void CRPWinRenderer::RenderUpdate()
 {
-  if (clear)
-    g_graphicsContext.Clear(g_Windowing.UseLimitedColor() ? 0x101010 : 0);
-
   if (!m_bConfigured)
     return;
-
-  g_Windowing.SetAlphaBlendEnable(alpha < 255);
-
-  ManageRenderArea();
-
-  UpdateVideoShaders();
 
   if (m_bQueued)
   {
@@ -223,25 +214,9 @@ void CRPWinRenderer::Render(CD3DTexture *target)
   // Are we using video shaders?
   if (m_bUseShaderPreset)
   {
-    // select destination rectangle
-    CPoint destPoints[4];
-    if (m_renderOrientation)
-    {
-      for (size_t i = 0; i < 4; i++)
-        destPoints[i] = m_rotatedDestCoords[i];
-    }
-    else
-    {
-      CRect destRect = g_graphicsContext.StereoCorrection(m_destRect);
-      destPoints[0] = { destRect.x1, destRect.y1 };
-      destPoints[1] = { destRect.x2, destRect.y1 };
-      destPoints[2] = { destRect.x2, destRect.y2 };
-      destPoints[3] = { destRect.x1, destRect.y2 };
-    }
-
     // Render shaders and ouput to display
     m_targetTexture.SetTexture(target);
-    if (!m_shaderPreset->RenderUpdate(destPoints, m_intermediateTarget.get(), &m_targetTexture))
+    if (!m_shaderPreset->RenderUpdate(m_destPoints, m_intermediateTarget.get(), &m_targetTexture))
     {
       m_shadersNeedUpdate = false;
       m_bUseShaderPreset = false;
@@ -257,5 +232,4 @@ void CRPWinRenderer::Render(CD3DTexture *target)
         g_Windowing.UseLimitedColor() ? 1 : 0, 0.5f, 0.5f);
     }
   }
-  g_Windowing.ApplyStateBlock();
 }
