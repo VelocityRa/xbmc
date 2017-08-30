@@ -55,8 +55,8 @@ namespace
 
   const std::vector<ScalingMethodProperties> scalingMethods =
   {
-    { 16296, 16301, 16298, VS_SCALINGMETHOD_NEAREST },
-    { 16297, 16302, 16299, VS_SCALINGMETHOD_LINEAR },
+    { 16301, 16296, 16298, VS_SCALINGMETHOD_NEAREST },
+    { 16302, 16297, 16299, VS_SCALINGMETHOD_LINEAR },
   };
 }
 
