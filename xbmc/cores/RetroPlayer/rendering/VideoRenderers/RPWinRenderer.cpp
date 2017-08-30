@@ -118,7 +118,7 @@ void CRPWinRenderer::Flush()
   m_bQueued = false;
 }
 
-void CRPWinRenderer::RenderUpdate(unsigned int alpha)
+void CRPWinRenderer::RenderUpdate(bool clear, unsigned int alpha)
 {
   if (!m_bConfigured)
     return;
