@@ -154,7 +154,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>100%</width>
-			<bottom>410</bottom>
+			<bottom>540</bottom>
 			<texturefocus />
 			<texturenofocus />
 			<onclick>Action(close)</onclick>
@@ -169,7 +169,7 @@
 				<texture colordiffuse="E6FFFFFF">dialogs/dialog-bg-nobo.png</texture>
 			</control>
 			<control type="panel" id="11">
-				<top>40</top>
+				<top>30</top>
 				<scrolltime tween="sine">200</scrolltime>
 				<orientation>horizontal</orientation>
 				<itemlayout width="480" height="340">
@@ -243,11 +243,11 @@
 			</control>
 			<control type="textbox" id="12">
 				<description>Description Area</description>
-				<top>420</top>
+				<top>410</top>
 				<left>100</left>
 				<right>100</right>
 				<height>200</height>
-				<font>font27</font>
+				<font>font37</font>
 				<align>justify</align>
 				<shadowcolor>text_shadow</shadowcolor>
 				<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
@@ -275,7 +275,7 @@
 				<texture colordiffuse="E6FFFFFF">dialogs/dialog-bg-nobo.png</texture>
 			</control>
 			<control type="panel" id="11">
-				<top>50</top>
+				<top>30</top>
 				<scrolltime tween="sine">200</scrolltime>
 				<orientation>horizontal</orientation>
 				<itemlayout width="480" height="340">
