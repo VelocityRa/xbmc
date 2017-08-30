@@ -45,7 +45,7 @@ namespace RETRO
     virtual bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) = 0;
     virtual void AddFrame(const uint8_t* data, unsigned int size) = 0;
     virtual void Flush() = 0;
-    virtual void RenderUpdate() = 0;
+    virtual void RenderUpdate(unsigned int alpha) = 0;
     virtual void Deinitialize() = 0;
     virtual void SetSpeed(double speed) = 0;
 
@@ -86,7 +86,7 @@ namespace RETRO
     /*!
      * \brief Performs whatever nessesary before rendering the frame. Must be called before RenderUpdate()
      */
-    void PreRender(bool clear, unsigned int alpha);
+    void PreRender(bool clear);
 
     /*!
     * \brief Performs whatever nessesary after a frame has been rendered. Must be called after RenderUpdate()

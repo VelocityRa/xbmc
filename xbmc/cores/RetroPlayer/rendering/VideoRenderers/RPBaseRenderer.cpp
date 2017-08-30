@@ -19,7 +19,6 @@
  */
 
 #include "RPBaseRenderer.h"
-#include "ServiceBroker.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIWindowManager.h"
@@ -28,6 +27,7 @@
 #include "settings/Settings.h"
 #include "utils/MathUtils.h"
 #include "windowing/WindowingFactory.h"
+#include "ServiceBroker.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -544,7 +544,7 @@ void CRPBaseRenderer::UpdateVideoShaders()
   }
 }
 
-void CRPBaseRenderer::PreRender(bool clear, unsigned int alpha)
+void CRPBaseRenderer::PreRender(bool clear)
 {
   if (m_bUseShaderPreset)
   {
@@ -566,9 +566,6 @@ void CRPBaseRenderer::PreRender(bool clear, unsigned int alpha)
   // Clear screen
   if (clear)
     g_graphicsContext.Clear(g_Windowing.UseLimitedColor() ? 0x101010 : 0);
-
-  // Set alpha blend state
-  g_Windowing.SetAlphaBlendEnable(alpha < 255);
 
   ManageRenderArea();
 

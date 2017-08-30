@@ -34,8 +34,6 @@ extern "C" {
 #include "libswscale/swscale.h"
 }
 
-#include <cstring>
-
 using namespace KODI;
 using namespace RETRO;
 
@@ -120,7 +118,7 @@ void CRPWinRenderer::Flush()
   m_bQueued = false;
 }
 
-void CRPWinRenderer::RenderUpdate()
+void CRPWinRenderer::RenderUpdate(unsigned int alpha)
 {
   if (!m_bConfigured)
     return;
@@ -130,6 +128,9 @@ void CRPWinRenderer::RenderUpdate()
     if (UploadTexture())
       m_bQueued = false;
   }
+
+  // Set alpha blend state
+  g_Windowing.SetAlphaBlendEnable(alpha < 255);
 
   Render(g_Windowing.GetBackBuffer());
 }

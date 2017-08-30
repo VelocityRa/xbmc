@@ -27,7 +27,6 @@
 #include <stdint.h>
 #include <vector>
 
-#include "cores/RetroPlayer/rendering/VideoShaders/IVideoShaderPreset.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/windows/VideoShaderTextureDX.h"
 
 struct SwsContext;
@@ -51,7 +50,7 @@ namespace RETRO
     bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) override;
     void AddFrame(const uint8_t* data, unsigned int size) override;
     void Flush() override;
-    void RenderUpdate() override;
+    void RenderUpdate(unsigned int alpha) override;
     void Deinitialize() override;
     bool Supports(ERENDERFEATURE feature) const override;
     bool Supports(ESCALINGMETHOD method) const override;

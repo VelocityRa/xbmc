@@ -100,8 +100,8 @@ void CRPRenderManager::Render(bool clear, DWORD alpha)
 
   CSingleExit exitLock(g_graphicsContext);
 
-  m_renderer->PreRender(clear, alpha);
-  m_renderer->RenderUpdate();
+  m_renderer->PreRender(clear);
+  m_renderer->RenderUpdate(alpha);
   m_renderer->PostRender();
 }
 
