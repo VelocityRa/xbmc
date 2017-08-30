@@ -19,10 +19,12 @@
  */
 #pragma once
 
+#include <memory>
 #include <stdint.h>
 
 #include "cores/IPlayer.h"
 #include "guilib/Geometry.h"
+
 #include "libavutil/pixfmt.h"
 
 
@@ -45,7 +47,7 @@ namespace RETRO
     virtual bool Configure(AVPixelFormat format, unsigned int width, unsigned int height, unsigned int orientation) = 0;
     virtual void AddFrame(const uint8_t* data, unsigned int size) = 0;
     virtual void Flush() = 0;
-    virtual void RenderUpdate(unsigned int alpha) = 0;
+    virtual void RenderUpdate(bool clear, unsigned int alpha) = 0;
     virtual void Deinitialize() = 0;
     virtual void SetSpeed(double speed) = 0;
 
