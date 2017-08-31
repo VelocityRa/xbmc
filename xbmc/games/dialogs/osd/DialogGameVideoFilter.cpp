@@ -127,8 +127,8 @@ void CDialogGameVideoFilter::InitVideoFilters()
       continue;
 
     TiXmlNode* pathNode;
-    if((pathNode = child->FirstChild("path")))
-      if((pathNode = pathNode->FirstChild()))
+    if ((pathNode = child->FirstChild("path")))
+      if ((pathNode = pathNode->FirstChild()))
         videoFilter.path = URIUtils::AddFileToFolder(basePath, pathNode->Value());
     TiXmlNode* nameIndexNode;
     if ((nameIndexNode = child->FirstChild("name")))
@@ -140,7 +140,7 @@ void CDialogGameVideoFilter::InitVideoFilters()
         videoFilter.categoryIndex = atoi(categoryIndexNode->Value());
     TiXmlNode* descriptionNode;
     if ((descriptionNode = child->FirstChild("description")))
-      if((descriptionNode = descriptionNode->FirstChild()))
+      if ((descriptionNode = descriptionNode->FirstChild()))
         videoFilter.descriptionIndex = atoi(descriptionNode->Value());
 
     videoFilters.emplace_back(videoFilter);
