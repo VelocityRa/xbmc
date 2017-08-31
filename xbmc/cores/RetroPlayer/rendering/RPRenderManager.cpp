@@ -132,6 +132,16 @@ bool CRPRenderManager::SupportsScalingMethod(ESCALINGMETHOD method) const
   return false;
 }
 
+const std::string& CRPRenderManager::GetShaderPreset() const
+{
+  return m_renderer->GetShaderPreset();
+}
+
+void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
+{
+  m_renderer->SetShaderPreset(shaderPresetPath);
+}
+
 ESCALINGMETHOD CRPRenderManager::GetScalingMethod() const
 {
   if (m_renderer)
@@ -166,16 +176,6 @@ void CRPRenderManager::SetSpeed(double speed)
 {
   if (m_renderer)
     m_renderer->SetSpeed(speed);
-}
-
-void CRPRenderManager::SetShaderPreset(const std::string& shaderPresetPath)
-{
-  m_renderer->SetShaderPreset(shaderPresetPath);
-}
-
-const std::string& CRPRenderManager::GetShaderPreset() const
-{
-  return m_renderer->GetShaderPreset();
 }
 
 void CRPRenderManager::UpdateResolution()

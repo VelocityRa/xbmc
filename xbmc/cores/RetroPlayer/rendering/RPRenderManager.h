@@ -55,12 +55,12 @@ namespace RETRO
     // Implementation of IRenderSettingsCallback
     bool SupportsRenderFeature(ERENDERFEATURE feature) const override;
     bool SupportsScalingMethod(ESCALINGMETHOD method) const override;
+    const std::string &GetShaderPreset() const override;
+    void SetShaderPreset(const std::string &shaderPresetPath) override;
     ESCALINGMETHOD GetScalingMethod() const override;
     void SetScalingMethod(ESCALINGMETHOD scalingMethod) override;
     ViewMode GetRenderViewMode() const override;
     void SetRenderViewMode(ViewMode mode) override;
-    void SetShaderPreset(const std::string &shaderPresetPath) override;
-    const std::string &GetShaderPreset() const override;
 
   private:
     void UpdateResolution();
