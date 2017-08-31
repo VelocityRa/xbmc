@@ -102,7 +102,6 @@ namespace RETRO
      */
     void LoadGameSettings();
 
-    void CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height);
     void CalcNormalRenderRect(float offsetX, float offsetY, float width, float height, float inputFrameRatio, float zoomAmount);
     virtual void ManageRenderArea();
     virtual void ReorderDrawPoints();

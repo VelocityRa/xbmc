@@ -65,7 +65,6 @@ bool CRPRendererOpenGLES::Configure(AVPixelFormat format, unsigned int width, un
   m_sourceHeight = height;
   m_renderOrientation = orientation;
 
-  CalculateFrameAspectRatio(width, height);
   SetViewMode(CMediaSettings::GetInstance().GetCurrentGameSettings().ViewMode());
   ManageRenderArea();
 
