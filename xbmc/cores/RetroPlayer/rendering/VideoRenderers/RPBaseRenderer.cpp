@@ -77,10 +77,7 @@ void CRPBaseRenderer::GetVideoRect(CRect &source, CRect &dest, CRect &view)
 
 float CRPBaseRenderer::GetAspectRatio() const
 {
-  float width = static_cast<float>(m_sourceWidth);
-  float height = static_cast<float>(m_sourceHeight);
-
-  return m_sourceFrameRatio * width / height * m_sourceHeight / m_sourceWidth;
+  return m_sourceFrameRatio;
 }
 
 const std::string& CRPBaseRenderer::GetShaderPreset() const
