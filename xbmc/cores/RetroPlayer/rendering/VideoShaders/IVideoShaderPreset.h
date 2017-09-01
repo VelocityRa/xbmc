@@ -141,7 +141,7 @@ namespace SHADER
      * \param videoWidth Height of the source frame in pixels
      * \param videoHeight Height of the source frame in pixels
      */
-    virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight);
+    virtual void SetVideoSize(const unsigned videoWidth, const unsigned videoHeight) = 0;
 
     /*!
      * \brief Set the preset to be rendered on the next frame
@@ -162,9 +162,5 @@ namespace SHADER
      */
     virtual VideoShaderPasses& GetPasses() = 0;
   };
-
-  inline void IVideoShaderPreset::SetVideoSize(const unsigned videoWidth, const unsigned videoHeight)
-  {
-  }
 }
 }
