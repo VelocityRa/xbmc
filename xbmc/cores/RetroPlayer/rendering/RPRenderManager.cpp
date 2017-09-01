@@ -74,12 +74,6 @@ bool CRPRenderManager::AddFrame(const uint8_t* data, unsigned int size)
   return true;
 }
 
-bool CRPRenderManager::IsConfigured() const
-{
-  CSingleLock lock(m_stateMutex);
-  return m_state == RENDER_STATE::CONFIGURED;
-}
-
 void CRPRenderManager::FrameMove()
 {
   UpdateResolution();

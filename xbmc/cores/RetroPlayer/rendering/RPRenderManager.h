@@ -46,7 +46,6 @@ namespace RETRO
     void SetSpeed(double speed);
 
     // Functions called from render thread
-    bool IsConfigured() const;
     void FrameMove();
     void Render(bool clear, DWORD alpha);
     void Flush();
