@@ -53,7 +53,7 @@ namespace RETRO
 
   protected:
     virtual void CreateTexture();
-    virtual void UploadTexture();
+    virtual void UploadTexture(const uint8_t* textureData, unsigned int width, unsigned int height);
     virtual void DeleteTexture();
 
     /*!
