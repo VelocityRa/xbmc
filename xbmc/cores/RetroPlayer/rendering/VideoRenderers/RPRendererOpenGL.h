@@ -35,7 +35,7 @@ namespace RETRO
     ~CRPRendererOpenGL() override = default;
 
   protected:
-    void UploadTexture() override;
+    void UploadTexture(const uint8_t* textureData, unsigned int width, unsigned int height) override;
   };
 }
 }

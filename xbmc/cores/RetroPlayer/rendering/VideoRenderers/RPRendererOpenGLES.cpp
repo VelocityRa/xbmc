@@ -216,7 +216,7 @@ void CRPRendererOpenGLES::CreateTexture()
   glDisable(m_textureTarget);
 }
 
-void CRPRendererOpenGLES::UploadTexture()
+void CRPRendererOpenGLES::UploadTexture(const uint8_t* textureData, unsigned int width, unsigned int height)
 {
   glEnable(m_textureTarget);
 
@@ -226,7 +226,7 @@ void CRPRendererOpenGLES::UploadTexture()
   const unsigned datatype = GL_UNSIGNED_BYTE;
 
   glBindTexture(m_textureTarget, m_textureId);
-  glTexSubImage2D(m_textureTarget, 0, 0, 0, m_sourceWidth, m_sourceHeight, GL_BGRA, datatype, m_texture.data());
+  glTexSubImage2D(m_textureTarget, 0, 0, 0, width, height, GL_BGRA, datatype, textureData);
 
   glBindTexture(m_textureTarget, 0);
 
@@ -300,7 +300,7 @@ void CRPRendererOpenGLES::Render()
     CreateTexture();
 
   // Upload texture
-  UploadTexture();
+  UploadTexture(m_texture.data(), m_sourceWidth, m_sourceHeight);
 
   // Render texture
   glEnable(m_textureTarget);

@@ -41,7 +41,7 @@ CRPRendererOpenGL::CRPRendererOpenGL()
   m_clearColour = g_Windowing.UseLimitedColor() ? (16.0f / 0xff) : 0.0f;
 }
 
-void CRPRendererOpenGL::UploadTexture()
+void CRPRendererOpenGL::UploadTexture(const uint8_t* textureData, unsigned int width, unsigned int height)
 {
   glEnable(m_textureTarget);
 
@@ -53,7 +53,7 @@ void CRPRendererOpenGL::UploadTexture()
   glPixelStorei(GL_UNPACK_ROW_LENGTH, m_sourceWidth);
 
   glBindTexture(m_textureTarget, m_textureId);
-  glTexSubImage2D(m_textureTarget, 0, 0, 0, m_sourceWidth, m_sourceHeight, GL_BGRA, datatype, m_texture.data());
+  glTexSubImage2D(m_textureTarget, 0, 0, 0, width, height, GL_BGRA, datatype, textureData);
 
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
