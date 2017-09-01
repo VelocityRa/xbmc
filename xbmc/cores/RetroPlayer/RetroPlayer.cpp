@@ -497,7 +497,7 @@ void CRetroPlayer::TriggerUpdateResolution()
 
 bool CRetroPlayer::IsRenderingVideo()
 {
-  return m_renderManager->IsConfigured();
+  return true;
 }
 
 void CRetroPlayer::UpdateClockSync(bool enabled)
