@@ -60,6 +60,7 @@ namespace RETRO
 
     // Feature support
     virtual bool Supports(ERENDERFEATURE feature) const = 0;
+    virtual bool Supports(ESCALINGMETHOD method) const = 0;
     bool IsCompatible(const CRenderVideoSettings &settings) const;
     virtual ESCALINGMETHOD GetDefaultScalingMethod() const = 0;
 

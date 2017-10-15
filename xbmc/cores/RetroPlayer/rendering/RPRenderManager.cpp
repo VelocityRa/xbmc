@@ -269,7 +269,13 @@ bool CRPRenderManager::SupportsScalingMethod(ESCALINGMETHOD method) const
   {
     CRenderVideoSettings renderSettings;
     renderSettings.SetScalingMethod(method);
-    if (bufferPool->IsCompatible(renderSettings))
+    bool hasAtLeastOneRenderer = !m_renderers.empty();
+    bool bufferPoolSupport = bufferPool->IsCompatible(renderSettings);
+    bool renderersSupport = std::all_of(m_renderers.begin(), m_renderers.end(),
+      [method](auto renderer) { return renderer->Supports(method); });
+
+    // If method is supported by the buffer pool and all the renderers, the manager supports it
+    if (hasAtLeastOneRenderer && bufferPoolSupport && renderersSupport)
       return true;
   }
 
@@ -502,8 +508,9 @@ CRenderVideoSettings CRPRenderManager::GetEffectiveSettings(const IGUIRenderSett
   }
 
   // Sanitize settings
-  if (effectiveSettings.GetScalingMethod() == VS_SCALINGMETHOD_AUTO)
+  ESCALINGMETHOD scalingMethod = effectiveSettings.GetScalingMethod();
+  // If the method is AUTO or unsupported by the manager, we need to set it to the default
+  if (scalingMethod == VS_SCALINGMETHOD_AUTO || !SupportsScalingMethod(scalingMethod))
     effectiveSettings.SetScalingMethod(m_processInfo.GetDefaultScalingMethod());
-
   return effectiveSettings;
 }

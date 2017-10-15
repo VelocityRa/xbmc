@@ -195,9 +195,10 @@ bool CWinRenderBufferPool::ConfigureDX(DXGI_FORMAT dxFormat)
 // --- CRPWinRenderer ----------------------------------------------------------
 
 CRPWinRenderer::CRPWinRenderer(const CRenderSettings &renderSettings, CRenderContext &context, std::shared_ptr<IRenderBufferPool> bufferPool) :
-  CRPBaseRenderer(renderSettings, context, std::move(bufferPool)),
-  m_outputShader(new CRPWinOutputShader)
+  CRPBaseRenderer(renderSettings, context, std::move(bufferPool))
 {
+  ESCALINGMETHOD defaultScalingMethod = renderSettings.VideoSettings().GetScalingMethod();
+  CompileOutputShaders(defaultScalingMethod);
 }
 
 CRPWinRenderer::~CRPWinRenderer()
@@ -205,10 +206,39 @@ CRPWinRenderer::~CRPWinRenderer()
   Deinitialize();
 }
 
-void CRPWinRenderer::CompileOutputShader(ESCALINGMETHOD scalingMethod)
+void CRPWinRenderer::CompileOutputShaders(ESCALINGMETHOD defaultScalingMethod)
 {
-  if (!m_outputShader->Create(scalingMethod))
-    CLog::Log(LOGERROR, "RPWinRenderer: Unable to create output shader");
+  auto compileAndRegisterShader = [this] (ESCALINGMETHOD scalingMethod, const char* scalingMethodString)
+  {
+    CRPWinOutputShader* outputShader = new CRPWinOutputShader;
+    if (!outputShader->Create(scalingMethod))
+      CLog::Log(LOGERROR, "RPWinRenderer: Unable to create output shader (%s)", scalingMethodString);
+    m_outputShaders[scalingMethod].reset(outputShader);
+  };
+
+  // compile with linear scaling
+  compileAndRegisterShader(VS_SCALINGMETHOD_LINEAR, "linear");
+
+  // compile with nearest neighbor scaling
+  compileAndRegisterShader(VS_SCALINGMETHOD_NEAREST, "nearest");
+
+  // Fill all remaining keys
+
+  // Use `defaultScalingMethod` if our output shader implements it
+  // if not, default to nearest neighbor scaling
+  std::shared_ptr<CRPWinOutputShader> defaultScalingShader;
+  if (m_outputShaders.count(defaultScalingMethod) != 0)
+    defaultScalingShader = m_outputShaders[defaultScalingMethod];
+  else
+    defaultScalingShader = m_outputShaders[VS_SCALINGMETHOD_NEAREST];
+
+  for (int s = VS_SCALINGMETHOD_NEAREST; s != VS_SCALINGMETHOD_MAX; ++s)
+  {
+    auto scalingMethod = static_cast<ESCALINGMETHOD>(s);
+
+    if (m_outputShaders.count(scalingMethod) == 0)
+      m_outputShaders[scalingMethod] = defaultScalingShader;
+  }
 }
 
 bool CRPWinRenderer::ConfigureInternal()
@@ -218,9 +248,6 @@ bool CRPWinRenderer::ConfigureInternal()
   DXGI_FORMAT targetDxFormat = renderingDx->GetBackBuffer()->GetFormat();
 
   static_cast<CWinRenderBufferPool*>(m_bufferPool.get())->ConfigureDX(targetDxFormat);
-
-  // Compile output shader
-  HandleScalingChange();
 
   return true;
 }
@@ -233,16 +260,6 @@ void CRPWinRenderer::RenderInternal(bool clear, uint8_t alpha)
   renderingDx->SetAlphaBlendEnable(alpha < 0xFF);
 
   Render(renderingDx->GetBackBuffer());
-}
-
-void CRPWinRenderer::HandleScalingChange()
-{
-  ESCALINGMETHOD scalingMethod = m_renderSettings.VideoSettings().GetScalingMethod();
-  if (scalingMethod != m_prevScalingMethod)
-  {
-    CompileOutputShader(scalingMethod);
-    m_prevScalingMethod = scalingMethod;
-  }
 }
 
 bool CRPWinRenderer::Supports(ERENDERFEATURE feature) const
@@ -258,10 +275,15 @@ bool CRPWinRenderer::Supports(ERENDERFEATURE feature) const
   return false;
 }
 
+bool CRPWinRenderer::Supports(ESCALINGMETHOD method) const
+{
+  return SupportsScalingMethod(method);
+}
+
 bool CRPWinRenderer::SupportsScalingMethod(ESCALINGMETHOD method)
 {
   if (method == VS_SCALINGMETHOD_LINEAR ||
-      method == VS_SCALINGMETHOD_NEAREST)
+    method == VS_SCALINGMETHOD_NEAREST)
     return true;
 
   return false;
@@ -269,9 +291,7 @@ bool CRPWinRenderer::SupportsScalingMethod(ESCALINGMETHOD method)
 
 void CRPWinRenderer::Render(CD3DTexture *target)
 {
-  HandleScalingChange();
-
-  if (m_renderBuffer != nullptr && m_outputShader)
+  if (m_renderBuffer != nullptr)
   {
     CD3DTexture *intermediateTarget = static_cast<CWinRenderBuffer*>(m_renderBuffer)->GetTarget();
     if (intermediateTarget != nullptr)
@@ -279,9 +299,15 @@ void CRPWinRenderer::Render(CD3DTexture *target)
       CRect viewPort;
       m_context.GetViewPort(viewPort);
 
-      m_outputShader->Render(*intermediateTarget, m_sourceWidth, m_sourceHeight,
-        m_sourceRect, m_rotatedDestCoords, viewPort, target,
-        m_context.UseLimitedColor() ? 1 : 0);
+      // Pick appropriate output shader depending on the scaling method of the renderer
+      ESCALINGMETHOD scalingMethod = m_renderSettings.VideoSettings().GetScalingMethod();
+      CRPWinOutputShader* outputShader = m_outputShaders[scalingMethod].get();
+
+      // Use the picked output shader to render to the target
+      if (outputShader)
+        outputShader->Render(*intermediateTarget, m_sourceWidth, m_sourceHeight,
+          m_sourceRect, m_rotatedDestCoords, viewPort, target,
+          m_context.UseLimitedColor() ? 1 : 0);
     }
   }
 }
