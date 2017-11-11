@@ -123,7 +123,7 @@ namespace RETRO
     void RenderInternal(bool clear, uint8_t alpha) override;
 
   private:
-    void CompileOutputShaders(ESCALINGMETHOD defaultScalingMethod);
+    void CompileOutputShaders();
     void Render(CD3DTexture *target);
 
     std::map<ESCALINGMETHOD, std::shared_ptr<CRPWinOutputShader>> m_outputShaders;

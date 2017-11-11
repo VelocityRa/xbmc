@@ -20,6 +20,7 @@
 
 #include "RPWinRenderer.h"
 #include "cores/RetroPlayer/rendering/RenderContext.h"
+#include "cores/RetroPlayer/rendering/RenderTranslator.h"
 #include "cores/RetroPlayer/rendering/RenderVideoSettings.h"
 #include "cores/RetroPlayer/rendering/VideoShaders/windows/RPWinOutputShader.h"
 #include "guilib/D3DResource.h"
@@ -197,8 +198,7 @@ bool CWinRenderBufferPool::ConfigureDX(DXGI_FORMAT dxFormat)
 CRPWinRenderer::CRPWinRenderer(const CRenderSettings &renderSettings, CRenderContext &context, std::shared_ptr<IRenderBufferPool> bufferPool) :
   CRPBaseRenderer(renderSettings, context, std::move(bufferPool))
 {
-  ESCALINGMETHOD defaultScalingMethod = renderSettings.VideoSettings().GetScalingMethod();
-  CompileOutputShaders(defaultScalingMethod);
+  CompileOutputShaders();
 }
 
 CRPWinRenderer::~CRPWinRenderer()
@@ -206,38 +206,18 @@ CRPWinRenderer::~CRPWinRenderer()
   Deinitialize();
 }
 
-void CRPWinRenderer::CompileOutputShaders(ESCALINGMETHOD defaultScalingMethod)
+void CRPWinRenderer::CompileOutputShaders()
 {
-  auto compileAndRegisterShader = [this] (ESCALINGMETHOD scalingMethod, const char* scalingMethodString)
+  auto scalingMethods = { VS_SCALINGMETHOD_NEAREST , VS_SCALINGMETHOD_LINEAR };
+
+  for (auto scalingMethod : scalingMethods)
   {
-    CRPWinOutputShader* outputShader = new CRPWinOutputShader;
-    if (!outputShader->Create(scalingMethod))
-      CLog::Log(LOGERROR, "RPWinRenderer: Unable to create output shader (%s)", scalingMethodString);
-    m_outputShaders[scalingMethod].reset(outputShader);
-  };
-
-  // compile with linear scaling
-  compileAndRegisterShader(VS_SCALINGMETHOD_LINEAR, "linear");
-
-  // compile with nearest neighbor scaling
-  compileAndRegisterShader(VS_SCALINGMETHOD_NEAREST, "nearest");
-
-  // Fill all remaining keys
-
-  // Use `defaultScalingMethod` if our output shader implements it
-  // if not, default to nearest neighbor scaling
-  std::shared_ptr<CRPWinOutputShader> defaultScalingShader;
-  if (m_outputShaders.count(defaultScalingMethod) != 0)
-    defaultScalingShader = m_outputShaders[defaultScalingMethod];
-  else
-    defaultScalingShader = m_outputShaders[VS_SCALINGMETHOD_NEAREST];
-
-  for (int s = VS_SCALINGMETHOD_NEAREST; s != VS_SCALINGMETHOD_MAX; ++s)
-  {
-    auto scalingMethod = static_cast<ESCALINGMETHOD>(s);
-
-    if (m_outputShaders.count(scalingMethod) == 0)
-      m_outputShaders[scalingMethod] = defaultScalingShader;
+    std::unique_ptr<CRPWinOutputShader> outputShader(new CRPWinOutputShader);
+    if (outputShader->Create(scalingMethod))
+      m_outputShaders[scalingMethod] = std::move(outputShader);
+    else
+      CLog::Log(LOGERROR, "RPWinRenderer: Unable to create output shader (%s)",
+        CRenderTranslator::TranslateScalingMethod(scalingMethod));
   }
 }
 
