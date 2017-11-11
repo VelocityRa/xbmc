@@ -502,9 +502,8 @@ CRenderVideoSettings CRPRenderManager::GetEffectiveSettings(const IGUIRenderSett
   }
 
   // Sanitize settings
-  ESCALINGMETHOD scalingMethod = effectiveSettings.GetScalingMethod();
-  // If the method is AUTO or unsupported by the manager, we need to set it to the default
-  if (scalingMethod == VS_SCALINGMETHOD_AUTO || !SupportsScalingMethod(scalingMethod))
+  if (effectiveSettings.GetScalingMethod() == VS_SCALINGMETHOD_AUTO)
     effectiveSettings.SetScalingMethod(m_processInfo.GetDefaultScalingMethod());
+
   return effectiveSettings;
 }
