@@ -275,15 +275,10 @@ bool CRPWinRenderer::Supports(ERENDERFEATURE feature) const
   return false;
 }
 
-bool CRPWinRenderer::Supports(ESCALINGMETHOD method) const
-{
-  return SupportsScalingMethod(method);
-}
-
 bool CRPWinRenderer::SupportsScalingMethod(ESCALINGMETHOD method)
 {
   if (method == VS_SCALINGMETHOD_LINEAR ||
-    method == VS_SCALINGMETHOD_NEAREST)
+      method == VS_SCALINGMETHOD_NEAREST)
     return true;
 
   return false;

@@ -89,15 +89,6 @@ bool CRPRendererGuiTexture::Supports(ERENDERFEATURE feature) const
   return false;
 }
 
-bool CRPRendererGuiTexture::Supports(ESCALINGMETHOD method) const
-{
-  if (method == VS_SCALINGMETHOD_LINEAR ||
-    method == VS_SCALINGMETHOD_NEAREST)
-    return true;
-
-  return false;
-}
-
 void CRPRendererGuiTexture::RenderInternal(bool clear, uint8_t alpha)
 {
   CRenderBufferGuiTexture *renderBuffer = static_cast<CRenderBufferGuiTexture*>(m_renderBuffer);
