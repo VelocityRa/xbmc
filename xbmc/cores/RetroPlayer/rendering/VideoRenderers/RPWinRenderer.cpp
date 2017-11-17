@@ -209,7 +209,7 @@ const std::vector<ESCALINGMETHOD> &CWinRenderBufferPool::GetScalingMethods()
 {
   static std::vector<ESCALINGMETHOD> scalingMethods = {
     VS_SCALINGMETHOD_NEAREST,
-    VS_SCALINGMETHOD_LINEAR
+    VS_SCALINGMETHOD_LINEAR,
   };
 
   return scalingMethods;
