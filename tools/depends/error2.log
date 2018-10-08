@@ -1,0 +1,1586 @@
+make: Entering directory '/programming/kodi/tools/depends/target/libiconv'
+rm -rf aarch64-none-elf-release/*; mkdir -p aarch64-none-elf-release
+cd aarch64-none-elf-release; /bin/tar --strip-components=1 -xf /home/velo/switch-tools/kodi-tarballs/libiconv-1.15.tar.gz
+cd aarch64-none-elf-release; patch -p0 < ../switch.patch
+patching file srclib/Makefile.in
+patching file srclib/getprogname.c
+patching file srclib/signal.in.h
+patching file srclib/sigprocmask.c
+patching file srclib/sys_time.in.h
+cd aarch64-none-elf-release; patch -p0 < ../no-msvc.patch
+patching file configure
+cd aarch64-none-elf-release; cp -f /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/automake-1.15/config.sub /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/automake-1.15/config.guess build-aux/; cp -f /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/automake-1.15/config.sub /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/automake-1.15/config.guess libcharset/build-aux/; ./configure --prefix=/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release --disable-shared --enable-extra-encodings
+configure: loading site script /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/config.site
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for strip... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+configure: WARNING: using cross tools not prefixed with host triplet
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether make sets $(MAKE)... (cached) yes
+checking for gcc... /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc accepts -g... yes
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to accept ISO C89... none needed
+checking whether /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc understands -c and -o together... yes
+checking for style of include used by make... GNU
+checking dependency style of /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc... none
+checking how to run the C preprocessor... /usr/bin/ccache aarch64-none-elf-gcc -E
+checking for strip... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking for strip... (cached) /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... aarch64-none-elf
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking whether _XOPEN_SOURCE should be defined... no
+checking for Minix Amsterdam compiler... no
+checking the archiver (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar) interface... ar
+checking for ar... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking for ld used by /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld
+checking if the linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) is GNU ld... yes
+checking for shared library path variable... none
+checking whether to activate relocatable installation... no
+checking how to copy files... cp -p
+checking how to make hard links... ln
+checking whether ln -s works... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld
+checking if the linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm
+checking the name lister (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm) interface... BSD nm
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to aarch64-none-elf format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld option to reload object files... -r
+checking for objdump... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-objdump
+checking how to recognize dependent libraries... unknown
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... (cached) /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking for ranlib... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib
+checking command to parse /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm output from /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for dlfcn.h... no
+checking for objdir... .libs
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -fno-rtti -fno-exceptions... no
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to produce PIC... -fPIC -DPIC
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc static flag -static works... no
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... (cached) yes
+checking whether the /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) supports shared libraries... yes
+checking dynamic linker characteristics... no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for windres... no
+checking whether the -Werror option is usable... no
+checking for simple visibility declarations... yes
+checking for shared library run path origin... done
+checking for iconv... yes
+checking for working iconv... guessing yes
+checking for iconv declaration... 
+         extern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+checking whether NLS is requested... yes
+checking for msgfmt... /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/bin/msgfmt
+checking for gmsgfmt... /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/bin/msgfmt
+checking for xgettext... /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/bin/xgettext
+checking for msgmerge... /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/bin/msgmerge
+checking for CFPreferencesCopyAppValue... no
+checking for CFLocaleCopyCurrent... no
+checking for GNU gettext in libc... no
+checking for iconv... (cached) yes
+checking for working iconv... (cached) guessing yes
+checking for GNU gettext in libintl... no
+checking whether to use NLS... no
+checking for mbstate_t... yes
+checking for wchar_t... yes
+checking for getc_unlocked... yes
+checking for mbrtowc... yes
+checking for wcrtomb... yes
+checking for mbsinit... yes
+checking for setlocale... yes
+checking whether <wchar.h> is standalone... yes
+checking for memmove... yes
+checking for nl_langinfo and CODESET... yes
+checking for unistd.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for sys/param.h... yes
+checking for sys/time.h... yes
+checking for sys/socket.h... yes
+checking for limits.h... yes
+checking for wchar.h... yes
+checking for stdint.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for symlink... yes
+checking for canonicalize_file_name... yes
+checking for getcwd... yes
+checking for readlink... yes
+checking for realpath... yes
+checking for readlinkat... yes
+checking for getprogname... yes
+checking for getexecname... yes
+checking for gettimeofday... yes
+checking for lstat... yes
+checking for setenv... yes
+checking for working fcntl.h... cross-compiling
+checking for wchar.h... (cached) yes
+checking for EILSEQ... yes
+checking byte ordering... guessing little endian
+checking for size_t... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking whether // is distinct from /... unknown, assuming no
+checking whether realpath works... guessing no
+checking if environ is properly declared... yes
+checking whether the preprocessor supports include_next... yes
+checking whether system header files limit the line length... no
+checking for complete errno.h... yes
+checking whether strerror_r is declared... yes
+checking for strerror_r... yes
+checking whether strerror_r returns char *... no
+checking for pid_t... yes
+checking for mode_t... yes
+checking for C/C++ restrict keyword... __restrict
+checking for struct timeval... yes
+checking for wide-enough struct timeval.tv_sec member... yes
+checking whether gettimeofday is declared without a macro... yes
+checking whether limits.h has ULLONG_WIDTH etc.... yes
+checking whether lstat correctly handles trailing slash... guessing no
+checking whether malloc, realloc, calloc are POSIX compliant... yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible malloc... (cached) yes
+checking for unsigned long long int... yes
+checking for long long int... yes
+./configure: line 19845: test: =: unary operator expected
+checking for sigset_t... yes
+checking for SIGPIPE... yes
+checking whether setenv is declared... yes
+checking for ssize_t... yes
+checking for uid_t in sys/types.h... yes
+checking whether C symbols are prefixed with underscore at the linker level... no
+checking for stdbool.h that conforms to C99... yes
+checking for _Bool... yes
+checking for wint_t... yes
+checking whether wint_t is too small... no
+checking whether stdint.h conforms to C99... (cached) yes
+checking whether stdint.h predates C++11... no
+checking whether stdint.h has UINTMAX_WIDTH etc.... no
+checking whether strerror(0) succeeds... guessing no
+checking whether ffsl is declared without a macro... yes
+checking whether ffsll is declared without a macro... yes
+checking whether memmem is declared without a macro... no
+checking whether mempcpy is declared without a macro... no
+checking whether memrchr is declared without a macro... no
+checking whether rawmemchr is declared without a macro... no
+checking whether stpcpy is declared without a macro... yes
+checking whether stpncpy is declared without a macro... yes
+checking whether strchrnul is declared without a macro... no
+checking whether strdup is declared without a macro... yes
+checking whether strncat is declared without a macro... yes
+checking whether strndup is declared without a macro... yes
+checking whether strnlen is declared without a macro... yes
+checking whether strpbrk is declared without a macro... yes
+checking whether strsep is declared without a macro... yes
+checking whether strcasestr is declared without a macro... no
+checking whether strtok_r is declared without a macro... yes
+checking whether strerror_r is declared without a macro... yes
+checking whether strsignal is declared without a macro... yes
+checking whether strverscmp is declared without a macro... no
+checking whether stat file-mode macros are broken... no
+checking for struct timespec in <time.h>... yes
+checking whether clearerr_unlocked is declared... yes
+checking whether feof_unlocked is declared... yes
+checking whether ferror_unlocked is declared... yes
+checking whether fflush_unlocked is declared... yes
+checking whether fgets_unlocked is declared... no
+checking whether fputc_unlocked is declared... yes
+checking whether fputs_unlocked is declared... no
+checking whether fread_unlocked is declared... yes
+checking whether fwrite_unlocked is declared... yes
+checking whether getc_unlocked is declared... yes
+checking whether getchar_unlocked is declared... yes
+checking whether putc_unlocked is declared... yes
+checking whether putchar_unlocked is declared... yes
+checking whether // is distinct from /... (cached) unknown, assuming no
+checking for error_at_line... no
+checking whether fcntl is declared without a macro... yes
+checking whether openat is declared without a macro... yes
+checking whether program_invocation_name is declared... no
+checking whether program_invocation_short_name is declared... no
+checking whether __argv is declared... no
+checking whether __progname is defined in default libraries... yes
+checking whether gettimeofday clobbers localtime buffer... (cached) no
+checking for gettimeofday with POSIX signature... yes
+checking for mbstate_t... (cached) yes
+checking whether program_invocation_name is declared... (cached) no
+checking whether program_invocation_short_name is declared... (cached) no
+checking for raise... yes
+checking for sigprocmask... yes
+checking whether readlink signature is correct... yes
+checking whether readlink handles trailing slash correctly... guessing no
+checking search.h usability... yes
+checking search.h presence... yes
+checking for search.h... yes
+checking for tsearch... yes
+checking for volatile sig_atomic_t... yes
+checking for sighandler_t... no
+checking whether pthread_sigmask is declared without a macro... yes
+checking whether sigaction is declared without a macro... yes
+checking whether sigaddset is declared without a macro... yes
+checking whether sigdelset is declared without a macro... yes
+checking whether sigemptyset is declared without a macro... yes
+checking whether sigfillset is declared without a macro... yes
+checking whether sigismember is declared without a macro... yes
+checking whether sigpending is declared without a macro... yes
+checking whether sigprocmask is declared without a macro... yes
+checking for sigprocmask... (cached) yes
+checking for ssize_t... (cached) yes
+checking whether stat handles trailing slashes on directories... guessing yes
+checking whether stat handles trailing slashes on files... guessing no
+checking for max_align_t... yes
+checking whether NULL can be used in arbitrary expressions... yes
+checking which flavor of printf attribute matches inttypes macros... system
+checking whether dprintf is declared without a macro... yes
+checking whether fpurge is declared without a macro... yes
+checking whether fseeko is declared without a macro... yes
+checking whether ftello is declared without a macro... yes
+checking whether getdelim is declared without a macro... no
+checking whether getline is declared without a macro... no
+checking whether gets is declared without a macro... yes
+checking whether pclose is declared without a macro... yes
+checking whether popen is declared without a macro... yes
+checking whether renameat is declared without a macro... yes
+checking whether snprintf is declared without a macro... yes
+checking whether tmpfile is declared without a macro... yes
+checking whether vdprintf is declared without a macro... yes
+checking whether vsnprintf is declared without a macro... yes
+checking whether _Exit is declared without a macro... yes
+checking whether atoll is declared without a macro... yes
+checking whether canonicalize_file_name is declared without a macro... no
+checking whether getloadavg is declared without a macro... no
+checking whether getsubopt is declared without a macro... yes
+checking whether grantpt is declared without a macro... no
+checking whether initstate is declared without a macro... yes
+checking whether initstate_r is declared without a macro... no
+checking whether mkdtemp is declared without a macro... yes
+checking whether mkostemp is declared without a macro... no
+checking whether mkostemps is declared without a macro... no
+checking whether mkstemp is declared without a macro... yes
+checking whether mkstemps is declared without a macro... yes
+checking whether posix_openpt is declared without a macro... no
+checking whether ptsname is declared without a macro... no
+checking whether ptsname_r is declared without a macro... no
+checking whether qsort_r is declared without a macro... yes
+checking whether random is declared without a macro... yes
+checking whether random_r is declared without a macro... no
+checking whether realpath is declared without a macro... yes
+checking whether rpmatch is declared without a macro... yes
+checking whether secure_getenv is declared without a macro... no
+checking whether setenv is declared without a macro... yes
+checking whether setstate is declared without a macro... yes
+checking whether setstate_r is declared without a macro... no
+checking whether srandom is declared without a macro... yes
+checking whether srandom_r is declared without a macro... no
+checking whether strtod is declared without a macro... yes
+checking whether strtoll is declared without a macro... yes
+checking whether strtoull is declared without a macro... yes
+checking whether unlockpt is declared without a macro... no
+checking whether unsetenv is declared without a macro... yes
+checking for nlink_t... yes
+checking whether fchmodat is declared without a macro... yes
+checking whether fstat is declared without a macro... yes
+checking whether fstatat is declared without a macro... yes
+checking whether futimens is declared without a macro... yes
+checking whether lchmod is declared without a macro... no
+checking whether lstat is declared without a macro... yes
+checking whether mkdirat is declared without a macro... yes
+checking whether mkfifo is declared without a macro... yes
+checking whether mkfifoat is declared without a macro... yes
+checking whether mknod is declared without a macro... no
+checking whether mknodat is declared without a macro... yes
+checking whether stat is declared without a macro... yes
+checking whether utimensat is declared without a macro... yes
+checking whether chdir is declared without a macro... yes
+checking whether chown is declared without a macro... yes
+checking whether dup is declared without a macro... yes
+checking whether dup2 is declared without a macro... yes
+checking whether dup3 is declared without a macro... no
+checking whether environ is declared without a macro... yes
+checking whether euidaccess is declared without a macro... no
+checking whether faccessat is declared without a macro... yes
+checking whether fchdir is declared without a macro... yes
+checking whether fchownat is declared without a macro... yes
+checking whether fdatasync is declared without a macro... yes
+checking whether fsync is declared without a macro... yes
+checking whether ftruncate is declared without a macro... yes
+checking whether getcwd is declared without a macro... yes
+checking whether getdomainname is declared without a macro... yes
+checking whether getdtablesize is declared without a macro... yes
+checking whether getgroups is declared without a macro... yes
+checking whether gethostname is declared without a macro... yes
+checking whether getlogin is declared without a macro... yes
+checking whether getlogin_r is declared without a macro... no
+checking whether getpagesize is declared without a macro... yes
+checking whether getusershell is declared without a macro... yes
+checking whether setusershell is declared without a macro... yes
+checking whether endusershell is declared without a macro... yes
+checking whether group_member is declared without a macro... no
+checking whether isatty is declared without a macro... yes
+checking whether lchown is declared without a macro... yes
+checking whether link is declared without a macro... yes
+checking whether linkat is declared without a macro... yes
+checking whether lseek is declared without a macro... yes
+checking whether pipe is declared without a macro... yes
+checking whether pipe2 is declared without a macro... no
+checking whether pread is declared without a macro... yes
+checking whether pwrite is declared without a macro... yes
+checking whether readlink is declared without a macro... yes
+checking whether readlinkat is declared without a macro... yes
+checking whether rmdir is declared without a macro... yes
+checking whether sethostname is declared without a macro... yes
+checking whether sleep is declared without a macro... yes
+checking whether symlink is declared without a macro... yes
+checking whether symlinkat is declared without a macro... yes
+checking whether ttyname_r is declared without a macro... yes
+checking whether unlink is declared without a macro... yes
+checking whether unlinkat is declared without a macro... yes
+checking whether usleep is declared without a macro... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating lib/Makefile
+config.status: creating srclib/Makefile
+config.status: creating src/Makefile
+config.status: creating po/Makefile.in
+config.status: creating man/Makefile
+config.status: creating tests/Makefile
+config.status: creating include/iconv.h
+config.status: creating include/iconv.h.inst
+config.status: creating config.h
+config.status: creating lib/config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing po-directories commands
+config.status: creating po/POTFILES
+config.status: creating po/Makefile
+=== configuring in libcharset (/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset)
+configure: running /bin/bash ./configure --disable-option-checking '--prefix=/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release'  '--disable-shared' '--enable-extra-encodings' --cache-file=/dev/null --srcdir=.
+configure: loading site script /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/config.site
+checking whether make sets $(MAKE)... yes
+checking for gcc... /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+configure: WARNING: using cross tools not prefixed with host triplet
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc accepts -g... yes
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... /usr/bin/ccache aarch64-none-elf-gcc -E
+checking for a BSD-compatible install... /usr/bin/install -c
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... aarch64-none-elf
+checking whether to activate relocatable installation... no
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld
+checking if the linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm
+checking the name lister (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to aarch64-none-elf format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld option to reload object files... -r
+checking for objdump... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-objdump
+checking how to recognize dependent libraries... unknown
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking for ranlib... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib
+checking for gawk... gawk
+checking command to parse /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm output from /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for dlfcn.h... no
+checking for objdir... .libs
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -fno-rtti -fno-exceptions... no
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to produce PIC... -fPIC -DPIC
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc static flag -static works... no
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... (cached) yes
+checking whether the /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) supports shared libraries... yes
+checking dynamic linker characteristics... no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking whether the -Werror option is usable... no
+checking for simple visibility declarations... yes
+checking for nl_langinfo and CODESET... yes
+checking for unistd.h... (cached) yes
+checking for symlink... yes
+checking for working fcntl.h... cross-compiling
+checking whether we are using the GNU C Library >= 2.1 or uClibc... no
+checking for setlocale... yes
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating lib/Makefile
+config.status: creating include/localcharset.h
+config.status: creating include/localcharset.h.inst
+config.status: creating config.h
+config.status: executing libtool commands
+=== configuring in preload (/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/preload)
+configure: running /bin/bash ./configure --disable-option-checking '--prefix=/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release'  '--disable-shared' '--enable-extra-encodings' --cache-file=/dev/null --srcdir=.
+configure: loading site script /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/config.site
+checking whether make sets $(MAKE)... yes
+checking for gcc... /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+configure: WARNING: using cross tools not prefixed with host triplet
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc accepts -g... yes
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... /usr/bin/ccache aarch64-none-elf-gcc -E
+checking for a BSD-compatible install... /usr/bin/install -c
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... aarch64-none-elf
+checking whether to activate relocatable installation... no
+checking whether ln -s works... yes
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking whether _XOPEN_SOURCE should be defined... no
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld
+checking if the linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm
+checking the name lister (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm) interface... BSD nm
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to aarch64-none-elf format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld option to reload object files... -r
+checking for objdump... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-objdump
+checking how to recognize dependent libraries... unknown
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking for ranlib... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib
+checking for gawk... gawk
+checking command to parse /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm output from /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for dlfcn.h... no
+checking for objdir... .libs
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -fno-rtti -fno-exceptions... no
+checking for /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc option to produce PIC... -fPIC -DPIC
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc static flag -static works... no
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... yes
+checking if /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc supports -c -o file.o... (cached) yes
+checking whether the /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc linker (/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... yes
+checking dynamic linker characteristics... no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking whether the -Werror option is usable... no
+checking for simple visibility declarations... yes
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing libtool commands
+make -C aarch64-none-elf-release
+make[1]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release'
+builddir="`pwd`"; cd libcharset && make all && make install-lib libdir="$builddir/lib" includedir="$builddir/lib"
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+if [ ! -d include ] ; then mkdir include ; fi
+cp ./include/libcharset.h.in include/libcharset.h
+cd lib && make all
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+/bin/bash ../libtool --mode=compile /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I.. -I./.. -I../include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBCHARSET -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libcharset_set_relocation_prefix -Drelocate=libcharset_relocate -DHAVE_CONFIG_H -c ./localcharset.c
+libtool: compile:  /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I.. -I./.. -I../include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -fvisibility=hidden -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBCHARSET -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libcharset_set_relocation_prefix -Drelocate=libcharset_relocate -DHAVE_CONFIG_H -c ./localcharset.c -o localcharset.o
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=compile /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I.. -I./.. -I../include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBCHARSET -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libcharset_set_relocation_prefix -Drelocate=libcharset_relocate -DHAVE_CONFIG_H -c ./relocatable.c
+libtool: compile:  /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I.. -I./.. -I../include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -fvisibility=hidden -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBCHARSET -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libcharset_set_relocation_prefix -Drelocate=libcharset_relocate -DHAVE_CONFIG_H -c ./relocatable.c -o relocatable.o
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=link /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -lpthread -lm --verbose    -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -o libcharset.la -rpath /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -version-info 1:0:0 -no-undefined localcharset.lo relocatable.lo
+libtool: link: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar cru .libs/libcharset.a  localcharset.o relocatable.o
+libtool: link: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib .libs/libcharset.a
+libtool: link: ( cd ".libs" && rm -f "libcharset.la" && ln -s "../libcharset.la" "libcharset.la" )
+/bin/sh ./config.charset 'aarch64-none-elf' > t-charset.alias
+mv t-charset.alias charset.alias
+sed -e '/^#/d' -e 's/@''PACKAGE''@/@PACKAGE@/g' ./ref-add.sin > t-ref-add.sed
+mv t-ref-add.sed ref-add.sed
+sed -e '/^#/d' -e 's/@''PACKAGE''@/@PACKAGE@/g' ./ref-del.sin > t-ref-del.sed
+mv t-ref-del.sed ref-del.sed
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+cd lib && make all
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+cd lib && make install-lib libdir='/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib' includedir='/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib'
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+/bin/sh ../build-aux/mkinstalldirs /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib
+/bin/bash ../libtool --mode=install /usr/bin/install -c libcharset.la /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.la
+libtool: install: /usr/bin/install -c .libs/libcharset.lai /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.la
+libtool: install: /usr/bin/install -c .libs/libcharset.a /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.a
+libtool: install: chmod 644 /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.a
+libtool: install: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.a
+libtool: warning: remember to run 'libtool --finish /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+test -f /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/charset.alias && orig=/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/charset.alias \
+                                || orig=charset.alias; \
+sed -f ref-add.sed $orig > /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/t-charset.alias; \
+/usr/bin/install -c -m 644 /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/t-charset.alias /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/charset.alias; \
+rm -f /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/t-charset.alias
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+/bin/sh ./build-aux/mkinstalldirs /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib
+/usr/bin/install -c -m 644 include/libcharset.h /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/libcharset.h
+/usr/bin/install -c -m 644 include/localcharset.h.inst /programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib/localcharset.h
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+cd lib && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib'
+/bin/bash ../libtool --mode=compile /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./iconv.c
+libtool: compile:  /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./iconv.c -o iconv.o
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=compile /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./../libcharset/lib/localcharset.c
+libtool: compile:  /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./../libcharset/lib/localcharset.c -o localcharset.o
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=compile /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./relocatable.c
+libtool: compile:  /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -I. -I. -I../include -I./../include -I.. -I./.. -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include -fvisibility=hidden -DLIBDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DBUILDING_LIBICONV -DBUILDING_DLL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libiconv_set_relocation_prefix -Drelocate=libiconv_relocate -DHAVE_CONFIG_H -c ./relocatable.c -o relocatable.o
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=link /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -lpthread -lm --verbose     -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -fvisibility=hidden -o libiconv.la -rpath /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -version-info 8:0:6 -no-undefined iconv.lo localcharset.lo relocatable.lo  
+libtool: link: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar cru .libs/libiconv.a  iconv.o localcharset.o relocatable.o
+libtool: link: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib .libs/libiconv.a
+libtool: link: ( cd ".libs" && rm -f "libiconv.la" && ln -s "../libiconv.la" "libiconv.la" )
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib'
+cd preload && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/preload'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/preload'
+cd srclib && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+rm -f alloca.h-t alloca.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  cat ./alloca.in.h; \
+} > alloca.h-t && \
+mv -f alloca.h-t alloca.h
+rm -f c++defs.h-t c++defs.h && \
+sed -n -e '/_GL_CXXDEFS/,$p' \
+  < ../build-aux/snippet/c++defs.h \
+  > c++defs.h-t && \
+mv c++defs.h-t c++defs.h
+rm -f arg-nonnull.h-t arg-nonnull.h && \
+sed -n -e '/GL_ARG_NONNULL/,$p' \
+  < ../build-aux/snippet/arg-nonnull.h \
+  > arg-nonnull.h-t && \
+mv arg-nonnull.h-t arg-nonnull.h
+rm -f warn-on-use.h-t warn-on-use.h && \
+sed -n -e '/^.ifndef/,$p' \
+  < ../build-aux/snippet/warn-on-use.h \
+  > warn-on-use.h-t && \
+mv warn-on-use.h-t warn-on-use.h
+rm -f fcntl.h-t fcntl.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_FCNTL_H''@|<fcntl.h>|g' \
+      -e 's/@''GNULIB_FCNTL''@/0/g' \
+      -e 's/@''GNULIB_NONBLOCKING''@/0/g' \
+      -e 's/@''GNULIB_OPEN''@/0/g' \
+      -e 's/@''GNULIB_OPENAT''@/0/g' \
+      -e 's|@''HAVE_FCNTL''@|1|g' \
+      -e 's|@''HAVE_OPENAT''@|1|g' \
+      -e 's|@''REPLACE_FCNTL''@|0|g' \
+      -e 's|@''REPLACE_OPEN''@|0|g' \
+      -e 's|@''REPLACE_OPENAT''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h' \
+      < ./fcntl.in.h; \
+} > fcntl.h-t && \
+mv fcntl.h-t fcntl.h
+rm -f limits.h-t limits.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_LIMITS_H''@|<limits.h>|g' \
+      < ./limits.in.h; \
+} > limits.h-t && \
+mv limits.h-t limits.h
+rm -f signal.h-t signal.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_SIGNAL_H''@|<signal.h>|g' \
+      -e 's|@''GNULIB_PTHREAD_SIGMASK''@|0|g' \
+      -e 's|@''GNULIB_RAISE''@|1|g' \
+      -e 's/@''GNULIB_SIGNAL_H_SIGPIPE''@/1/g' \
+      -e 's/@''GNULIB_SIGPROCMASK''@/1/g' \
+      -e 's/@''GNULIB_SIGACTION''@/0/g' \
+      -e 's|@''HAVE_POSIX_SIGNALBLOCKING''@|1|g' \
+      -e 's|@''HAVE_PTHREAD_SIGMASK''@|1|g' \
+      -e 's|@''HAVE_RAISE''@|1|g' \
+      -e 's|@''HAVE_SIGSET_T''@|1|g' \
+      -e 's|@''HAVE_SIGINFO_T''@|1|g' \
+      -e 's|@''HAVE_SIGACTION''@|1|g' \
+      -e 's|@''HAVE_STRUCT_SIGACTION_SA_SIGACTION''@|1|g' \
+      -e 's|@''HAVE_TYPE_VOLATILE_SIG_ATOMIC_T''@|1|g' \
+      -e 's|@''HAVE_SIGHANDLER_T''@|0|g' \
+      -e 's|@''REPLACE_PTHREAD_SIGMASK''@|0|g' \
+      -e 's|@''REPLACE_RAISE''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h' \
+      < ./signal.in.h; \
+} > signal.h-t && \
+mv signal.h-t signal.h
+rm -f stdint.h-t stdint.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's/@''HAVE_STDINT_H''@/1/g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_STDINT_H''@|<stdint.h>|g' \
+      -e 's/@''HAVE_C99_STDINT_H''@/1/g' \
+      -e 's/@''HAVE_SYS_TYPES_H''@/1/g' \
+      -e 's/@''HAVE_INTTYPES_H''@/1/g' \
+      -e 's/@''HAVE_SYS_INTTYPES_H''@/0/g' \
+      -e 's/@''HAVE_SYS_BITYPES_H''@/0/g' \
+      -e 's/@''HAVE_WCHAR_H''@/1/g' \
+      -e 's/@''HAVE_LONG_LONG_INT''@/1/g' \
+      -e 's/@''HAVE_UNSIGNED_LONG_LONG_INT''@/1/g' \
+      -e 's/@''APPLE_UNIVERSAL_BUILD''@/0/g' \
+      -e 's/@''BITSIZEOF_PTRDIFF_T''@//g' \
+      -e 's/@''PTRDIFF_T_SUFFIX''@//g' \
+      -e 's/@''BITSIZEOF_SIG_ATOMIC_T''@//g' \
+      -e 's/@''HAVE_SIGNED_SIG_ATOMIC_T''@//g' \
+      -e 's/@''SIG_ATOMIC_T_SUFFIX''@//g' \
+      -e 's/@''BITSIZEOF_SIZE_T''@//g' \
+      -e 's/@''SIZE_T_SUFFIX''@//g' \
+      -e 's/@''BITSIZEOF_WCHAR_T''@//g' \
+      -e 's/@''HAVE_SIGNED_WCHAR_T''@//g' \
+      -e 's/@''WCHAR_T_SUFFIX''@//g' \
+      -e 's/@''BITSIZEOF_WINT_T''@//g' \
+      -e 's/@''HAVE_SIGNED_WINT_T''@//g' \
+      -e 's/@''WINT_T_SUFFIX''@//g' \
+      -e 's/@''GNULIB_OVERRIDES_WINT_T''@/0/g' \
+      < ./stdint.in.h; \
+} > stdint.h-t && \
+mv stdint.h-t stdint.h
+rm -f stdio.h-t stdio.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_STDIO_H''@|<stdio.h>|g' \
+      -e 's/@''GNULIB_DPRINTF''@/0/g' \
+      -e 's/@''GNULIB_FCLOSE''@/0/g' \
+      -e 's/@''GNULIB_FDOPEN''@/0/g' \
+      -e 's/@''GNULIB_FFLUSH''@/0/g' \
+      -e 's/@''GNULIB_FGETC''@/1/g' \
+      -e 's/@''GNULIB_FGETS''@/1/g' \
+      -e 's/@''GNULIB_FOPEN''@/0/g' \
+      -e 's/@''GNULIB_FPRINTF''@/1/g' \
+      -e 's/@''GNULIB_FPRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_FPURGE''@/0/g' \
+      -e 's/@''GNULIB_FPUTC''@/1/g' \
+      -e 's/@''GNULIB_FPUTS''@/1/g' \
+      -e 's/@''GNULIB_FREAD''@/1/g' \
+      -e 's/@''GNULIB_FREOPEN''@/0/g' \
+      -e 's/@''GNULIB_FSCANF''@/1/g' \
+      -e 's/@''GNULIB_FSEEK''@/0/g' \
+      -e 's/@''GNULIB_FSEEKO''@/0/g' \
+      -e 's/@''GNULIB_FTELL''@/0/g' \
+      -e 's/@''GNULIB_FTELLO''@/0/g' \
+      -e 's/@''GNULIB_FWRITE''@/1/g' \
+      -e 's/@''GNULIB_GETC''@/1/g' \
+      -e 's/@''GNULIB_GETCHAR''@/1/g' \
+      -e 's/@''GNULIB_GETDELIM''@/0/g' \
+      -e 's/@''GNULIB_GETLINE''@/0/g' \
+      -e 's/@''GNULIB_OBSTACK_PRINTF''@/0/g' \
+      -e 's/@''GNULIB_OBSTACK_PRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_PCLOSE''@/0/g' \
+      -e 's/@''GNULIB_PERROR''@/0/g' \
+      -e 's/@''GNULIB_POPEN''@/0/g' \
+      -e 's/@''GNULIB_PRINTF''@/1/g' \
+      -e 's/@''GNULIB_PRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_PUTC''@/1/g' \
+      -e 's/@''GNULIB_PUTCHAR''@/1/g' \
+      -e 's/@''GNULIB_PUTS''@/1/g' \
+      -e 's/@''GNULIB_REMOVE''@/0/g' \
+      -e 's/@''GNULIB_RENAME''@/0/g' \
+      -e 's/@''GNULIB_RENAMEAT''@/0/g' \
+      -e 's/@''GNULIB_SCANF''@/1/g' \
+      -e 's/@''GNULIB_SNPRINTF''@/0/g' \
+      -e 's/@''GNULIB_SPRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_STDIO_H_NONBLOCKING''@/0/g' \
+      -e 's/@''GNULIB_STDIO_H_SIGPIPE''@/1/g' \
+      -e 's/@''GNULIB_TMPFILE''@/0/g' \
+      -e 's/@''GNULIB_VASPRINTF''@/0/g' \
+      -e 's/@''GNULIB_VDPRINTF''@/0/g' \
+      -e 's/@''GNULIB_VFPRINTF''@/1/g' \
+      -e 's/@''GNULIB_VFPRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_VFSCANF''@/0/g' \
+      -e 's/@''GNULIB_VSCANF''@/0/g' \
+      -e 's/@''GNULIB_VPRINTF''@/1/g' \
+      -e 's/@''GNULIB_VPRINTF_POSIX''@/0/g' \
+      -e 's/@''GNULIB_VSNPRINTF''@/0/g' \
+      -e 's/@''GNULIB_VSPRINTF_POSIX''@/0/g' \
+      < ./stdio.in.h | \
+  sed -e 's|@''HAVE_DECL_FPURGE''@|1|g' \
+      -e 's|@''HAVE_DECL_FSEEKO''@|1|g' \
+      -e 's|@''HAVE_DECL_FTELLO''@|1|g' \
+      -e 's|@''HAVE_DECL_GETDELIM''@|1|g' \
+      -e 's|@''HAVE_DECL_GETLINE''@|1|g' \
+      -e 's|@''HAVE_DECL_OBSTACK_PRINTF''@|1|g' \
+      -e 's|@''HAVE_DECL_SNPRINTF''@|1|g' \
+      -e 's|@''HAVE_DECL_VSNPRINTF''@|1|g' \
+      -e 's|@''HAVE_DPRINTF''@|1|g' \
+      -e 's|@''HAVE_FSEEKO''@|1|g' \
+      -e 's|@''HAVE_FTELLO''@|1|g' \
+      -e 's|@''HAVE_PCLOSE''@|1|g' \
+      -e 's|@''HAVE_POPEN''@|1|g' \
+      -e 's|@''HAVE_RENAMEAT''@|1|g' \
+      -e 's|@''HAVE_VASPRINTF''@|1|g' \
+      -e 's|@''HAVE_VDPRINTF''@|1|g' \
+      -e 's|@''REPLACE_DPRINTF''@|0|g' \
+      -e 's|@''REPLACE_FCLOSE''@|0|g' \
+      -e 's|@''REPLACE_FDOPEN''@|0|g' \
+      -e 's|@''REPLACE_FFLUSH''@|0|g' \
+      -e 's|@''REPLACE_FOPEN''@|0|g' \
+      -e 's|@''REPLACE_FPRINTF''@|0|g' \
+      -e 's|@''REPLACE_FPURGE''@|0|g' \
+      -e 's|@''REPLACE_FREOPEN''@|0|g' \
+      -e 's|@''REPLACE_FSEEK''@|0|g' \
+      -e 's|@''REPLACE_FSEEKO''@|0|g' \
+      -e 's|@''REPLACE_FTELL''@|0|g' \
+      -e 's|@''REPLACE_FTELLO''@|0|g' \
+      -e 's|@''REPLACE_GETDELIM''@|0|g' \
+      -e 's|@''REPLACE_GETLINE''@|0|g' \
+      -e 's|@''REPLACE_OBSTACK_PRINTF''@|0|g' \
+      -e 's|@''REPLACE_PERROR''@|0|g' \
+      -e 's|@''REPLACE_POPEN''@|0|g' \
+      -e 's|@''REPLACE_PRINTF''@|0|g' \
+      -e 's|@''REPLACE_REMOVE''@|0|g' \
+      -e 's|@''REPLACE_RENAME''@|0|g' \
+      -e 's|@''REPLACE_RENAMEAT''@|0|g' \
+      -e 's|@''REPLACE_SNPRINTF''@|0|g' \
+      -e 's|@''REPLACE_SPRINTF''@|0|g' \
+      -e 's|@''REPLACE_STDIO_READ_FUNCS''@|0|g' \
+      -e 's|@''REPLACE_STDIO_WRITE_FUNCS''@|0|g' \
+      -e 's|@''REPLACE_TMPFILE''@|0|g' \
+      -e 's|@''REPLACE_VASPRINTF''@|0|g' \
+      -e 's|@''REPLACE_VDPRINTF''@|0|g' \
+      -e 's|@''REPLACE_VFPRINTF''@|0|g' \
+      -e 's|@''REPLACE_VPRINTF''@|0|g' \
+      -e 's|@''REPLACE_VSNPRINTF''@|0|g' \
+      -e 's|@''REPLACE_VSPRINTF''@|0|g' \
+      -e 's|@''ASM_SYMBOL_PREFIX''@|""|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h'; \
+} > stdio.h-t && \
+mv stdio.h-t stdio.h
+rm -f stdlib.h-t stdlib.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_STDLIB_H''@|<stdlib.h>|g' \
+      -e 's/@''GNULIB__EXIT''@/0/g' \
+      -e 's/@''GNULIB_ATOLL''@/0/g' \
+      -e 's/@''GNULIB_CALLOC_POSIX''@/0/g' \
+      -e 's/@''GNULIB_CANONICALIZE_FILE_NAME''@/1/g' \
+      -e 's/@''GNULIB_GETLOADAVG''@/0/g' \
+      -e 's/@''GNULIB_GETSUBOPT''@/0/g' \
+      -e 's/@''GNULIB_GRANTPT''@/0/g' \
+      -e 's/@''GNULIB_MALLOC_POSIX''@/1/g' \
+      -e 's/@''GNULIB_MBTOWC''@/0/g' \
+      -e 's/@''GNULIB_MKDTEMP''@/0/g' \
+      -e 's/@''GNULIB_MKOSTEMP''@/0/g' \
+      -e 's/@''GNULIB_MKOSTEMPS''@/0/g' \
+      -e 's/@''GNULIB_MKSTEMP''@/0/g' \
+      -e 's/@''GNULIB_MKSTEMPS''@/0/g' \
+      -e 's/@''GNULIB_POSIX_OPENPT''@/0/g' \
+      -e 's/@''GNULIB_PTSNAME''@/0/g' \
+      -e 's/@''GNULIB_PTSNAME_R''@/0/g' \
+      -e 's/@''GNULIB_PUTENV''@/0/g' \
+      -e 's/@''GNULIB_QSORT_R''@/0/g' \
+      -e 's/@''GNULIB_RANDOM''@/0/g' \
+      -e 's/@''GNULIB_RANDOM_R''@/0/g' \
+      -e 's/@''GNULIB_REALLOC_POSIX''@/0/g' \
+      -e 's/@''GNULIB_REALPATH''@/1/g' \
+      -e 's/@''GNULIB_RPMATCH''@/0/g' \
+      -e 's/@''GNULIB_SECURE_GETENV''@/0/g' \
+      -e 's/@''GNULIB_SETENV''@/0/g' \
+      -e 's/@''GNULIB_STRTOD''@/0/g' \
+      -e 's/@''GNULIB_STRTOLL''@/0/g' \
+      -e 's/@''GNULIB_STRTOULL''@/0/g' \
+      -e 's/@''GNULIB_SYSTEM_POSIX''@/0/g' \
+      -e 's/@''GNULIB_UNLOCKPT''@/0/g' \
+      -e 's/@''GNULIB_UNSETENV''@/0/g' \
+      -e 's/@''GNULIB_WCTOMB''@/0/g' \
+      < ./stdlib.in.h | \
+  sed -e 's|@''HAVE__EXIT''@|1|g' \
+      -e 's|@''HAVE_ATOLL''@|1|g' \
+      -e 's|@''HAVE_CANONICALIZE_FILE_NAME''@|1|g' \
+      -e 's|@''HAVE_DECL_GETLOADAVG''@|1|g' \
+      -e 's|@''HAVE_GETSUBOPT''@|1|g' \
+      -e 's|@''HAVE_GRANTPT''@|1|g' \
+      -e 's|@''HAVE_MKDTEMP''@|1|g' \
+      -e 's|@''HAVE_MKOSTEMP''@|1|g' \
+      -e 's|@''HAVE_MKOSTEMPS''@|1|g' \
+      -e 's|@''HAVE_MKSTEMP''@|1|g' \
+      -e 's|@''HAVE_MKSTEMPS''@|1|g' \
+      -e 's|@''HAVE_POSIX_OPENPT''@|1|g' \
+      -e 's|@''HAVE_PTSNAME''@|1|g' \
+      -e 's|@''HAVE_PTSNAME_R''@|1|g' \
+      -e 's|@''HAVE_QSORT_R''@|1|g' \
+      -e 's|@''HAVE_RANDOM''@|1|g' \
+      -e 's|@''HAVE_RANDOM_H''@|1|g' \
+      -e 's|@''HAVE_RANDOM_R''@|1|g' \
+      -e 's|@''HAVE_REALPATH''@|1|g' \
+      -e 's|@''HAVE_RPMATCH''@|1|g' \
+      -e 's|@''HAVE_SECURE_GETENV''@|1|g' \
+      -e 's|@''HAVE_DECL_SETENV''@|1|g' \
+      -e 's|@''HAVE_STRTOD''@|1|g' \
+      -e 's|@''HAVE_STRTOLL''@|1|g' \
+      -e 's|@''HAVE_STRTOULL''@|1|g' \
+      -e 's|@''HAVE_STRUCT_RANDOM_DATA''@|1|g' \
+      -e 's|@''HAVE_SYS_LOADAVG_H''@|0|g' \
+      -e 's|@''HAVE_UNLOCKPT''@|1|g' \
+      -e 's|@''HAVE_DECL_UNSETENV''@|1|g' \
+      -e 's|@''REPLACE_CALLOC''@|0|g' \
+      -e 's|@''REPLACE_CANONICALIZE_FILE_NAME''@|1|g' \
+      -e 's|@''REPLACE_MALLOC''@|0|g' \
+      -e 's|@''REPLACE_MBTOWC''@|0|g' \
+      -e 's|@''REPLACE_MKSTEMP''@|0|g' \
+      -e 's|@''REPLACE_PTSNAME''@|0|g' \
+      -e 's|@''REPLACE_PTSNAME_R''@|0|g' \
+      -e 's|@''REPLACE_PUTENV''@|0|g' \
+      -e 's|@''REPLACE_QSORT_R''@|0|g' \
+      -e 's|@''REPLACE_RANDOM_R''@|0|g' \
+      -e 's|@''REPLACE_REALLOC''@|0|g' \
+      -e 's|@''REPLACE_REALPATH''@|1|g' \
+      -e 's|@''REPLACE_SETENV''@|0|g' \
+      -e 's|@''REPLACE_STRTOD''@|0|g' \
+      -e 's|@''REPLACE_UNSETENV''@|0|g' \
+      -e 's|@''REPLACE_WCTOMB''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _Noreturn/r ../build-aux/snippet/_Noreturn.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h'; \
+} > stdlib.h-t && \
+mv stdlib.h-t stdlib.h
+rm -f string.h-t string.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_STRING_H''@|<string.h>|g' \
+      -e 's/@''GNULIB_FFSL''@/0/g' \
+      -e 's/@''GNULIB_FFSLL''@/0/g' \
+      -e 's/@''GNULIB_MBSLEN''@/0/g' \
+      -e 's/@''GNULIB_MBSNLEN''@/0/g' \
+      -e 's/@''GNULIB_MBSCHR''@/0/g' \
+      -e 's/@''GNULIB_MBSRCHR''@/0/g' \
+      -e 's/@''GNULIB_MBSSTR''@/0/g' \
+      -e 's/@''GNULIB_MBSCASECMP''@/0/g' \
+      -e 's/@''GNULIB_MBSNCASECMP''@/0/g' \
+      -e 's/@''GNULIB_MBSPCASECMP''@/0/g' \
+      -e 's/@''GNULIB_MBSCASESTR''@/0/g' \
+      -e 's/@''GNULIB_MBSCSPN''@/0/g' \
+      -e 's/@''GNULIB_MBSPBRK''@/0/g' \
+      -e 's/@''GNULIB_MBSSPN''@/0/g' \
+      -e 's/@''GNULIB_MBSSEP''@/0/g' \
+      -e 's/@''GNULIB_MBSTOK_R''@/0/g' \
+      -e 's/@''GNULIB_MEMCHR''@/0/g' \
+      -e 's/@''GNULIB_MEMMEM''@/0/g' \
+      -e 's/@''GNULIB_MEMPCPY''@/0/g' \
+      -e 's/@''GNULIB_MEMRCHR''@/0/g' \
+      -e 's/@''GNULIB_RAWMEMCHR''@/0/g' \
+      -e 's/@''GNULIB_STPCPY''@/0/g' \
+      -e 's/@''GNULIB_STPNCPY''@/0/g' \
+      -e 's/@''GNULIB_STRCHRNUL''@/0/g' \
+      -e 's/@''GNULIB_STRDUP''@/0/g' \
+      -e 's/@''GNULIB_STRNCAT''@/0/g' \
+      -e 's/@''GNULIB_STRNDUP''@/0/g' \
+      -e 's/@''GNULIB_STRNLEN''@/0/g' \
+      -e 's/@''GNULIB_STRPBRK''@/0/g' \
+      -e 's/@''GNULIB_STRSEP''@/0/g' \
+      -e 's/@''GNULIB_STRSTR''@/0/g' \
+      -e 's/@''GNULIB_STRCASESTR''@/0/g' \
+      -e 's/@''GNULIB_STRTOK_R''@/0/g' \
+      -e 's/@''GNULIB_STRERROR''@/1/g' \
+      -e 's/@''GNULIB_STRERROR_R''@/0/g' \
+      -e 's/@''GNULIB_STRSIGNAL''@/0/g' \
+      -e 's/@''GNULIB_STRVERSCMP''@/0/g' \
+      < ./string.in.h | \
+  sed -e 's|@''HAVE_FFSL''@|1|g' \
+      -e 's|@''HAVE_FFSLL''@|1|g' \
+      -e 's|@''HAVE_MBSLEN''@|0|g' \
+      -e 's|@''HAVE_MEMCHR''@|1|g' \
+      -e 's|@''HAVE_DECL_MEMMEM''@|1|g' \
+      -e 's|@''HAVE_MEMPCPY''@|1|g' \
+      -e 's|@''HAVE_DECL_MEMRCHR''@|1|g' \
+      -e 's|@''HAVE_RAWMEMCHR''@|1|g' \
+      -e 's|@''HAVE_STPCPY''@|1|g' \
+      -e 's|@''HAVE_STPNCPY''@|1|g' \
+      -e 's|@''HAVE_STRCHRNUL''@|1|g' \
+      -e 's|@''HAVE_DECL_STRDUP''@|1|g' \
+      -e 's|@''HAVE_DECL_STRNDUP''@|1|g' \
+      -e 's|@''HAVE_DECL_STRNLEN''@|1|g' \
+      -e 's|@''HAVE_STRPBRK''@|1|g' \
+      -e 's|@''HAVE_STRSEP''@|1|g' \
+      -e 's|@''HAVE_STRCASESTR''@|1|g' \
+      -e 's|@''HAVE_DECL_STRTOK_R''@|1|g' \
+      -e 's|@''HAVE_DECL_STRERROR_R''@|1|g' \
+      -e 's|@''HAVE_DECL_STRSIGNAL''@|1|g' \
+      -e 's|@''HAVE_STRVERSCMP''@|1|g' \
+      -e 's|@''REPLACE_STPNCPY''@|0|g' \
+      -e 's|@''REPLACE_MEMCHR''@|0|g' \
+      -e 's|@''REPLACE_MEMMEM''@|0|g' \
+      -e 's|@''REPLACE_STRCASESTR''@|0|g' \
+      -e 's|@''REPLACE_STRCHRNUL''@|0|g' \
+      -e 's|@''REPLACE_STRDUP''@|0|g' \
+      -e 's|@''REPLACE_STRSTR''@|0|g' \
+      -e 's|@''REPLACE_STRERROR''@|1|g' \
+      -e 's|@''REPLACE_STRERROR_R''@|0|g' \
+      -e 's|@''REPLACE_STRNCAT''@|0|g' \
+      -e 's|@''REPLACE_STRNDUP''@|0|g' \
+      -e 's|@''REPLACE_STRNLEN''@|0|g' \
+      -e 's|@''REPLACE_STRSIGNAL''@|0|g' \
+      -e 's|@''REPLACE_STRTOK_R''@|0|g' \
+      -e 's|@''UNDEFINE_STRTOK_R''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h'; \
+      < ./string.in.h; \
+} > string.h-t && \
+mv string.h-t string.h
+/bin/mkdir -p sys
+rm -f sys/stat.h-t sys/stat.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_SYS_STAT_H''@|<sys/stat.h>|g' \
+      -e 's|@''WINDOWS_64_BIT_ST_SIZE''@|0|g' \
+      -e 's/@''GNULIB_FCHMODAT''@/0/g' \
+      -e 's/@''GNULIB_FSTAT''@/0/g' \
+      -e 's/@''GNULIB_FSTATAT''@/0/g' \
+      -e 's/@''GNULIB_FUTIMENS''@/0/g' \
+      -e 's/@''GNULIB_LCHMOD''@/0/g' \
+      -e 's/@''GNULIB_LSTAT''@/1/g' \
+      -e 's/@''GNULIB_MKDIRAT''@/0/g' \
+      -e 's/@''GNULIB_MKFIFO''@/0/g' \
+      -e 's/@''GNULIB_MKFIFOAT''@/0/g' \
+      -e 's/@''GNULIB_MKNOD''@/0/g' \
+      -e 's/@''GNULIB_MKNODAT''@/0/g' \
+      -e 's/@''GNULIB_STAT''@/1/g' \
+      -e 's/@''GNULIB_UTIMENSAT''@/0/g' \
+      -e 's|@''HAVE_FCHMODAT''@|1|g' \
+      -e 's|@''HAVE_FSTATAT''@|1|g' \
+      -e 's|@''HAVE_FUTIMENS''@|1|g' \
+      -e 's|@''HAVE_LCHMOD''@|1|g' \
+      -e 's|@''HAVE_LSTAT''@|1|g' \
+      -e 's|@''HAVE_MKDIRAT''@|1|g' \
+      -e 's|@''HAVE_MKFIFO''@|1|g' \
+      -e 's|@''HAVE_MKFIFOAT''@|1|g' \
+      -e 's|@''HAVE_MKNOD''@|1|g' \
+      -e 's|@''HAVE_MKNODAT''@|1|g' \
+      -e 's|@''HAVE_UTIMENSAT''@|1|g' \
+      -e 's|@''REPLACE_FSTAT''@|0|g' \
+      -e 's|@''REPLACE_FSTATAT''@|0|g' \
+      -e 's|@''REPLACE_FUTIMENS''@|0|g' \
+      -e 's|@''REPLACE_LSTAT''@|1|g' \
+      -e 's|@''REPLACE_MKDIR''@|0|g' \
+      -e 's|@''REPLACE_MKFIFO''@|0|g' \
+      -e 's|@''REPLACE_MKNOD''@|0|g' \
+      -e 's|@''REPLACE_STAT''@|1|g' \
+      -e 's|@''REPLACE_UTIMENSAT''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h' \
+      < ./sys_stat.in.h; \
+} > sys/stat.h-t && \
+mv sys/stat.h-t sys/stat.h
+/bin/mkdir -p sys
+rm -f sys/time.h-t sys/time.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's/@''HAVE_SYS_TIME_H''@/1/g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_SYS_TIME_H''@|<sys/time.h>|g' \
+      -e 's/@''GNULIB_GETTIMEOFDAY''@/1/g' \
+      -e 's|@''HAVE_WINSOCK2_H''@|0|g' \
+      -e 's/@''HAVE_GETTIMEOFDAY''@/1/g' \
+      -e 's/@''HAVE_STRUCT_TIMEVAL''@/1/g' \
+      -e 's/@''REPLACE_GETTIMEOFDAY''@/0/g' \
+      -e 's/@''REPLACE_STRUCT_TIMEVAL''@/0/g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h' \
+      < ./sys_time.in.h; \
+} > sys/time.h-t && \
+mv sys/time.h-t sys/time.h
+/bin/mkdir -p sys
+rm -f sys/types.h-t sys/types.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_SYS_TYPES_H''@|<sys/types.h>|g' \
+      -e 's|@''WINDOWS_64_BIT_OFF_T''@|0|g' \
+      < ./sys_types.in.h; \
+} > sys/types.h-t && \
+mv sys/types.h-t sys/types.h
+rm -f time.h-t time.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_TIME_H''@|<time.h>|g' \
+      -e 's/@''GNULIB_GETTIMEOFDAY''@/1/g' \
+      -e 's/@''GNULIB_MKTIME''@/0/g' \
+      -e 's/@''GNULIB_NANOSLEEP''@/0/g' \
+      -e 's/@''GNULIB_STRPTIME''@/0/g' \
+      -e 's/@''GNULIB_TIMEGM''@/0/g' \
+      -e 's/@''GNULIB_TIME_R''@/0/g' \
+      -e 's/@''GNULIB_TIME_RZ''@/0/g' \
+      -e 's|@''HAVE_DECL_LOCALTIME_R''@|1|g' \
+      -e 's|@''HAVE_NANOSLEEP''@|1|g' \
+      -e 's|@''HAVE_STRPTIME''@|1|g' \
+      -e 's|@''HAVE_TIMEGM''@|1|g' \
+      -e 's|@''HAVE_TIMEZONE_T''@|0|g' \
+      -e 's|@''REPLACE_GMTIME''@|0|g' \
+      -e 's|@''REPLACE_LOCALTIME''@|0|g' \
+      -e 's|@''REPLACE_LOCALTIME_R''@|GNULIB_PORTCHECK|g' \
+      -e 's|@''REPLACE_MKTIME''@|GNULIB_PORTCHECK|g' \
+      -e 's|@''REPLACE_NANOSLEEP''@|GNULIB_PORTCHECK|g' \
+      -e 's|@''REPLACE_TIMEGM''@|GNULIB_PORTCHECK|g' \
+      -e 's|@''PTHREAD_H_DEFINES_STRUCT_TIMESPEC''@|0|g' \
+      -e 's|@''SYS_TIME_H_DEFINES_STRUCT_TIMESPEC''@|0|g' \
+      -e 's|@''TIME_H_DEFINES_STRUCT_TIMESPEC''@|1|g' \
+      -e 's|@''UNISTD_H_DEFINES_STRUCT_TIMESPEC''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h' \
+      < ./time.in.h; \
+} > time.h-t && \
+mv time.h-t time.h
+rm -f unistd.h-t unistd.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  sed -e 's|@''GUARD_PREFIX''@|GL|g' \
+      -e 's|@''HAVE_UNISTD_H''@|1|g' \
+      -e 's|@''INCLUDE_NEXT''@|include_next|g' \
+      -e 's|@''PRAGMA_SYSTEM_HEADER''@|#pragma GCC system_header|g' \
+      -e 's|@''PRAGMA_COLUMNS''@||g' \
+      -e 's|@''NEXT_UNISTD_H''@|<unistd.h>|g' \
+      -e 's|@''WINDOWS_64_BIT_OFF_T''@|0|g' \
+      -e 's/@''GNULIB_CHDIR''@/0/g' \
+      -e 's/@''GNULIB_CHOWN''@/0/g' \
+      -e 's/@''GNULIB_CLOSE''@/0/g' \
+      -e 's/@''GNULIB_DUP''@/0/g' \
+      -e 's/@''GNULIB_DUP2''@/0/g' \
+      -e 's/@''GNULIB_DUP3''@/0/g' \
+      -e 's/@''GNULIB_ENVIRON''@/1/g' \
+      -e 's/@''GNULIB_EUIDACCESS''@/0/g' \
+      -e 's/@''GNULIB_FACCESSAT''@/0/g' \
+      -e 's/@''GNULIB_FCHDIR''@/0/g' \
+      -e 's/@''GNULIB_FCHOWNAT''@/0/g' \
+      -e 's/@''GNULIB_FDATASYNC''@/0/g' \
+      -e 's/@''GNULIB_FSYNC''@/0/g' \
+      -e 's/@''GNULIB_FTRUNCATE''@/0/g' \
+      -e 's/@''GNULIB_GETCWD''@/0/g' \
+      -e 's/@''GNULIB_GETDOMAINNAME''@/0/g' \
+      -e 's/@''GNULIB_GETDTABLESIZE''@/0/g' \
+      -e 's/@''GNULIB_GETGROUPS''@/0/g' \
+      -e 's/@''GNULIB_GETHOSTNAME''@/0/g' \
+      -e 's/@''GNULIB_GETLOGIN''@/0/g' \
+      -e 's/@''GNULIB_GETLOGIN_R''@/0/g' \
+      -e 's/@''GNULIB_GETPAGESIZE''@/0/g' \
+      -e 's/@''GNULIB_GETUSERSHELL''@/0/g' \
+      -e 's/@''GNULIB_GROUP_MEMBER''@/0/g' \
+      -e 's/@''GNULIB_ISATTY''@/0/g' \
+      -e 's/@''GNULIB_LCHOWN''@/0/g' \
+      -e 's/@''GNULIB_LINK''@/0/g' \
+      -e 's/@''GNULIB_LINKAT''@/0/g' \
+      -e 's/@''GNULIB_LSEEK''@/0/g' \
+      -e 's/@''GNULIB_PIPE''@/0/g' \
+      -e 's/@''GNULIB_PIPE2''@/0/g' \
+      -e 's/@''GNULIB_PREAD''@/0/g' \
+      -e 's/@''GNULIB_PWRITE''@/0/g' \
+      -e 's/@''GNULIB_READ''@/1/g' \
+      -e 's/@''GNULIB_READLINK''@/1/g' \
+      -e 's/@''GNULIB_READLINKAT''@/0/g' \
+      -e 's/@''GNULIB_RMDIR''@/0/g' \
+      -e 's/@''GNULIB_SETHOSTNAME''@/0/g' \
+      -e 's/@''GNULIB_SLEEP''@/0/g' \
+      -e 's/@''GNULIB_SYMLINK''@/0/g' \
+      -e 's/@''GNULIB_SYMLINKAT''@/0/g' \
+      -e 's/@''GNULIB_TTYNAME_R''@/0/g' \
+      -e 's/@''GNULIB_UNISTD_H_GETOPT''@/0/g' \
+      -e 's/@''GNULIB_UNISTD_H_NONBLOCKING''@/0/g' \
+      -e 's/@''GNULIB_UNISTD_H_SIGPIPE''@/1/g' \
+      -e 's/@''GNULIB_UNLINK''@/0/g' \
+      -e 's/@''GNULIB_UNLINKAT''@/0/g' \
+      -e 's/@''GNULIB_USLEEP''@/0/g' \
+      -e 's/@''GNULIB_WRITE''@/0/g' \
+      < ./unistd.in.h | \
+  sed -e 's|@''HAVE_CHOWN''@|1|g' \
+      -e 's|@''HAVE_DUP2''@|1|g' \
+      -e 's|@''HAVE_DUP3''@|1|g' \
+      -e 's|@''HAVE_EUIDACCESS''@|1|g' \
+      -e 's|@''HAVE_FACCESSAT''@|1|g' \
+      -e 's|@''HAVE_FCHDIR''@|1|g' \
+      -e 's|@''HAVE_FCHOWNAT''@|1|g' \
+      -e 's|@''HAVE_FDATASYNC''@|1|g' \
+      -e 's|@''HAVE_FSYNC''@|1|g' \
+      -e 's|@''HAVE_FTRUNCATE''@|1|g' \
+      -e 's|@''HAVE_GETDTABLESIZE''@|1|g' \
+      -e 's|@''HAVE_GETGROUPS''@|1|g' \
+      -e 's|@''HAVE_GETHOSTNAME''@|1|g' \
+      -e 's|@''HAVE_GETPAGESIZE''@|1|g' \
+      -e 's|@''HAVE_GROUP_MEMBER''@|1|g' \
+      -e 's|@''HAVE_LCHOWN''@|1|g' \
+      -e 's|@''HAVE_LINK''@|1|g' \
+      -e 's|@''HAVE_LINKAT''@|1|g' \
+      -e 's|@''HAVE_PIPE''@|1|g' \
+      -e 's|@''HAVE_PIPE2''@|1|g' \
+      -e 's|@''HAVE_PREAD''@|1|g' \
+      -e 's|@''HAVE_PWRITE''@|1|g' \
+      -e 's|@''HAVE_READLINK''@|1|g' \
+      -e 's|@''HAVE_READLINKAT''@|1|g' \
+      -e 's|@''HAVE_SETHOSTNAME''@|1|g' \
+      -e 's|@''HAVE_SLEEP''@|1|g' \
+      -e 's|@''HAVE_SYMLINK''@|1|g' \
+      -e 's|@''HAVE_SYMLINKAT''@|1|g' \
+      -e 's|@''HAVE_UNLINKAT''@|1|g' \
+      -e 's|@''HAVE_USLEEP''@|1|g' \
+      -e 's|@''HAVE_DECL_ENVIRON''@|1|g' \
+      -e 's|@''HAVE_DECL_FCHDIR''@|1|g' \
+      -e 's|@''HAVE_DECL_FDATASYNC''@|1|g' \
+      -e 's|@''HAVE_DECL_GETDOMAINNAME''@|1|g' \
+      -e 's|@''HAVE_DECL_GETLOGIN''@|1|g' \
+      -e 's|@''HAVE_DECL_GETLOGIN_R''@|1|g' \
+      -e 's|@''HAVE_DECL_GETPAGESIZE''@|1|g' \
+      -e 's|@''HAVE_DECL_GETUSERSHELL''@|1|g' \
+      -e 's|@''HAVE_DECL_SETHOSTNAME''@|1|g' \
+      -e 's|@''HAVE_DECL_TTYNAME_R''@|1|g' \
+      -e 's|@''HAVE_OS_H''@|0|g' \
+      -e 's|@''HAVE_SYS_PARAM_H''@|0|g' \
+  | \
+  sed -e 's|@''REPLACE_CHOWN''@|0|g' \
+      -e 's|@''REPLACE_CLOSE''@|0|g' \
+      -e 's|@''REPLACE_DUP''@|0|g' \
+      -e 's|@''REPLACE_DUP2''@|0|g' \
+      -e 's|@''REPLACE_FCHOWNAT''@|0|g' \
+      -e 's|@''REPLACE_FTRUNCATE''@|0|g' \
+      -e 's|@''REPLACE_GETCWD''@|0|g' \
+      -e 's|@''REPLACE_GETDOMAINNAME''@|0|g' \
+      -e 's|@''REPLACE_GETDTABLESIZE''@|0|g' \
+      -e 's|@''REPLACE_GETLOGIN_R''@|0|g' \
+      -e 's|@''REPLACE_GETGROUPS''@|0|g' \
+      -e 's|@''REPLACE_GETPAGESIZE''@|0|g' \
+      -e 's|@''REPLACE_ISATTY''@|0|g' \
+      -e 's|@''REPLACE_LCHOWN''@|0|g' \
+      -e 's|@''REPLACE_LINK''@|0|g' \
+      -e 's|@''REPLACE_LINKAT''@|0|g' \
+      -e 's|@''REPLACE_LSEEK''@|0|g' \
+      -e 's|@''REPLACE_PREAD''@|0|g' \
+      -e 's|@''REPLACE_PWRITE''@|0|g' \
+      -e 's|@''REPLACE_READ''@|0|g' \
+      -e 's|@''REPLACE_READLINK''@|1|g' \
+      -e 's|@''REPLACE_READLINKAT''@|0|g' \
+      -e 's|@''REPLACE_RMDIR''@|0|g' \
+      -e 's|@''REPLACE_SLEEP''@|0|g' \
+      -e 's|@''REPLACE_SYMLINK''@|0|g' \
+      -e 's|@''REPLACE_SYMLINKAT''@|0|g' \
+      -e 's|@''REPLACE_TTYNAME_R''@|0|g' \
+      -e 's|@''REPLACE_UNLINK''@|0|g' \
+      -e 's|@''REPLACE_UNLINKAT''@|0|g' \
+      -e 's|@''REPLACE_USLEEP''@|0|g' \
+      -e 's|@''REPLACE_WRITE''@|0|g' \
+      -e 's|@''UNISTD_H_HAVE_WINSOCK2_H''@|0|g' \
+      -e 's|@''UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS''@|0|g' \
+      -e '/definitions of _GL_FUNCDECL_RPL/r c++defs.h' \
+      -e '/definition of _GL_ARG_NONNULL/r arg-nonnull.h' \
+      -e '/definition of _GL_WARN_ON_USE/r warn-on-use.h'; \
+} > unistd.h-t && \
+mv unistd.h-t unistd.h
+rm -f unitypes.h-t unitypes.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  cat ./unitypes.in.h; \
+} > unitypes.h-t && \
+mv -f unitypes.h-t unitypes.h
+rm -f uniwidth.h-t uniwidth.h && \
+{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+  cat ./uniwidth.in.h; \
+} > uniwidth.h-t && \
+mv -f uniwidth.h-t uniwidth.h
+make  all-am
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o allocator.o allocator.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o areadlink.o areadlink.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o binary-io.o binary-io.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o careadlinkat.o careadlinkat.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o dirname-lgpl.o dirname-lgpl.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o basename-lgpl.o basename-lgpl.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o stripslash.o stripslash.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o getprogname.o getprogname.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o malloca.o malloca.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o progname.o progname.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o safe-read.o safe-read.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o unistd.o unistd.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o uniwidth/width.o uniwidth/width.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o xmalloc.o xmalloc.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o xstrdup.o xstrdup.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o xreadlink.o xreadlink.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o canonicalize-lgpl.o canonicalize-lgpl.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o error.o error.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+error.c: In function 'error':
+error.c:315:31: warning: implicit declaration of function 'getprogname'; did you mean 'gethostname'? [-Wimplicit-function-declaration]
+       fprintf (stderr, "%s: ", program_name);
+                               ^~~~~~~~~~~
+                               gethostname
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o lstat.o lstat.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o readlink.o readlink.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o stat.o stat.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o strerror.o strerror.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include   -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -c -o strerror-override.o strerror-override.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+rm -f libicrt.a
+/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar cr libicrt.a allocator.o areadlink.o binary-io.o careadlinkat.o dirname-lgpl.o basename-lgpl.o stripslash.o getprogname.o malloca.o progname.o safe-read.o unistd.o uniwidth/width.o xmalloc.o xstrdup.o xreadlink.o canonicalize-lgpl.o error.o lstat.o readlink.o stat.o strerror.o strerror-override.o
+/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib libicrt.a
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+cd src && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/src'
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -c -I. -I. -I.. -I../include -I./../include -I../srclib -I./../srclib -I../lib -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin\" -DLOCALEDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/locale\" ./iconv_no_i18n.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+/bin/bash ../libtool --mode=link /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -lpthread -lm --verbose    -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  iconv_no_i18n.o ../srclib/libicrt.a ../lib/libiconv.la  -o iconv_no_i18n
+libtool: link: /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -specs=/opt/devkitpro/libnx/switch.specs -g -Wl,-Map -Wl,kodi-switch-deps.map --verbose -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include iconv_no_i18n.o -o iconv_no_i18n  -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ ../srclib/libicrt.a ../lib/.libs/libiconv.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthread.a -lm
+Using built-in specs.
+Reading specs from /opt/devkitpro/libnx/switch.specs
+rename spec link to old_link
+COLLECT_GCC=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+COLLECT_LTO_WRAPPER=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/lto-wrapper
+Target: aarch64-none-elf
+Configured with: ../../gcc-8.2.0/configure --enable-languages=c,c++,objc,lto --with-gnu-as --with-gnu-ld --with-gcc --with-march=armv8 --enable-cxx-flags=-ffunction-sections --disable-libstdcxx-verbose --enable-poison-system-directories --enable-interwork --enable-multilib --enable-threads --disable-win32-registry --disable-nls --disable-debug --disable-libmudflap --disable-libssp --disable-libgomp --disable-libstdcxx-pch --enable-libstdcxx-time --enable-libstdcxx-filesystem-ts --target=aarch64-none-elf --with-newlib --with-headers=../../newlib-3.0.0/newlib/libc/include --prefix=/opt/devkitpro/devkitA64 --enable-lto --with-system-zlib --with-bugurl=https://github.com/devkitPro/buildscripts/issues --with-pkgversion='devkitA64 release 12'
+Thread model: single
+gcc version 8.2.0 (devkitA64 release 12) 
+COMPILER_PATH=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/bin/
+LIBRARY_PATH=/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/pic/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/
+COLLECT_GCC_OPTIONS='-specs=/opt/devkitpro/libnx/switch.specs' '-g' '-v' '-ffunction-sections' '-fdata-sections' '-march=armv8-a' '-mtune=cortex-a57' '-mtp=soft' '-fPIC' '-ftls-model=local-exec' '-D' '__SWITCH__' '-D' 'TARGET_SWITCH' '-D' '__aarch64__' '-D' 'pthread_t=Thread*' '-D' 'pthread_mutex_t=void*' '-D' 'pthread_mutexattr_t=void*' '-D' 'pthread_attr_t=int' '-D' 'pthread_cond_t=CondVar' '-D' 'pthread_condattr_t=int' '-D' 'HAVE_THREADS' '-U' '__linux__' '-U' '__linux' '-D' '_SYS__PTHREADTYPES_H_-D_MBSTATE_T' '-D' 'mbstate_t=_mbstate_t' '-I' '/opt/devkitpro/libnx/include' '-I' '/opt/devkitpro/portlibs/switch/include' '-I' '/opt/devkitpro/devkitA64/aarch64-none-elf/include' '-include' '/opt/devkitpro/libnx/include/switch.h' '-D' 'NDEBUG=1' '-isystem' '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include' '-o' 'iconv_no_i18n' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64' '-L.' '-L/opt/devkitpro/libnx/lib' '-L/opt/devkitpro/portlibs/switch/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/' '-mlittle-endian' '-mabi=lp64'
+ /opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/collect2 -plugin /opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/liblto_plugin.so -plugin-opt=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccrfhZhL.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lg -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lsysbase -EL -X -maarch64elf -T /opt/devkitpro/libnx/switch.ld -pie --gc-sections -z text -z nodynamic-undefined-weak --build-id=sha1 -o iconv_no_i18n /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crti.o /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtbegin.o -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/pic -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0 -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib -Map kodi-switch-deps.map iconv_no_i18n.o ../srclib/libicrt.a ../lib/.libs/libiconv.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthread.a -lm --start-group -lgcc -lg -lc -lsysbase --end-group /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtend.o /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtn.o
+/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/bin/ld: warning: cannot find entry symbol _start; defaulting to 0000000000000038
+COLLECT_GCC_OPTIONS='-specs=/opt/devkitpro/libnx/switch.specs' '-g' '-v' '-ffunction-sections' '-fdata-sections' '-march=armv8-a' '-mtune=cortex-a57' '-mtp=soft' '-fPIC' '-ftls-model=local-exec' '-D' '__SWITCH__' '-D' 'TARGET_SWITCH' '-D' '__aarch64__' '-D' 'pthread_t=Thread*' '-D' 'pthread_mutex_t=void*' '-D' 'pthread_mutexattr_t=void*' '-D' 'pthread_attr_t=int' '-D' 'pthread_cond_t=CondVar' '-D' 'pthread_condattr_t=int' '-D' 'HAVE_THREADS' '-U' '__linux__' '-U' '__linux' '-D' '_SYS__PTHREADTYPES_H_-D_MBSTATE_T' '-D' 'mbstate_t=_mbstate_t' '-I' '/opt/devkitpro/libnx/include' '-I' '/opt/devkitpro/portlibs/switch/include' '-I' '/opt/devkitpro/devkitA64/aarch64-none-elf/include' '-include' '/opt/devkitpro/libnx/include/switch.h' '-D' 'NDEBUG=1' '-isystem' '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include' '-o' 'iconv_no_i18n' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64' '-L.' '-L/opt/devkitpro/libnx/lib' '-L/opt/devkitpro/portlibs/switch/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/' '-mlittle-endian' '-mabi=lp64'
+/usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -c -I. -I. -I.. -I../include -I./../include -I../srclib -I./../srclib -I../lib -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  -DINSTALLDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin\" -DLOCALEDIR=\"/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/locale\" ./iconv.c
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+<command-line>: warning: ISO C99 requires whitespace after the macro name
+test `ls -ld . | sed -e 's/^d\(.........\).*/\1/'` = rwxrwxrwx || chmod 777 .
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/src'
+cd po && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/po'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/po'
+cd man && make all
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/man'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/man'
+if test -d tests; then cd tests && make all; fi
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/tests'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/tests'
+make[1]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release'
+make -C aarch64-none-elf-release install
+make[1]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release'
+cd libcharset && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+cd lib && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+if test no = no; then \
+  case 'elf' in \
+    darwin[56]*) \
+      need_charset_alias=true ;; \
+    darwin* | cygwin* | mingw* | pw32* | cegcc*) \
+      need_charset_alias=false ;; \
+    *) \
+      need_charset_alias=true ;; \
+  esac ; \
+else \
+  need_charset_alias=false ; \
+fi ; \
+/bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib ; \
+/bin/bash ../libtool --mode=install /usr/bin/install -c libcharset.la /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libcharset.la
+libtool: install: /usr/bin/install -c .libs/libcharset.lai /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libcharset.la
+libtool: install: /usr/bin/install -c .libs/libcharset.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libcharset.a
+libtool: install: chmod 644 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libcharset.a
+libtool: install: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libcharset.a
+if test -f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/charset.alias; then \
+  sed -f ref-add.sed /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/charset.alias > /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias; \
+  /usr/bin/install -c -m 644 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/charset.alias; \
+  rm -f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias; \
+else \
+  if $need_charset_alias; then \
+    sed -f ref-add.sed charset.alias > /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias; \
+    /usr/bin/install -c -m 644 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/charset.alias; \
+    rm -f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/t-charset.alias; \
+  fi ; \
+fi
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset/lib'
+/bin/sh ./build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include
+/usr/bin/install -c -m 644 include/libcharset.h /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include/libcharset.h
+/usr/bin/install -c -m 644 include/localcharset.h.inst /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include/localcharset.h
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/libcharset'
+cd lib && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib'
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib ] ; then /bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib ; fi
+/bin/bash ../libtool --mode=install /usr/bin/install -c libiconv.la /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.la
+libtool: install: /usr/bin/install -c .libs/libiconv.lai /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.la
+libtool: install: /usr/bin/install -c .libs/libiconv.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.a
+libtool: install: chmod 644 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.a
+libtool: install: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.a
+case "elf" in \
+  aix*) (cd /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib && \
+         objects=`ar t libiconv.a`" "`ar t /lib/libiconv.a` && \
+         ar x libiconv.a && ar x /lib/libiconv.a && \
+         ar q libiconv.new.a $objects && \
+         rm -f $objects && \
+         mv -f libiconv.new.a libiconv.a) ;; \
+esac
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/lib'
+cd preload && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/preload'
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib ] ; then /bin/sh ./build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib ; fi
+if test -n ""; then /usr/bin/install -c -m 644  /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/.new && mv /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/.new /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ ; fi
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/preload'
+cd srclib && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make  install-am
+make[3]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make[4]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make[4]: Nothing to be done for 'install-exec-am'.
+make[4]: Nothing to be done for 'install-data-am'.
+make[4]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make[3]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/srclib'
+cd src && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' libdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/src'
+test `ls -ld . | sed -e 's/^d\(.........\).*/\1/'` = rwxrwxrwx || chmod 777 .
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin ] ; then /bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin ; fi
+case "elf" in \
+  hpux*) /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -lpthread -lm --verbose    -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  `if test -n ''; then  /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin; fi` iconv.o ../srclib/libicrt.a -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -liconv   `if test -n ''; then echo " -Wl,+b -Wl,/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib"; fi` -o iconv;; \
+  *) /bin/bash ../libtool --mode=link /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -lpthread -lm --verbose    -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D pthread_t=Thread* -D pthread_mutex_t=void* -D pthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1    -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include  `if test -n ''; then  /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin; fi` iconv.o ../srclib/libicrt.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.la   -o iconv;; \
+esac
+libtool: link: /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -specs=/opt/devkitpro/libnx/switch.specs -g -Wl,-Map -Wl,kodi-switch-deps.map --verbose -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -D "pthread_t=Thread*" -D "pthread_mutex_t=void*" -D "pthread_mutexattr_t=void*" -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_-D_MBSTATE_T -Dmbstate_t=_mbstate_t -I /opt/devkitpro/libnx/include -I /opt/devkitpro/portlibs/switch/include -I /opt/devkitpro/devkitA64/aarch64-none-elf/include -include /opt/devkitpro/libnx/include/switch.h -DNDEBUG=1 -isystem /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include iconv.o -o iconv  -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ ../srclib/libicrt.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthread.a -lm
+Using built-in specs.
+Reading specs from /opt/devkitpro/libnx/switch.specs
+rename spec link to old_link
+COLLECT_GCC=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+COLLECT_LTO_WRAPPER=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/lto-wrapper
+Target: aarch64-none-elf
+Configured with: ../../gcc-8.2.0/configure --enable-languages=c,c++,objc,lto --with-gnu-as --with-gnu-ld --with-gcc --with-march=armv8 --enable-cxx-flags=-ffunction-sections --disable-libstdcxx-verbose --enable-poison-system-directories --enable-interwork --enable-multilib --enable-threads --disable-win32-registry --disable-nls --disable-debug --disable-libmudflap --disable-libssp --disable-libgomp --disable-libstdcxx-pch --enable-libstdcxx-time --enable-libstdcxx-filesystem-ts --target=aarch64-none-elf --with-newlib --with-headers=../../newlib-3.0.0/newlib/libc/include --prefix=/opt/devkitpro/devkitA64 --enable-lto --with-system-zlib --with-bugurl=https://github.com/devkitPro/buildscripts/issues --with-pkgversion='devkitA64 release 12'
+Thread model: single
+gcc version 8.2.0 (devkitA64 release 12) 
+COMPILER_PATH=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/bin/
+LIBRARY_PATH=/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/pic/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/:/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/
+COLLECT_GCC_OPTIONS='-specs=/opt/devkitpro/libnx/switch.specs' '-g' '-v' '-ffunction-sections' '-fdata-sections' '-march=armv8-a' '-mtune=cortex-a57' '-mtp=soft' '-fPIC' '-ftls-model=local-exec' '-D' '__SWITCH__' '-D' 'TARGET_SWITCH' '-D' '__aarch64__' '-D' 'pthread_t=Thread*' '-D' 'pthread_mutex_t=void*' '-D' 'pthread_mutexattr_t=void*' '-D' 'pthread_attr_t=int' '-D' 'pthread_cond_t=CondVar' '-D' 'pthread_condattr_t=int' '-D' 'HAVE_THREADS' '-U' '__linux__' '-U' '__linux' '-D' '_SYS__PTHREADTYPES_H_-D_MBSTATE_T' '-D' 'mbstate_t=_mbstate_t' '-I' '/opt/devkitpro/libnx/include' '-I' '/opt/devkitpro/portlibs/switch/include' '-I' '/opt/devkitpro/devkitA64/aarch64-none-elf/include' '-include' '/opt/devkitpro/libnx/include/switch.h' '-D' 'NDEBUG=1' '-isystem' '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include' '-o' 'iconv' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64' '-L.' '-L/opt/devkitpro/libnx/lib' '-L/opt/devkitpro/portlibs/switch/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/' '-mlittle-endian' '-mabi=lp64'
+ /opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/collect2 -plugin /opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/liblto_plugin.so -plugin-opt=/opt/devkitpro/devkitA64/libexec/gcc/aarch64-none-elf/8.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvr6gRn.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lg -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lsysbase -EL -X -maarch64elf -T /opt/devkitpro/libnx/switch.ld -pie --gc-sections -z text -z nodynamic-undefined-weak --build-id=sha1 -o iconv /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crti.o /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtbegin.o -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64 -L. -L/opt/devkitpro/libnx/lib -L/opt/devkitpro/portlibs/switch/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/ -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib/pic -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0 -L/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/lib -Map kodi-switch-deps.map iconv.o ../srclib/libicrt.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libiconv.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthread.a -lm --start-group -lgcc -lg -lc -lsysbase --end-group /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtend.o /opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/pic/crtn.o
+/opt/devkitpro/devkitA64/lib/gcc/aarch64-none-elf/8.2.0/../../../../aarch64-none-elf/bin/ld: warning: cannot find entry symbol _start; defaulting to 0000000000000038
+COLLECT_GCC_OPTIONS='-specs=/opt/devkitpro/libnx/switch.specs' '-g' '-v' '-ffunction-sections' '-fdata-sections' '-march=armv8-a' '-mtune=cortex-a57' '-mtp=soft' '-fPIC' '-ftls-model=local-exec' '-D' '__SWITCH__' '-D' 'TARGET_SWITCH' '-D' '__aarch64__' '-D' 'pthread_t=Thread*' '-D' 'pthread_mutex_t=void*' '-D' 'pthread_mutexattr_t=void*' '-D' 'pthread_attr_t=int' '-D' 'pthread_cond_t=CondVar' '-D' 'pthread_condattr_t=int' '-D' 'HAVE_THREADS' '-U' '__linux__' '-U' '__linux' '-D' '_SYS__PTHREADTYPES_H_-D_MBSTATE_T' '-D' 'mbstate_t=_mbstate_t' '-I' '/opt/devkitpro/libnx/include' '-I' '/opt/devkitpro/portlibs/switch/include' '-I' '/opt/devkitpro/devkitA64/aarch64-none-elf/include' '-include' '/opt/devkitpro/libnx/include/switch.h' '-D' 'NDEBUG=1' '-isystem' '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include' '-o' 'iconv' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib64' '-L.' '-L/opt/devkitpro/libnx/lib' '-L/opt/devkitpro/portlibs/switch/lib' '-L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/' '-mlittle-endian' '-mabi=lp64'
+/bin/bash ../libtool --mode=install /usr/bin/install -c iconv /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin/iconv
+libtool: install: /usr/bin/install -c iconv /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/bin/iconv
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/src'
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include ] ; then /bin/sh ./build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include ; fi
+/usr/bin/install -c -m 644 include/iconv.h.inst /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include/iconv.h
+cd po && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' datarootdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share' datadir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/po'
+if test "libiconv" = "gettext-tools"; then \
+  /bin/mkdir -p /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/gettext/po; \
+  for file in Makefile.in.in remove-potcdate.sin quot.sed boldquot.sed en@quot.header en@boldquot.header insert-header.sin Rules-quot   Makevars.template; do \
+    /usr/bin/install -c -m 644 ./$file \
+		    /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/gettext/po/$file; \
+  done; \
+  for file in Makevars; do \
+    rm -f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/gettext/po/$file; \
+  done; \
+else \
+  : ; \
+fi
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/po'
+cd man && make install prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' exec_prefix='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release' datarootdir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share' datadir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share' mandir='/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man'
+make[2]: Entering directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/man'
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man1 ] ; then /bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man1 ; fi
+builddir="`pwd`"; cd . && for f in *.1 ; do (cd "$builddir"; echo /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man1/$f ; /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man1/$f) ; done
+/usr/bin/install -c -m 644 ./iconv.1 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man1/iconv.1
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3 ] ; then /bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3 ; fi
+builddir="`pwd`"; cd . && for f in *.3 ; do (cd "$builddir"; echo /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/$f ; /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/$f) ; done
+/usr/bin/install -c -m 644 ./iconv.3 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/iconv.3
+/usr/bin/install -c -m 644 ./iconv_close.3 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/iconv_close.3
+/usr/bin/install -c -m 644 ./iconv_open.3 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/iconv_open.3
+/usr/bin/install -c -m 644 ./iconv_open_into.3 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/iconv_open_into.3
+/usr/bin/install -c -m 644 ./iconvctl.3 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/man/man3/iconvctl.3
+if [ ! -d /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc/ ] ; then /bin/sh ../build-aux/mkinstalldirs /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc/ ; fi
+builddir="`pwd`"; cd . && for f in *.html ; do (cd "$builddir"; echo /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//$f ; /usr/bin/install -c -m 644 ./$f /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//$f) ; done
+/usr/bin/install -c -m 644 ./iconv.1.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconv.1.html
+/usr/bin/install -c -m 644 ./iconv.3.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconv.3.html
+/usr/bin/install -c -m 644 ./iconv_close.3.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconv_close.3.html
+/usr/bin/install -c -m 644 ./iconv_open.3.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconv_open.3.html
+/usr/bin/install -c -m 644 ./iconv_open_into.3.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconv_open_into.3.html
+/usr/bin/install -c -m 644 ./iconvctl.3.html /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/doc//iconvctl.3.html
+make[2]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release/man'
+make[1]: Leaving directory '/programming/kodi/tools/depends/target/libiconv/aarch64-none-elf-release'
+touch .installed-aarch64-none-elf-release
+make: Leaving directory '/programming/kodi/tools/depends/target/libiconv'

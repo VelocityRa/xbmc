@@ -1,7 +1,11 @@
 rm -rf kodi-switch-build
 mkdir kodi-switch-build
 pushd kodi-switch-build
-CMAKE_EXECUTABLE="/programming/kodi/tools/depends/native/cmake-native/x86_64-linux-native/bin/cmake"
+
+source /etc/profile.d/devkit-env.sh
+source $DEVKITPRO/switchvars.sh
+
+CMAKE_EXECUTABLE="../kodi/tools/depends/native/cmake-native/x86_64-linux-native/bin/cmake"
 
 ${CMAKE_EXECUTABLE} -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=/programming/kodi/tools/depends/target/Toolchain.cmake \
                           -DWITH_FFMPEG=ON \

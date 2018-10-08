@@ -29,10 +29,12 @@ ifeq ($(OS),android)
 	cd $(PLATFORM); patch -p0 < ../fix-32bits-on-64bits.patch
 endif
 # seems MAP_POPULATE is broken on aarch64
-ifneq ($(OS),android)
+ifneq ($(OS),$(filter $(OS),android switch))
 	cd $(PLATFORM); patch -p1 < ../sqlite3.c.patch
 endif
+ifeq ($(OS),switch)
 	cd $(PLATFORM); patch -p0 < ../switch.patch
+endif
 	# do not build the program sqlite3
 	sed -ie "s|bin_PROGRAMS = sqlite3||" "$(PLATFORM)/Makefile.am";
 	cd $(PLATFORM); $(AUTORECONF) -vif

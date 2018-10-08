@@ -23,15 +23,20 @@
 #ifndef _SWITCH_PTHREAD_
 #define _SWITCH_PTHREAD_
 
-#include <cerrno>
-#include <cstdio>
-#include <cstring>
-#include <ctime>
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 
-#include <algorithm>
-#include <vector>
+// #include <algorithm>
+// #include <vector>
 
 #include <switch.h>
+#include <switch/kernel/thread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define SIZEOF_PTHREAD_T 8
 
@@ -118,20 +123,21 @@ static INLINE pthread_t pthread_self(void)
   return threadGetCurrent();
 }
 
-static std::vector<void*> recursive_mutexes;
+// static std::vector<void*> recursive_mutexes;
 
 static bool is_mutex_recursive(void* mutex)
 {
-  return std::find(recursive_mutexes.begin(), recursive_mutexes.end(), mutex) != recursive_mutexes.end();
+  return true;
+  // return std::find(recursive_mutexes.begin(), recursive_mutexes.end(), mutex) != recursive_mutexes.end();
 }
 
 static INLINE int pthread_mutex_init(pthread_mutex_t* mutex, pthread_mutexattr_t* attr)
 {
-  if (*(int*)attr & 1)
-    recursive_mutexes.push_back((void*)mutex);
+  // if (*(int*)attr & 1)
+    // recursive_mutexes.push_back((void*)mutex);
   
   // TODO: remove
-  if (*(int*)attr & 1) assert(is_mutex_recursive(mutex));
+  // if (*(int*)attr & 1) assert(is_mutex_recursive(mutex));
 
   if (is_mutex_recursive(mutex))
     rmutexInit((RMutex*)mutex);
@@ -245,5 +251,9 @@ INLINE int pthread_equal(pthread_t t1, pthread_t t2)
 
   return 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

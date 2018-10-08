@@ -43,7 +43,7 @@ touch switch-not-built.txt
 
 for t in "${targets[@]}"
 do
-    make -C "target/$t"
+    make "$@" -C "target/$t"
     if [ -f target/$t/.installed-aarch64-none-elf-release ]; then
         echo "$t" >> switch-built.txt
     else

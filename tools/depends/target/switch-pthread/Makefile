@@ -126,6 +126,7 @@ clean:
 
 install:
 	cp -f lib/lib$(TARGET).a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthread.a
+	cp -f lib/lib$(TARGET).a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthreads.a
 	cp -f lib/lib$(TARGET)d.a /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libpthreadd.a
 	cp -f include/switch_pthread.h /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/include/pthread.h
 #---------------------------------------------------------------------------------

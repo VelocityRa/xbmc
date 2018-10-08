@@ -75,7 +75,7 @@
 +                                    "$ENV{'CFLAGS'}"),
 +        lflags           => add("$ENV{'LDFLAGS'}"),
 +        thread_scheme    => "pthreads",
-+        ex_libs          => add(threads("-pthread")),
++        ex_libs          => add(threads("-lpthread")),
 +#        cflags           => combine(threads("-D_REENTRANT")),
 +#        ex_libs          => add("\$(LDLIBS)"),
 +#        shared_target    => "linux-shared",

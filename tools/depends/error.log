@@ -1,0 +1,33 @@
+make -C native
+make[1]: Entering directory '/programming/kodi/tools/depends/native'
+make -C m4-native
+make[2]: Entering directory '/programming/kodi/tools/depends/native/m4-native'
+rm -rf x86_64-linux-native/*; mkdir -p x86_64-linux-native
+cd x86_64-linux-native; /bin/tar --strip-components=1 -xf /home/velo/switch-tools/kodi-tarballs/m4-1.4.18.tar.gz
+cd x86_64-linux-native; patch -p1 -i ../osx_snprintf.patch
+patching file lib/vasnprintf.c
+cd x86_64-linux-native; ./configure --prefix=/home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native
+configure: loading site script /home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/config.site
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether make supports nested variables... (cached) yes
+checking for gcc... /usr/bin/ccache /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... configure: error: in `/programming/kodi/tools/depends/native/m4-native/x86_64-linux-native':
+configure: error: cannot run C compiled programs.
+If you meant to cross compile, use `--host'.
+See `config.log' for more details
+Makefile:23: recipe for target 'x86_64-linux-native' failed
+make[2]: *** [x86_64-linux-native] Error 1
+make[2]: Leaving directory '/programming/kodi/tools/depends/native/m4-native'
+Makefile:64: recipe for target 'm4-native' failed
+make[1]: *** [m4-native] Error 2
+make[1]: Leaving directory '/programming/kodi/tools/depends/native'
+Makefile:8: recipe for target 'native/.installed-x86_64-linux-native' failed
+make: *** [native/.installed-x86_64-linux-native] Error 2

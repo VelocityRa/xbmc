@@ -37,43 +37,22 @@ $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	rm -rf $(PLATFORM); mkdir -p $(PLATFORM)
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 ifeq ($(OS),switch)
-		cd $(PLATFORM); patch -p0 < ../switch.patch
-		cd $(PLATFORM); patch -p0 < ../u128-rename.patch
+	cd $(PLATFORM); patch -p0 < ../switch.patch
+	cd $(PLATFORM); patch -p0 < ../u128-rename.patch
 endif
 	cd $(PLATFORM); AR="$(AR)" CFLAGS="$(CFLAGS)" CC="$(CC)" RANLIB=$(RANLIB) $(CONFIGURE)
-# ifeq ($(OS),osx)
-# 		sed -ie "s|CC= /usr/bin/gcc-4.2|CC= $(CC)|" "$(PLATFORM)/Makefile";
-# 		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile";
-# endif
+	if test "$(OS)" = "osx"; then \
+		sed -ie "s|CC= /usr/bin/gcc-4.2|CC= $(CC)|" "$(PLATFORM)/Makefile"; \
+		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile"; \
+	fi
 	# for iphoneos-cross config a sysroot argument is added
 	# however sysroot already set in Makefile.include, so remove this
-# ifeq ($(OS),ios)
-# 		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile";
-# 		sed -ie "s|-isysroot \$$(CROSS_TOP)/SDKs/\$$(CROSS_SDK) ||" "$(PLATFORM)/Makefile";
-# 		sed -ie "s|static volatile sig_atomic_t intr_signal;|static volatile intr_signal;|" "$(PLATFORM)/crypto/ui/ui_openssl.c";
-# endif
-	sed -ie "s|apps test||" "$(PLATFORM)/Makefile";
-
-# $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
-# 	rm -rf $(PLATFORM); mkdir -p $(PLATFORM)
-# 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
-# ifeq ($(OS),"switch")
-# 	  cd $(PLATFORM); patch -p0 < ../switch.patch
-# endif
-# 	cd $(PLATFORM); AR="$(AR)" CFLAGS="$(CFLAGS)" CC="$(CC)" RANLIB=$(RANLIB) $(CONFIGURE)
-# ifeq ($(OS),osx)
-# 		sed -ie "s|CC= /usr/bin/gcc-4.2|CC= $(CC)|" "$(PLATFORM)/Makefile";
-# 		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile";
-# endif
-# 	# for iphoneos-cross config a sysroot argument is added
-# 	# however sysroot already set in Makefile.include, so remove this
-# ifeq ($(OS),ios)
-# 		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile";
-# 		sed -ie "s|-isysroot \$$(CROSS_TOP)/SDKs/\$$(CROSS_SDK) ||" "$(PLATFORM)/Makefile";
-# 		sed -ie "s|static volatile sig_atomic_t intr_signal;|static volatile intr_signal;|" "$(PLATFORM)/crypto/ui/ui_openssl.c";
-# endif
-# 	sed -ie "s|apps test||" "$(PLATFORM)/Makefile";
-
+	if test "$(OS)" = "ios"; then \
+		sed -E -ie "s|^CFLAGS=-|CFLAGS=$(CFLAGS) -|" "$(PLATFORM)/Makefile"; \
+		sed -ie "s|-isysroot \$$(CROSS_TOP)/SDKs/\$$(CROSS_SDK) ||" "$(PLATFORM)/Makefile"; \
+		sed -ie "s|static volatile sig_atomic_t intr_signal;|static volatile intr_signal;|" "$(PLATFORM)/crypto/ui/ui_openssl.c"; \
+	fi
+	sed -ie "s|apps test||" "$(PLATFORM)/Makefile"; \
 
 $(LIBDYLIB): $(PLATFORM)
 	$(MAKE) -C $(PLATFORM)

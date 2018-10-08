@@ -1,5 +1,5 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile no-msvc.patch
+DEPS= ../../Makefile.include Makefile no-msvc.patch switch.patch
 
 # lib name, version
 LIBNAME=libiconv
@@ -22,7 +22,10 @@ $(TARBALLS_LOCATION)/$(ARCHIVE):
 $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	rm -rf $(PLATFORM)/*; mkdir -p $(PLATFORM)
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
+ifeq ($(OS),switch)
+	cd $(PLATFORM); patch -p0 < ../switch.patch
 	cd $(PLATFORM); patch -p0 < ../no-msvc.patch
+endif
 	cd $(PLATFORM); $(CONFIGURE)
 
 $(LIBDYLIB): $(PLATFORM)

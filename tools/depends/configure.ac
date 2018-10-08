@@ -130,8 +130,8 @@ if test -n "$use_toolchain"; then
 fi
 AC_PROG_CXX([$COMPILER_LIST])
 AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
-c11_flags=$(echo "$CFLAGS" | sed 's/-O@<:@123@:>@//g;s/-g //g;s/ //g')
-cxx11_flags=$(echo "$CXXFLAGS" | sed 's/-O@<:@123@:>@//g;s/-g //g;s/ //g')
+c11_flags=$(echo "$CFLAGS" | sed 's/-O@<:@123@:>@//g;s/-g //g')
+cxx11_flags=$(echo "$CXXFLAGS" | sed 's/-O@<:@123@:>@//g;s/-g //g')
 PATH="${OLD_PATH}"
 
 if test "$use_ccache" = "yes"; then
@@ -258,7 +258,7 @@ case $host in
       prefix=/Users/Shared/xbmc-depends
     fi
 
-    use_xcodepath=`xcode-select -print-path`
+    ### temporarily removed line because it was messing my editor's syntax highlighting
     use_xcodebuild=$use_xcodepath/usr/bin/xcodebuild
     AC_MSG_RESULT(found xcodebuild at $use_xcodebuild)
     use_build_toolchain=$use_xcodepath
@@ -437,22 +437,29 @@ case $use_platform in
      ### Includes
 
      # Include paths
-     tmp_switch_includes="-I $DEVKITPRO/libnx/include -I $DEVKITPRO/portlibs/switch/include -I $DEVKITPRO/devkitA64/aarch64-none-elf/include"
+     #tmp_switch_includes="-I $DEVKITPRO/libnx/include -I $DEVKITPRO/portlibs/switch/include -I $DEVKITPRO/devkitA64/aarch64-none-elf/include"
      # Implicitly included headers
      tmp_switch_includes+=" -include $DEVKITPRO/libnx/include/switch.h"
      ### COMPILE FLAGS
 
      # TODO: debug flags probably not needed (appended below)
-     tmp_switch_compile_flags="-g -Wall -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec"
+     #tmp_switch_compile_flags="-g -Wall -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec"
      tmp_switch_compile_flags+=" -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__"
      # let everyone know about available headers
      ##tmp_switch_compile_flags+=" -DHAVE_SYS_SYSCTL_H -DHAVE_SYS_SOCKIO_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_FILIO_H -DHAVE_ERRNO_H"
      #
-     tmp_switch_compile_flags+=" -D_XOPEN_SOURCE=600 -D__BSD_VISIBLE=1 -Dgetdelim=__getdelim"
+     ############      tmp_switch_compile_flags+=" -D_XOPEN_SOURCE=600 -D__BSD_VISIBLE=1 -Dgetdelim=__getdelim"
 
      # pthread
-     tmp_switch_compile_flags+=" -Dpthread_t=Thread* -Dpthread_mutex_t=void* -Dpthread_mutexattr_t='void*' -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t='int'"
-     ##tmp_switch_compile_flags+=" -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_"
+     tmp_switch_compile_flags+=" -Dpthread_t=Thread* -Dpthread_mutex_t=void* -Dpthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int"
+     #tmp_switch_compile_flags+=" -include /home/velo/programming/kodi/xbmc/platform/switch/pthread_defines.inc"
+     tmp_switch_compile_flags+=" -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_"
+     
+     # libiconv
+     tmp_switch_compile_flags+=" -D_MBSTATE_T -Dmbstate_t=_mbstate_t"
+
+     # Debug stuff
+     #tmp_switch_compile_flags+=" -E -dM "
 
      # Gthread (GCC/C++ threading support)
      #tmp_switch_compile_flags+=" -D_GLIBCXX_HAS_GTHREADS -D_GLIBCXX_USE_C99_STDINT_TR1"
@@ -475,9 +482,11 @@ case $use_platform in
      #tmp_switch_compile_flags+=" -UHAVE_MMAP"
 
      ### Linker flags
-
-     tmp_switch_link_flags="-specs=$DEVKITPRO/libnx/switch.specs -g $ARCH -Wl,-Map,kodi-switch-deps.map"
-     tmp_switch_link_flags+=" -L. -L$DEVKITPRO/libnx/lib -L$DEVKITPRO/portlibs/switch/lib -lpthread -lm --verbose"
+     tmp_switch_link_flags="$LDFLAGS" 
+     tmp_switch_link_flags+=" -specs=$DEVKITPRO/libnx/switch.specs -g $ARCH -Wl,-Map,kodi-switch-deps.map --verbose"
+     tmp_switch_link_flags+=" -L. -L${PORTLIBS_PREFIX}/lib -L${DEVKITPRO}/libnx/lib -L$prefix/$deps_dir/lib"
+     tmp_switch_link_flags+=" -lpthread -lm -lnx"
+          
      #tmp_switch_link_flags+=" -lass"
 
      ### Compile & linker flags for portlibs
@@ -486,16 +495,18 @@ case $use_platform in
     #  tmp_switch_link_flags+=" `$pkg_config_switch --libs $switch_portlibs`"
 
      ### Assign to final vars
-     platform_cflags="$tmp_switch_compile_flags $tmp_switch_includes"
+     platform_cflags="$tmp_switch_compile_flags $tmp_switch_includes -L$prefix/$deps_dir/lib"
      #platform_cflags+=" -fdiagnostics-color=always"
-     platform_cxxflags="$tmp_switch_compile_flags $tmp_switch_includes"
+     platform_cxxflags="$tmp_switch_compile_flags $tmp_switch_includes -L$prefix/$deps_dir/lib"
      
      platform_ldflags="$tmp_switch_link_flags"
+
+     export LDFLAGS="$platform_ldflags"
 
      ### Misc
      app_rendersystem="gl"
 
-     ### hacks
+     ### Hacks
      cp -vf $DEVKITPRO/portlibs/switch/lib/libfribidi.a $prefix/$deps_dir/lib/
      cp -vf $DEVKITPRO/portlibs/switch/lib/libfribidi.la $prefix/$deps_dir/lib/
 
@@ -779,7 +790,6 @@ cp -vf target/Toolchain.cmake $prefix/$deps_dir/share
 cp -vf target/Toolchain_binaddons.cmake $prefix/$deps_dir/share
 cp -vf target/cross-file.meson $prefix/$deps_dir/share
 cp -vf native/config.site.native $prefix/$tool_dir/share/config.site
-
 
 echo -e "\n\n#------- configuration -------#"
 echo -e "ccache:\t\t $use_ccache"

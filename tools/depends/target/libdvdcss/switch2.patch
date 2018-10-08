@@ -1,0 +1,14 @@
+
+
+--- src/device.h
++++ src/device.h
+@@ -31,7 +31,9 @@
+  * iovec structure: vectored data entry
+  *****************************************************************************/
+ #ifndef HAVE_SYS_UIO_H
++#ifndef __SWITCH__
+ #   include <io.h>                                                 /* read() */
++#endif
+ struct iovec
+ {
+     void *iov_base;     /* Pointer to data. */

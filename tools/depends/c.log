@@ -1,0 +1,71 @@
+./configure: line 1996: :-O2: command not found
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... aarch64-none-elf
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether aarch64-none-elf-g++ accepts -g... yes
+checking whether aarch64-none-elf-g++ supports C++11 features by default... yes
+checking for ccache... yes
+checking for curl... /usr/bin/curl
+checking for tar... /bin/tar
+'/opt/devkitpro/portlibs/switch/lib/libfribidi.a' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libfribidi.a'
+'/opt/devkitpro/portlibs/switch/lib/libfribidi.la' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib/libfribidi.la'
+checking for aarch64-none-elf-ranlib... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ranlib
+checking for aarch64-none-elf-ld... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ld
+checking for aarch64-none-elf-ar... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar
+checking for aarch64-none-elf-readelf... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-readelf
+checking for aarch64-none-elf-strip... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-strip
+checking for aarch64-none-elf-as... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-as
+checking for aarch64-none-elf-nm... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm
+checking for aarch64-none-elf-objdump... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-objdump
+checking for aarch64-none-elf-gcc... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+checking for aarch64-none-elf-g++... /opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++
+checking how to run the C preprocessor... aarch64-none-elf-gcc -E
+checking for ranlib... /usr/bin/ranlib
+checking for ld... /usr/bin/ld
+checking for ar... /usr/bin/ar
+checking for readelf... /usr/bin/readelf
+checking for strip... /usr/bin/strip
+checking for as... /usr/bin/as
+checking for nm... /usr/bin/nm
+checking for objdump... /usr/bin/objdump
+checking for gcc... /usr/bin/gcc
+checking for g++... /usr/bin/g++
+checking for library containing iconv_open... no
+configure: WARNING: "No iconv support in toolchain. Will build libiconv."
+checking for aarch64-none-elf-ccache... no
+checking for ccache... /usr/bin/ccache
+configure: WARNING: using cross tools not prefixed with host triplet
+configure: creating ./config.status
+config.status: creating target/config.site
+config.status: creating native/config.site.native
+config.status: creating Makefile.include
+config.status: creating target/Toolchain.cmake
+config.status: creating target/config-binaddons.site
+config.status: creating target/Toolchain_binaddons.cmake
+config.status: creating target/cross-file.meson
+use simulator:	 
+'target/config.site' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/config.site'
+'target/config-binaddons.site' -> '/home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/config-binaddons.site'
+'target/Toolchain.cmake' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/Toolchain.cmake'
+'target/Toolchain_binaddons.cmake' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/Toolchain_binaddons.cmake'
+'target/cross-file.meson' -> '/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/share/cross-file.meson'
+'native/config.site.native' -> '/home/velo/switch-tools/kodi-deps/x86_64-linux-gnu-native/share/config.site'
+
+
+#------- configuration -------#
+ccache:		 yes
+build type:	 release
+toolchain:	 /opt/devkitpro/devkitA64
+cpu:		 cortex-a57
+host:		 aarch64-none-elf
+cflags:		 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -Dpthread_t=Thread* -Dpthread_mutex_t=void* -Dpthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_ -D_MBSTATE_T -Dmbstate_t=_mbstate_t -include /opt/devkitpro/libnx/include/switch.h -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -DNDEBUG=1  
+cxxflags:	 -ffunction-sections -fdata-sections -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -D__SWITCH__ -DTARGET_SWITCH -D__aarch64__ -Dpthread_t=Thread* -Dpthread_mutex_t=void* -Dpthread_mutexattr_t=void* -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t=int -DHAVE_THREADS -U__linux__ -U__linux -D_SYS__PTHREADTYPES_H_ -D_MBSTATE_T -Dmbstate_t=_mbstate_t -include /opt/devkitpro/libnx/include/switch.h -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -DNDEBUG=1  
+ldflags:	 -O2 -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec -L/opt/devkitpro/portlibs/switch/lib -L/opt/devkitpro/libnx/lib -specs=/opt/devkitpro/libnx/switch.specs -g  -Wl,-Map,kodi-switch-deps.map --verbose -L. -L/opt/devkitpro/portlibs/switch/lib -L/opt/devkitpro/libnx/lib -L/home/velo/switch-tools/kodi-deps/aarch64-none-elf-release/lib -lpthread -lm -lnx  
+ffmpeg options:	 
+prefix:		 /home/velo/switch-tools/kodi-deps
+depends:	 /home/velo/switch-tools/kodi-deps/aarch64-none-elf-release

@@ -11,15 +11,17 @@
      struct stat fileinfo;
 --- src/device.h
 +++ src/device.h
-@@ -30,8 +30,10 @@
- /*****************************************************************************
+@@ -31,7 +31,9 @@
   * iovec structure: vectored data entry
   *****************************************************************************/
--#ifndef HAVE_SYS_UIO_H
-+#if !defined(HAVE_SYS_UIO_H) || defined(__SWITCH__)
+ #ifndef HAVE_SYS_UIO_H
 +#ifndef __SWITCH__
  #   include <io.h>                                                 /* read() */
 +#endif
+ struct iovec
+ {
+     void *iov_base;     /* Pointer to data. */
+
  struct iovec
  {
      void *iov_base;     /* Pointer to data. */

@@ -1,0 +1,83 @@
+
+
+--- srclib/Makefile.in
++++ srclib/Makefile.in
+@@ -640,7 +640,7 @@ HAVE_SIGINFO_T = @HAVE_SIGINFO_T@
+ HAVE_SIGNED_SIG_ATOMIC_T = @HAVE_SIGNED_SIG_ATOMIC_T@
+ HAVE_SIGNED_WCHAR_T = @HAVE_SIGNED_WCHAR_T@
+ HAVE_SIGNED_WINT_T = @HAVE_SIGNED_WINT_T@
+-HAVE_SIGSET_T = @HAVE_SIGSET_T@
++HAVE_SIGSET_T=1
+ HAVE_SLEEP = @HAVE_SLEEP@
+ HAVE_STDINT_H = @HAVE_STDINT_H@
+ HAVE_STPCPY = @HAVE_STPCPY@
+
+
+--- srclib/getprogname.c
++++ srclib/getprogname.c
+@@ -143,6 +143,8 @@ getprogname (void)
+       free (buf.ps_pathptr);
+     }
+   return p;
++# elif __SWITCH__
++  return "kodi";
+ # else
+ #  error "getprogname module not ported to this OS"
+ # endif
+
+
+--- srclib/signal.in.h
++++ srclib/signal.in.h
+@@ -211,6 +211,8 @@ typedef int verify_NSIG_constraint[NSIG <= 32 ? 1 : -1];
+ # undef sigismember
+ #endif
+ 
++// These are defined in <sys/signal.h> in devkitpro
++#ifndef __SWITCH__
+ /* Test whether a given signal is contained in a signal set.  */
+ # if @HAVE_POSIX_SIGNALBLOCKING@
+ /* This function is defined as a macro on Mac OS X.  */
+@@ -273,6 +275,7 @@ _GL_FUNCDECL_SYS (sigfillset, int, (sigset_t *set) _GL_ARG_NONNULL ((1)));
+ # endif
+ _GL_CXXALIAS_SYS (sigfillset, int, (sigset_t *set));
+ _GL_CXXALIASWARN (sigfillset);
++#endif
+ 
+ /* Return the set of those blocked signals that are pending.  */
+ # if !@HAVE_POSIX_SIGNALBLOCKING@
+
+
+--- srclib/sigprocmask.c
++++ srclib/sigprocmask.c
+@@ -110,6 +110,8 @@ ext_signal (int sig, handler_t handler)
+ # define signal ext_signal
+ #endif
+ 
++// These are defined in <sys/signal.h> in devkitpro
++#ifndef __SWITCH__
+ int
+ sigismember (const sigset_t *set, int sig)
+ {
+@@ -180,6 +182,7 @@ sigfillset (sigset_t *set)
+   *set = ((2U << (NSIG - 1)) - 1) & ~ SIGABRT_COMPAT_MASK;
+   return 0;
+ }
++#endif
+ 
+ /* Set of currently blocked signals.  */
+ static volatile sigset_t blocked_set /* = 0 */;
+
+
+--- srclib/sys_time.in.h
++++ srclib/sys_time.in.h
+@@ -71,7 +71,7 @@ extern "C" {
+ #  define timeval rpl_timeval
+ # endif
+ 
+-# if !GNULIB_defined_struct_timeval
++# if !defined(__SWITCH__) && !GNULIB_defined_struct_timeval
+ struct timeval
+ {
+   time_t tv_sec;
+
+

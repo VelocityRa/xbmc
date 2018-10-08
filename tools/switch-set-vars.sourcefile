@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source /etc/profile.d/devkit-env.sh
+source $DEVKITPRO/switchvars.sh
+
+# We want to control the place of -lnx since linking order matters,
+# so remove it from $LIBS
+export LIBS=${LIBS//-lnx/}
+
+export CC=aarch64-none-elf-gcc
+export CXX=aarch64-none-elf-g++
+export LD=aarch64-none-elf-g++
