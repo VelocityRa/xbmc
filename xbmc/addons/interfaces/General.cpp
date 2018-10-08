@@ -21,7 +21,7 @@
 #include "filesystem/Directory.h"
 #include "filesystem/SpecialProtocol.h"
 #include "guilib/LocalizeStrings.h"
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX
 #include "platform/linux/XMemUtils.h"
 #endif
 #include "settings/Settings.h"

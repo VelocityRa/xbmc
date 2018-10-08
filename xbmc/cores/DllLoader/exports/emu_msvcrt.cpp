@@ -41,7 +41,7 @@
 #ifdef TARGET_POSIX
 #include "PlatformDefs.h" // for __stat64
 #include "XFileUtils.h"
-#include "XTimeUtils.h"
+#include "platform/linux/XTimeUtils.h"
 #endif
 #include "ServiceBroker.h"
 #include "Util.h"

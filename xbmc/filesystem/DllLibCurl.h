@@ -14,6 +14,9 @@
 #include <string>
 #include <sys/time.h>
 #include <sys/types.h>
+#if defined __SWITCH__
+#include <sys/select.h> // needed for fd_set used in curl.h
+#endif
 #include <type_traits>
 #include <vector>
 

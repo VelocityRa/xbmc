@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -3073,7 +3073,7 @@ as_fn_append ac_header_list " sys/socket.h"
+ as_fn_append ac_func_list " gettimeofday"
+ as_fn_append ac_header_list " limits.h"
+ as_fn_append ac_func_list " lstat"
+-as_fn_append ac_func_list " _set_invalid_parameter_handler"
++#as_fn_append ac_func_list " _set_invalid_parameter_handler"
+ as_fn_append ac_func_list " setenv"
+ as_fn_append ac_header_list " wchar.h"
+ as_fn_append ac_header_list " stdint.h"

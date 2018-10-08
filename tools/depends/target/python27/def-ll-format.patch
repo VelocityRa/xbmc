@@ -1,0 +1,11 @@
+--- configure.ac
++++ configure.ac
+@@ -4740,7 +4740,7 @@ then
+   ]]])],
+   [ac_cv_have_long_long_format=yes],
+   [ac_cv_have_long_long_format=no],
+-  [ac_cv_have_long_long_format="cross -- assuming no"
++  [ac_cv_have_long_long_format=yes
+    if test x$GCC = xyes; then
+     save_CFLAGS=$CFLAGS
+     CFLAGS="$CFLAGS -Werror -Wformat"

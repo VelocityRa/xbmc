@@ -48,7 +48,6 @@ double CLinuxResourceCounter::GetCPUUsage()
       }
     }
   }
-
   return m_dLastUsage;
 }
 

@@ -1227,7 +1227,7 @@ void CRenderManager::CheckEnableClockSync()
       diff = 1.0 / diff;
 
     // Calculate distance from nearest integer proportion
-    diff = std::abs(std::round(diff) - diff);
+    diff = std::abs(round(diff) - diff);
   }
 
   if (diff < 0.0005)

@@ -105,6 +105,12 @@ extern "C" {
 #define DLSYM(handle, symbol) lt_dlsym((handle), (symbol))
 #define DLCLOSE(handle) lt_dlclose(handle)
 #define DLERROR() lt_dlerror()
+#else
+#define DLHANDLE void *
+#define DLOPEN(name) NULL
+#define DLSYM(handle, symbol) NULL
+#define DLCLOSE(handle) NULL
+#define DLERROR() NULL
 #endif
 
 

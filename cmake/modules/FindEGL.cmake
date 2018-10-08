@@ -47,6 +47,10 @@ if(EGL_FOUND)
                                    INTERFACE_INCLUDE_DIRECTORIES "${EGL_INCLUDE_DIR}"
                                    INTERFACE_COMPILE_DEFINITIONS HAS_EGL=1)
   endif()
+
+  if(SWITCH)
+    add_dependencies(EGL::EGL SwitchDrmNouveau::SwitchDrmNouveau)
+  endif()
 endif()
 
 mark_as_advanced(EGL_INCLUDE_DIR EGL_LIBRARY)

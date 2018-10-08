@@ -8,7 +8,7 @@
 
 #include "OMXAudioCodecOMX.h"
 #ifdef TARGET_LINUX
-#include "XMemUtils.h"
+#include "platform/linux/XMemUtils.h"
 #endif
 #include "utils/log.h"
 

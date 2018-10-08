@@ -90,7 +90,6 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
             NO_DEFAULT_PATH)
   find_path(FFMPEG_INCLUDE_DIRS libavcodec/avcodec.h libavfilter/avfilter.h libavformat/avformat.h
                                 libavutil/avutil.h libswscale/swscale.h libpostproc/postprocess.h)
-
   find_library(FFMPEG_LIBAVCODEC
                NAMES avcodec libavcodec
                PATH_SUFFIXES ffmpeg/libavcodec
@@ -151,7 +150,6 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
      OR WIN32)
     set(FFMPEG_VERSION ${REQUIRED_FFMPEG_VERSION})
 
-
     include(FindPackageHandleStandardArgs)
     find_package_handle_standard_args(FFMPEG
                                       VERSION_VAR FFMPEG_VERSION
@@ -209,6 +207,8 @@ endif()
 
 # Internal FFMPEG
 if(NOT FFMPEG_FOUND)
+  message(FATAL_ERROR "FFMPEG NOT FOUND")
+
   include(ExternalProject)
   file(STRINGS ${CMAKE_SOURCE_DIR}/tools/depends/target/ffmpeg/FFMPEG-VERSION VER)
   string(REGEX MATCH "VERSION=[^ ]*$.*" FFMPEG_VER "${VER}")

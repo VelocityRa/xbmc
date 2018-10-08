@@ -23,6 +23,9 @@
 #include <dirent.h>
 #include "utils/StringUtils.h"
 #endif
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 const CProfileManager *CSpecialProtocol::m_profileManager = nullptr;
 

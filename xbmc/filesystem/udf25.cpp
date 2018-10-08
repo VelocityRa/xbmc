@@ -13,6 +13,9 @@
 #include "utils/log.h"
 #include "udf25.h"
 #include "File.h"
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 /* For direct data access, LSB first */
 #define GETN1(p) ((uint8_t)data[p])

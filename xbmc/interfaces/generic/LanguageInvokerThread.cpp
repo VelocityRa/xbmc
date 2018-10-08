@@ -8,6 +8,7 @@
 
 #include "LanguageInvokerThread.h"
 #include "ScriptInvocationManager.h"
+#include "utils/log.h"
 
 CLanguageInvokerThread::CLanguageInvokerThread(LanguageInvokerPtr invoker, CScriptInvocationManager *invocationManager, bool reuseable)
   : ILanguageInvoker(NULL),
@@ -15,7 +16,9 @@ CLanguageInvokerThread::CLanguageInvokerThread(LanguageInvokerPtr invoker, CScri
     m_invoker(invoker),
     m_invocationManager(invocationManager),
     m_reusable(reuseable)
-{ }
+{
+  CLog::Log(LOGWARNING, "[SWITCH] CLanguageInvokerThread uses std::mutex/condvar, not implemented");
+}
 
 CLanguageInvokerThread::~CLanguageInvokerThread()
 {
@@ -33,7 +36,7 @@ InvokerState CLanguageInvokerThread::GetState() const
 void CLanguageInvokerThread::Release()
 {
   m_bStop = true;
-  m_condition.notify_one();
+  // m_condition.notify_one();
 }
 
 bool CLanguageInvokerThread::execute(const std::string &script, const std::vector<std::string> &arguments)
@@ -46,9 +49,10 @@ bool CLanguageInvokerThread::execute(const std::string &script, const std::vecto
 
   if (CThread::IsRunning())
   {
-    std::unique_lock<std::mutex> lck(m_mutex);
+    // TODO(velocity)
+    // std::unique_lock<std::mutex> lck(m_mutex);
     m_restart = true;
-    m_condition.notify_one();
+    // m_condition.notify_one();
   }
   else
     Create();
@@ -95,7 +99,8 @@ void CLanguageInvokerThread::Process()
   if (m_invoker == NULL)
     return;
 
-  std::unique_lock<std::mutex> lckdl(m_mutex);
+  // TODO(velocity)
+  // std::unique_lock<std::mutex> lckdl(m_mutex);
   do {
     m_restart = false;
     m_invoker->Execute(m_script, m_args);
@@ -103,7 +108,8 @@ void CLanguageInvokerThread::Process()
     if (m_invoker->GetState() != InvokerStateScriptDone)
       m_reusable = false;
 
-    m_condition.wait(lckdl, [this] {return m_bStop || m_restart || !m_reusable; });
+    // TODO(velocity)
+    // m_condition.wait(lckdl, [this] {return m_bStop || m_restart || !m_reusable; });
 
   } while (m_reusable && !m_bStop);
 }

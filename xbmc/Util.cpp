@@ -81,6 +81,11 @@
 #ifdef HAVE_LIBCAP
   #include <sys/capability.h>
 #endif
+#if defined(TARGET_SWITCH)
+  #include "alloca.h"
+  // TODO(velocity): eliminate
+  std::string g_execPath;
+#endif
 
 #include "cores/VideoPlayer/DVDDemuxers/DVDDemux.h"
 
@@ -1596,7 +1601,7 @@ void CUtil::InitRandomSeed()
   srand(seed);
 }
 
-#ifdef TARGET_POSIX
+#if defined(TARGET_POSIX) && !defined(TARGET_SWITCH)
 bool CUtil::RunCommandLine(const std::string& cmdLine, bool waitExit)
 {
   std::vector<std::string> args = StringUtils::Split(cmdLine, ",");
@@ -1818,6 +1823,8 @@ std::string CUtil::ResolveExecutablePath()
   std::string libName = "lib" + appName + ".so";
   StringUtils::ToLower(libName);
   strExecutablePath += "/" + libName;
+#elif defined(TARGET_SWITCH)
+  return g_execPath;
 #else
   /* Get our PID and build the name of the link in /proc */
   pid_t pid = getpid();

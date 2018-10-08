@@ -509,6 +509,7 @@ CP_HIDDEN void cpi_signal_context(cp_context_t *context) {
 #endif
 }
 
+#endif
 
 // Debug helpers
 
@@ -526,5 +527,3 @@ CP_HIDDEN char *cpi_context_owner(cp_context_t *ctx, char *name, size_t size) {
 	strcpy(name + size - 4, "...");
 	return name;
 }
-
-#endif

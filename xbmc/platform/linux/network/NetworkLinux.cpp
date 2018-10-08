@@ -23,7 +23,9 @@
 #include <sys/wait.h>
 #endif
 #include <errno.h>
+#if !defined(TARGET_SWITCH)
 #include <resolv.h>
+#endif
 #if defined(TARGET_DARWIN)
   #include <sys/sockio.h>
   #include <net/if.h>
@@ -42,9 +44,15 @@
   #include <net/if.h>
   #include <net/if_arp.h>
   #include <net/if_dl.h>
+  #include <net/if_arp.h>
   #include <ifaddrs.h>
   #include <net/route.h>
   #include <netinet/if_ether.h>
+#elif defined(TARGET_SWITCH)
+  #include <sys/sockio.h>
+  #include <net/if.h>
+  #include <net/if_dl.h>
+  #include <net/route.h>
 #else
   #include <net/if_arp.h>
 #endif
@@ -79,6 +87,8 @@ bool CNetworkInterfaceLinux::IsWireless() const
 {
 #if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
   return false;
+#elif defined(TARGET_SWITCH)
+  return true;
 #else
   struct iwreq wrq;
    strcpy(wrq.ifr_name, m_interfaceName.c_str());
@@ -96,7 +106,11 @@ bool CNetworkInterfaceLinux::IsEnabled() const
    if (ioctl(m_network->GetSocket(), SIOCGIFFLAGS, &ifr) < 0)
       return false;
 
+#if !defined(TARGET_SWITCH)
    return ((ifr.ifr_flags & IFF_UP) == IFF_UP);
+#else
+   return ((ifr.ifr_flags[0] & IFF_UP) == IFF_UP);
+#endif
 }
 
 bool CNetworkInterfaceLinux::IsConnected() const
@@ -109,8 +123,11 @@ bool CNetworkInterfaceLinux::IsConnected() const
       return false;
 
    // ignore loopback
+#if !defined(TARGET_SWITCH)
    int iRunning = ( (ifr.ifr_flags & IFF_RUNNING) && (!(ifr.ifr_flags & IFF_LOOPBACK)));
-
+#else
+   int iRunning = ( (ifr.ifr_flags[0] & IFF_RUNNING) && (!(ifr.ifr_flags[0] & IFF_LOOPBACK)));
+#endif
    if (ioctl(m_network->GetSocket(), SIOCGIFADDR, &ifr) < 0)
       return false;
 
@@ -379,7 +396,11 @@ void CNetworkLinux::GetMacAddress(const std::string& interfaceName, char rawMac[
   }
 
   freeifaddrs(list);
-
+#elif defined(TARGET_SWITCH)
+  // TODO(velocity): unimplemented
+  CLog::Log(LOGWARN, "[Switch] %s - Assuming net interface is called 'en0'", __FUNCTION__);
+  interfaceName = "en0";
+  return;
 #else
 
    struct ifreq ifr;

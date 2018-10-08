@@ -1,0 +1,84 @@
+Ignore this document, it's outdated (all required dependencies are building atm)
+
+
+
+
+---=== WORKING ===---
+expat
+bzip2
+libfstrcmp
+liblzo2
+libzip
+freetype2
+libjpeg-turbo
+libpng
+fribidi
+libass
+libxml2
+rapidjson
+libffi
+tinyxml
+pythonmodule-pycryptodome
+pythonmodule-setuptools
+flatbuffers
+libiconv
+zlib (does not need to be built i think)
+pcre (needs better/smaller patch)
+sqlite (needs better/smaller patch)
+
+---=== NOT WORKING ===---
+libgpg-error:
+missing (auto generated) header file "./syscfg/lock-obj-pub.elf.h"
+
+libgcrypt:
+Needs libgpg-error
+
+ffmpeg:
+We need this as a portlib
+
+fontconfig
+openssl
+gmp
+nettle
+gnutls
+curl
+libmicrohttpd
+mariadb
+libshairplay
+libfmt
+libplist
+libbluray
+taglib
+libnfs
+pythonmodule-pil
+libxslt
+platform
+crossguid
+libdvdread
+libdvdnav
+libdvdcss
+p8-platform
+
+libUPNP (internal)
+
+---=== OMITTED ===---
+libusb
+libcec
+
+gettext:
+Needs pthreads
+includes sys/ stuff clashing with pthread cflag overrides
+Adding this to cflags seems to help:
+-D_MBSTATE_T -D_UINTMAX_T_DECLARED -D_PID_T_DECLARED -D_SSIZE_T_DECLARED -D_MODE_T_DECLARED -D_NLINK_T_DECLARED
+skipping for now
+
+python27:
+linker error: "read-only segment has dynamic relocations"
+
+---=== TODO REQUIRED & NOT PORTLIBS ===---
+libdvdread
+libdvdnav
+libdvdcss
+openssl
+tinyxml
+libcdio-gplv3

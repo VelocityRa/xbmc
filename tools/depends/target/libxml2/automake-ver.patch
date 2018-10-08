@@ -1,0 +1,11 @@
+--- configure.ac
++++ configure.ac
+@@ -50,7 +50,7 @@ AC_SUBST(LIBXML_VERSION_EXTRA)
+ 
+ VERSION=${LIBXML_VERSION}
+ 
+-AM_INIT_AUTOMAKE(libxml2, $VERSION)
++AM_INIT_AUTOMAKE([libxml2], [1.11])
+ 
+ # Support silent build rules, requires at least automake-1.11. Disable
+ # by either passing --disable-silent-rules to configure or passing V=1

@@ -17,6 +17,10 @@
     #include <GL/gl.h>
     #include <GL/glu.h>
     #include <GL/glext.h>
+  #elif defined(TARGET_SWITCH)
+    #include <glad/glad.h> // glad includes GL headers for us
+    #undef GL_GLEXT_PROTOTYPES // glad includes extension prototypes for us
+    #include <GL/glext.h>
   #elif defined(TARGET_FREEBSD)
     #include <GL/gl.h>
     #include <GL/glu.h>

@@ -74,6 +74,12 @@
 #include "windowing/WinSystem.h"
 #include "DVDCodecs/DVDCodecUtils.h"
 
+#if defined(TARGET_SWITCH)
+extern "C" {
+#include "cores/VideoPlayer/DVDInputStreams/dvdnav/dvdnav.h"
+}
+#endif
+
 #include <iterator>
 
 using namespace KODI::MESSAGING;

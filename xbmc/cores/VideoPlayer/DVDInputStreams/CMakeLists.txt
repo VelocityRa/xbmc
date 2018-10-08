@@ -3,7 +3,6 @@ set(SOURCES DVDFactoryInputStream.cpp
             DVDInputStreamFFmpeg.cpp
             DVDInputStreamFile.cpp
             DVDInputStreamMemory.cpp
-            DVDInputStreamNavigator.cpp
             DVDInputStreamStack.cpp
             DVDStateSerializer.cpp
             InputStreamAddon.cpp
@@ -20,7 +19,6 @@ set(HEADERS DVDFactoryInputStream.h
             DVDInputStreamNavigator.h
             DVDInputStreamStack.h
             DVDStateSerializer.h
-            DllDvdNav.h
             InputStreamAddon.h
             InputStreamMultiStreams.h
             InputStreamMultiSource.h
@@ -28,6 +26,11 @@ set(HEADERS DVDFactoryInputStream.h
             InputStreamPVRChannel.h
             InputStreamPVRRecording.h)
 
+if(NOT SWITCH)
+  list(APPEND SOURCES DVDInputStreamNavigator.cpp)
+  list(APPEND HEADERS DllDvdNav.h)
+endif()
+          
 if(BLURAY_FOUND)
   list(APPEND SOURCES DVDInputStreamBluray.cpp)
   list(APPEND HEADERS DVDInputStreamBluray.h)

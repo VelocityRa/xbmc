@@ -20,7 +20,7 @@
 #if defined(TARGET_DARWIN_OSX)
 #include "platform/darwin/osx/smc.h"
 #endif
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX
 #include "platform/linux/XMemUtils.h"
 #endif
 #include "powermanagement/PowerManager.h"
@@ -91,7 +91,7 @@ CTemperature CSystemGUIInfo::GetGPUTemperature() const
 #if defined(TARGET_DARWIN_OSX)
   value = SMCGetTemperature(SMC_KEY_GPU_TEMP);
   return CTemperature::CreateFromCelsius(value);
-#elif defined(TARGET_WINDOWS_STORE)
+#elif defined(TARGET_WINDOWS_STORE) || defined(TARGET_SWITCH)
   return CTemperature::CreateFromCelsius(0);
 #else
   std::string cmd = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_gpuTempCmd;
@@ -600,7 +600,7 @@ bool CSystemGUIInfo::GetBool(bool& value, const CGUIListItem *gitem, int context
     }
     case SYSTEM_ALARM_LESS_OR_EQUAL:
     {
-      int time = std::lrint(g_alarmClock.GetRemaining(info.GetData3()));
+      int time = lrint(g_alarmClock.GetRemaining(info.GetData3()));
       int timeCompare = info.GetData2();
       if (time > 0)
         value = timeCompare >= time;

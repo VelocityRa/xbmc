@@ -1,0 +1,24 @@
+
+--- configure.ac
++++ configure.ac
+@@ -3357,21 +3357,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+   [AC_MSG_RESULT(no)
+ ])
+ 
+-# check for openpty and forkpty
+-
+-AC_CHECK_FUNCS(openpty,, 
+-   AC_CHECK_LIB(util,openpty,
+-     [AC_DEFINE(HAVE_OPENPTY) LIBS="$LIBS -lutil"],
+-     AC_CHECK_LIB(bsd,openpty, [AC_DEFINE(HAVE_OPENPTY) LIBS="$LIBS -lbsd"])
+-   )
+-)
+-AC_CHECK_FUNCS(forkpty,, 
+-   AC_CHECK_LIB(util,forkpty, 
+-     [AC_DEFINE(HAVE_FORKPTY) LIBS="$LIBS -lutil"],
+-     AC_CHECK_LIB(bsd,forkpty, [AC_DEFINE(HAVE_FORKPTY) LIBS="$LIBS -lbsd"])
+-   )
+-)
+-
+ # Stuff for expat.
+ AC_CHECK_FUNCS(memmove)

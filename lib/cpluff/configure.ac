@@ -196,7 +196,7 @@ case "$dlmechanism" in
     AC_DEFINE([DLOPEN_LIBTOOL], [], [Define to use GNU Libtool libltdl])
     ;;
   *)
-    AC_MSG_ERROR([Either the Posix dlopen facility or GNU Libtool libltdl is required])
+    #AC_MSG_ERROR([Either the Posix dlopen facility or GNU Libtool libltdl is required])
     ;;
 esac
 LIBS_LIBCPLUFF="$LIBS_DL $LIBS_LIBCPLUFF"

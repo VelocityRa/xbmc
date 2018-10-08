@@ -1,5 +1,5 @@
 -include ../../Makefile.include
-DEPS = Makefile 0001-remove_custom_cxx_flags.patch
+DEPS = Makefile 0001-remove_custom_cxx_flags.patch switch.patch
 
 # lib name, version
 LIBNAME=rapidjson
@@ -43,6 +43,9 @@ endif
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	cd $(PLATFORM); rm -rf build; mkdir -p build
 	cd $(PLATFORM); patch -p1 < ../0001-remove_custom_cxx_flags.patch
+ifeq ($(OS),switch)
+	cd $(PLATFORM); patch -p0 < ../switch.patch
+endif
 	cd $(PLATFORM)/build; $(CMAKE) $(CMAKE_OPTIONS) ..
 
 .installed-$(PLATFORM): $(PLATFORM)

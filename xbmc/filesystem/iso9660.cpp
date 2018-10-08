@@ -44,6 +44,9 @@ ISO9660
 #include <stdlib.h>
 #include <algorithm>
 #include <cdio/bytesex.h>
+#ifdef TARGET_POSIX
+#include <strings.h>
+#endif
 //#define _DEBUG_OUTPUT 1
 
 static CCriticalSection m_critSection;

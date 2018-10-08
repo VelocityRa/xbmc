@@ -200,6 +200,7 @@ std::string CLinuxTimezone::GetOSConfiguredTimezone()
 {
    char timezoneName[255];
 
+#if !defined(TARGET_SWITCH)
    // try Slackware approach first
    ssize_t rlrc = readlink("/etc/localtime-copied-from"
                            , timezoneName, sizeof(timezoneName)-1);
@@ -229,6 +230,9 @@ std::string CLinuxTimezone::GetOSConfiguredTimezone()
         timezoneName[strlen(timezoneName)-1] = '\0';
       fclose(fp);
    }
+#else
+   timezoneName[0] = '\0';
+#endif
 
    return timezoneName;
 }

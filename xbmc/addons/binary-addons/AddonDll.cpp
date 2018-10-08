@@ -156,6 +156,9 @@ std::string CAddonDll::LibPath() const
 
 bool CAddonDll::LoadDll()
 {
+#ifdef NO_DLL_SUPPORT
+  return false;
+#else
   if (m_pDll)
     return true;
 
@@ -179,6 +182,7 @@ bool CAddonDll::LoadDll()
   }
 
   return true;
+#endif
 }
 
 ADDON_STATUS CAddonDll::Create(ADDON_TYPE type, void* funcTable, void* info)

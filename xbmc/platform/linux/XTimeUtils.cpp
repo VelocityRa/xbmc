@@ -6,8 +6,9 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "XTimeUtils.h"
+#include "platform/linux/XTimeUtils.h"
 #include "LinuxTimezone.h"
+#include "utils/log.h"
 
 #if defined(TARGET_DARWIN)
 #include "threads/Atomics.h"
@@ -75,7 +76,9 @@ int FileTimeToLocalFileTime(const FILETIME* lpFileTime, LPFILETIME lpLocalFileTi
   FileTimeToTimeT(lpFileTime, &ft);
   localtime_r(&ft, &tm_ft);
 
+#if !defined(TARGET_SWITCH)
   l.QuadPart += static_cast<unsigned long long>(tm_ft.tm_gmtoff) * 10000000;
+#endif
 
   lpLocalFileTime->dwLowDateTime = l.u.LowPart;
   lpLocalFileTime->dwHighDateTime = l.u.HighPart;
@@ -108,7 +111,10 @@ int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTime)
   CAtomicSpinLock lock(timegm_lock);
 #endif
 
-#if defined(TARGET_ANDROID) && !defined(__LP64__)
+#if defined(TARGET_SWITCH)
+  time_t t = {};
+  CLog::Log(LOGWARNING, "[SWITCH] %s unimplemented", __FUNCTION__);
+#elif defined(TARGET_ANDROID) && !defined(__LP64__)
   time64_t t = timegm64(&sysTime);
 #else
   time_t t = timegm(&sysTime);
@@ -175,7 +181,9 @@ int LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFileT
   l.u.LowPart = lpLocalFileTime->dwLowDateTime;
   l.u.HighPart = lpLocalFileTime->dwHighDateTime;
 
+#if !defined(TARGET_SWITCH)
   l.QuadPart += (unsigned long long) timezone * 10000000;
+#endif
 
   lpFileTime->dwLowDateTime = l.u.LowPart;
   lpFileTime->dwHighDateTime = l.u.HighPart;

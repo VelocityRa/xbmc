@@ -10,6 +10,7 @@ set(HEADERS Environment.h
             Filesystem.h
             MessagePrinter.h
             Platform.h
+            ResourceCounter.h
             xbmc.h
             ${OVERRIDES_H})
 

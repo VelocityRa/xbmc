@@ -1079,6 +1079,10 @@ namespace vfs
       buffer.accessTime       = frontendBuffer.st_atimespec;
       buffer.modificationTime = frontendBuffer.st_mtimespec;
       buffer.statusTime       = frontendBuffer.st_ctimespec;
+#elif defined(TARGET_SWITCH)
+      buffer.accessTime.tv_sec = frontendBuffer.st_atime;
+      buffer.modificationTime.tv_sec = frontendBuffer.st_mtime;
+      buffer.statusTime.tv_sec = frontendBuffer.st_ctime;
 #elif defined(TARGET_WINDOWS)
       buffer.accessTime       = frontendBuffer.st_atime;
       buffer.modificationTime = frontendBuffer.st_mtime;

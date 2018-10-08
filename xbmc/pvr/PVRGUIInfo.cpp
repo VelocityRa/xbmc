@@ -1032,14 +1032,14 @@ bool CPVRGUIInfo::GetPVRInt(const CFileItem *item, const CGUIInfo &info, int& iV
       iValue = m_timesInfo.GetTimeshiftProgressBufferEnd();
       return true;
     case PVR_ACTUAL_STREAM_SIG_PROGR:
-      iValue = std::lrintf(static_cast<float>(m_qualityInfo.iSignal) / 0xFFFF * 100);
+      iValue = lrintf(static_cast<float>(m_qualityInfo.iSignal) / 0xFFFF * 100);
       return true;
     case PVR_ACTUAL_STREAM_SNR_PROGR:
-      iValue = std::lrintf(static_cast<float>(m_qualityInfo.iSNR) / 0xFFFF * 100);
+      iValue = lrintf(static_cast<float>(m_qualityInfo.iSNR) / 0xFFFF * 100);
       return true;
     case PVR_BACKEND_DISKSPACE_PROGR:
       if (m_iBackendDiskTotal > 0)
-        iValue = std::lrintf(static_cast<float>(m_iBackendDiskUsed) / m_iBackendDiskTotal * 100);
+        iValue = lrintf(static_cast<float>(m_iBackendDiskUsed) / m_iBackendDiskTotal * 100);
       else
         iValue = 0xFF;
       return true;

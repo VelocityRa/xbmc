@@ -31,6 +31,7 @@ CSectionLoader::~CSectionLoader(void)
 
 LibraryLoader *CSectionLoader::LoadDLL(const std::string &dllname, bool bDelayUnload /*=true*/, bool bLoadSymbols /*=false*/)
 {
+#ifndef NO_DLL_SUPPORT
   CSingleLock lock(g_sectionLoader.m_critSection);
 
   if (dllname.empty()) return NULL;
@@ -59,10 +60,14 @@ LibraryLoader *CSectionLoader::LoadDLL(const std::string &dllname, bool bDelayUn
   g_sectionLoader.m_vecLoadedDLLs.push_back(newDLL);
 
   return newDLL.m_pDll;
+#else
+  return NULL;
+#endif
 }
 
 void CSectionLoader::UnloadDLL(const std::string &dllname)
 {
+#ifndef NO_DLL_SUPPORT
   CSingleLock lock(g_sectionLoader.m_critSection);
 
   if (dllname.empty()) return;
@@ -89,10 +94,12 @@ void CSectionLoader::UnloadDLL(const std::string &dllname)
       }
     }
   }
+#endif
 }
 
 void CSectionLoader::UnloadDelayed()
 {
+#ifndef NO_DLL_SUPPORT
   CSingleLock lock(g_sectionLoader.m_critSection);
 
   // check if we can unload any unreferenced dlls
@@ -109,10 +116,12 @@ void CSectionLoader::UnloadDelayed()
       return;
     }
   }
+#endif
 }
 
 void CSectionLoader::UnloadAll()
 {
+#ifndef NO_DLL_SUPPORT
   // delete the dll's
   CSingleLock lock(g_sectionLoader.m_critSection);
   std::vector<CDll>::iterator it = g_sectionLoader.m_vecLoadedDLLs.begin();
@@ -123,4 +132,5 @@ void CSectionLoader::UnloadAll()
       DllLoaderContainer::ReleaseModule(dll.m_pDll);
     it = g_sectionLoader.m_vecLoadedDLLs.erase(it);
   }
+#endif
 }

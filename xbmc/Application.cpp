@@ -54,8 +54,10 @@
 #include "messaging/ApplicationMessenger.h"
 #include "messaging/helpers/DialogHelper.h"
 #include "messaging/helpers/DialogOKHelper.h"
+#ifndef NO_DLL_SUPPORT
 #include "SectionLoader.h"
 #include "cores/DllLoader/DllLoaderContainer.h"
+#endif
 #include "GUIUserMessages.h"
 #include "filesystem/Directory.h"
 #include "filesystem/DirectoryCache.h"
@@ -168,8 +170,8 @@
 #include "input/InputManager.h"
 
 #ifdef TARGET_POSIX
-#include "XHandle.h"
-#include "XTimeUtils.h"
+#include "platform/linux/XHandle.h"
+#include "platform/linux/XTimeUtils.h"
 #include "platform/posix/filesystem/PosixDirectory.h"
 #endif
 
@@ -304,9 +306,11 @@ void CApplication::HandlePortEvents()
   }
 }
 
+#ifndef NO_DLL_SUPPORT
 extern "C" void __stdcall init_emu_environ();
 extern "C" void __stdcall update_emu_environ();
 extern "C" void __stdcall cleanup_emu_environ();
+#endif
 
 //
 // Utility function used to copy files from the application bundle
@@ -426,8 +430,10 @@ bool CApplication::Create(const CAppParamParser &params)
     CDirectory::Create("special://xbmc/addons");
   }
 
+#ifndef NO_DLL_SUPPORT
   // Init our DllLoaders emu env
   init_emu_environ();
+#endif
 
   CLog::Log(LOGNOTICE, "-----------------------------------------------------------------------");
   CLog::Log(LOGNOTICE, "Starting %s (%s). Platform: %s %s %d-bit", CSysInfo::GetAppName().c_str(), CSysInfo::GetVersion().c_str(),
@@ -538,7 +544,9 @@ bool CApplication::Create(const CAppParamParser &params)
   CDirectory::Create(profileManager->GetProfileUserDataFolder());
   profileManager->CreateProfileFolders();
 
+#ifndef NO_DLL_SUPPORT
   update_emu_environ();//apply the GUI settings
+#endif
 
   //! @todo - move to CPlatformXXX
 #ifdef TARGET_WINDOWS
@@ -2146,7 +2154,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
         CLog::Log(LOGNOTICE, "%s: Failed to suspend AudioEngine before launching external program", __FUNCTION__);
       }
     }
-#if defined(TARGET_DARWIN)
+#if defined(TARGET_DARWIN) || defined(TARGET_SWITCH)
     CLog::Log(LOGNOTICE, "ExecWait is not implemented on this platform");
 #elif defined(TARGET_POSIX)
     CUtil::RunCommandLine(pMsg->strParam.c_str(), (pMsg->param1 == 1));
@@ -2455,7 +2463,9 @@ bool CApplication::Cleanup()
     g_directoryCache.Clear();
     //CServiceBroker::GetInputManager().ClearKeymaps(); //! @todo
     CEventServer::RemoveInstance();
+#ifndef NO_DLL_SUPPORT
     DllLoaderContainer::Clear();
+#endif
     CServiceBroker::GetPlaylistPlayer().Clear();
 
     if (m_ServiceManager)
@@ -2630,7 +2640,9 @@ void CApplication::Stop(int exitCode)
     CLog::Log(LOGERROR, "Exception in CApplication::Stop()");
   }
 
+#ifndef NO_DLL_SUPPORT
   cleanup_emu_environ();
+#endif
 
   Sleep(200);
 }
@@ -4099,9 +4111,11 @@ void CApplication::ProcessSlow()
   // check if we should restart the player
   CheckDelayedPlayerRestart();
 
+#ifndef NO_DLL_SUPPORT
   //  check if we can unload any unreferenced dlls or sections
   if (!m_appPlayer.IsPlayingVideo())
     CSectionLoader::UnloadDelayed();
+#endif
 
 #ifdef TARGET_ANDROID
   // Pass the slow loop to droid

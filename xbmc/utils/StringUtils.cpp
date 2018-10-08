@@ -1126,8 +1126,13 @@ void StringUtils::WordToDigits(std::string &word)
 
 std::string StringUtils::CreateUUID()
 {
+// TODO(velocity): already stubbed in crossguid, should probably resolve linker issue instead 
+#ifndef TARGET_SWITCH
   static GuidGenerator guidGenerator;
   auto guid = guidGenerator.newGuid();
+#else
+  auto guid = "N/A";
+#endif
 
   std::stringstream strGuid; strGuid << guid;
   return strGuid.str();

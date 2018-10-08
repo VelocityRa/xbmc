@@ -16,6 +16,8 @@ elseif(APPLE)
   target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_CFUUID)
 elseif(WIN32)
   target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_WINDOWS)
+elseif(SWITCH)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_SWITCH)
 endif()
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

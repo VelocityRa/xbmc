@@ -15,7 +15,9 @@
 #include <string>
 #include "utils/Geometry.h"
 
+#if !defined(TARGET_SWITCH)
 #include "DllDvdNav.h"
+#endif
 #include "DVDInputStreamFile.h"
 
 #define DVD_VIDEO_BLOCKSIZE         DVD_VIDEO_LB_LEN // 2048 bytes
@@ -42,6 +44,7 @@ class CDVDInputStreamNavigator
   , public CDVDInputStream::IMenus
 {
 public:
+#if !defined(TARGET_SWITCH)
   CDVDInputStreamNavigator(IVideoPlayer* player, const CFileItem& fileitem);
   ~CDVDInputStreamNavigator() override;
 
@@ -143,6 +146,7 @@ protected:
   void GetVideoResolution(uint32_t * width, uint32_t * height);
 
   DllDvdNav m_dll;
+
   bool m_bCheckButtons;
   bool m_bEOF;
 
@@ -174,5 +178,86 @@ protected:
   int m_lastevent;
 
   std::map<int, std::map<int, int64_t>> m_mapTitleChapters;
+
+#else
+  CDVDInputStreamNavigator(IVideoPlayer* player, const CFileItem& fileitem)
+    : CDVDInputStream(DVDSTREAM_TYPE_DVD, fileitem)
+    {
+    }
+  ~CDVDInputStreamNavigator() override {};
+
+  bool Open() override { return false; };
+  void Close() override {};
+  int Read(uint8_t* buf, int buf_size) override { return 0; };
+  int64_t Seek(int64_t offset, int whence) override { return 0; };
+  bool Pause(double dTime) override { return false; };
+  int GetBlockSize() override { return DVDSTREAM_BLOCK_SIZE_DVD; }
+  bool IsEOF() override { return false; }
+  int64_t GetLength() override { return 0; }
+  ENextStream NextStream() override { return NEXTSTREAM_NONE; }; //todo
+
+  void ActivateButton() override {};
+  void SelectButton(int iButton) override {};
+  void SkipStill() override {};
+  void SkipWait() {};
+  void OnUp() override {};
+  void OnDown() override {};
+  void OnLeft() override {};
+  void OnRight() override {};
+  void OnMenu() override {};
+  void OnBack() override {};
+  void OnNext() override {};
+  void OnPrevious() override {};
+  bool OnMouseMove(const CPoint &point) override { return false; };
+  bool OnMouseClick(const CPoint &point) override { return false; };
+
+  int GetCurrentButton() override { return 0; };
+  int GetTotalButtons() override { return 0; };
+  bool GetCurrentButtonInfo(CDVDOverlaySpu* pOverlayPicture, CDVDDemuxSPU* pSPU, int iButtonType /* 0 = selection, 1 = action (clicked)*/) { return false; };
+
+  bool HasMenu() override { return false; }
+  bool IsInMenu() override { return false; }
+  double GetTimeStampCorrection() override { return 0.0; }
+
+  int GetActiveSubtitleStream() { return 0; };
+  int GetSubTitleStreamCount() { return 0; };
+  SubtitleStreamInfo GetSubtitleStreamInfo(const int iId) { return {}; };
+
+  bool SetActiveSubtitleStream(int iId) { return false; };
+  void EnableSubtitleStream(bool bEnable) {};
+  bool IsSubtitleStreamEnabled() { return false; };
+
+  int GetActiveAudioStream() { return 0; };
+  int GetAudioStreamCount() { return 0; };
+  int GetActiveAngle() { return 0; };
+  bool SetAngle(int angle) { return false; };
+  bool SetActiveAudioStream(int iId) { return false; };
+  AudioStreamInfo GetAudioStreamInfo(const int iId) { return {}; };
+
+  bool GetState(std::string &xmlstate) override { return false; } ;
+  bool SetState(const std::string &xmlstate) override { return false; };
+
+  int GetChapter() override { return 0; } // the current part in the current title
+  int GetChapterCount() override { return 0; } // the number of parts in the current title
+  void GetChapterName(std::string& name, int idx=-1) override {};
+  int64_t GetChapterPos(int ch=-1) override { return 0; };
+  bool SeekChapter(int iChapter) override { return false; };
+
+  CDVDInputStream::IDisplayTime* GetIDisplayTime() override { return this; }
+  int GetTotalTime() override { return 0; }; // the total time in milli seconds
+  int GetTime() override { return 0; }; // the current position in milli seconds
+
+  float GetVideoAspectRatio() { return 0; };
+
+  CDVDInputStream::IPosTime* GetIPosTime() override { return this; }
+  bool PosTime(int iTimeInMsec) override { return false; }; //seek within current pg(c)
+  
+  std::string GetDVDTitleString() { return ""; };
+  std::string GetDVDSerialString() { return ""; };
+
+  void CheckButtons() {};
+
+  VideoStreamInfo GetVideoStreamInfo() { return {}; };
+#endif
 };
 

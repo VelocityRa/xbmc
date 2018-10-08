@@ -34,14 +34,18 @@
 
 #include <stdio.h>
 #include <algorithm>
-#if defined(TARGET_DARWIN)
+#if defined(TARGET_SWITCH)
+#include "platform/ResourceCounter.h"
+#elif defined(TARGET_POSIX)
 #include "platform/linux/LinuxResourceCounter.h"
 #endif
 
 using namespace KODI::GUILIB;
 using namespace KODI::MESSAGING;
 
-#if defined(TARGET_DARWIN)
+#if defined(TARGET_SWITCH)
+static CResourceCounter m_resourceCounter;
+#elif defined(TARGET_DARWIN)
 static CLinuxResourceCounter m_resourceCounter;
 #endif
 

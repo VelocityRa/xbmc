@@ -1,5 +1,5 @@
 -include ../../Makefile.include
-DEPS = Makefile
+DEPS = Makefile no-strtod.patch
 
 # lib name, version
 LIBNAME=fmt
@@ -45,6 +45,7 @@ ifeq ($(PREFIX),)
 endif
 	rm -rf $(PLATFORM); mkdir -p $(PLATFORM)
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
+	cd $(PLATFORM); patch -p0 < ../no-strtod.patch
 	cd $(PLATFORM); rm -rf build; mkdir -p build
 	cd $(PLATFORM)/build; $(CMAKE) $(CMAKE_OPTIONS) ..
 

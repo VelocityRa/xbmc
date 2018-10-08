@@ -33,6 +33,9 @@
 #if defined(TARGET_ANDROID)
   #include "platform/android/activity/XBMCApp.h"
 #endif
+#if defined(TARGET_SWITCH)
+  #include "strings.h"
+#endif
 
 // If the process ends in less than this time (ms), we assume it's a launcher
 // and wait for manual intervention before continuing

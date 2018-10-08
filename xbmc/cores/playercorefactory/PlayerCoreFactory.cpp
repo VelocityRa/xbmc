@@ -24,6 +24,9 @@
 #include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include <sstream>
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 #define PLAYERCOREFACTORY_XML "playercorefactory.xml"
 

@@ -153,9 +153,9 @@ public:
   /*! \brief Get the current mouse positions x and y coordinates
    *
    * \return a struct containing the x and y coordinates
-   * \sa MousePosition
+   * \sa MousePosition_
    */
-  MousePosition GetMousePosition();
+  MousePosition_ GetMousePosition();
 
   /*! \brief Set the current screen resolution and pointer speed
    *

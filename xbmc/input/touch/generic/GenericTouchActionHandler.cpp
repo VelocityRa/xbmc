@@ -140,7 +140,7 @@ void CGenericTouchActionHandler::OnRotate(float centerX, float centerY, float an
 
 int CGenericTouchActionHandler::QuerySupportedGestures(float x, float y)
 {
-  CGUIMessage msg(GUI_MSG_GESTURE_NOTIFY, 0, 0, static_cast<int> (std::round(x)), static_cast<int> (std::round(y)));
+  CGUIMessage msg(GUI_MSG_GESTURE_NOTIFY, 0, 0, static_cast<int> (round(x)), static_cast<int> (round(y)));
   if (!CServiceBroker::GetGUI()->GetWindowManager().SendMessage(msg))
     return 0;
 
@@ -177,8 +177,8 @@ void CGenericTouchActionHandler::focusControl(float x, float y)
 {
   XBMC_Event newEvent{XBMC_SETFOCUS};
 
-  newEvent.focus.x = static_cast<int> (std::round(x));
-  newEvent.focus.y = static_cast<int> (std::round(y));
+  newEvent.focus.x = static_cast<int> (round(x));
+  newEvent.focus.y = static_cast<int> (round(y));
 
   std::shared_ptr<CAppInboundProtocol> appPort = CServiceBroker::GetAppPort();
   if (appPort)

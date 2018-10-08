@@ -8,13 +8,17 @@
 
 #pragma once
 
+#include "platform/ResourceCounter.h"
+
 #include <sys/time.h>
 #include <sys/times.h>
 #include <sys/resource.h>
 
 #include <time.h>
 
-class CLinuxResourceCounter
+class CResourceCounter;
+
+class CLinuxResourceCounter : public CResourceCounter
 {
 public:
   CLinuxResourceCounter();

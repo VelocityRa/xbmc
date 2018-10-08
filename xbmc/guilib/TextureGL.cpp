@@ -13,7 +13,7 @@
 #include "utils/GLUtils.h"
 #include "guilib/TextureManager.h"
 #include "settings/AdvancedSettings.h"
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX
 #include "platform/linux/XMemUtils.h"
 #endif
 

@@ -76,11 +76,13 @@ CURLMcode DllLibCurl::multi_remove_handle(CURLM* multi_handle, CURL_HANDLE* easy
   return curl_multi_remove_handle(multi_handle, easy_handle);
 }
 
+#if !defined TARGET_SWITCH
 CURLMcode DllLibCurl::multi_fdset(
     CURLM* multi_handle, fd_set* read_fd_set, fd_set* write_fd_set, fd_set* exc_fd_set, int* max_fd)
 {
   return curl_multi_fdset(multi_handle, read_fd_set, write_fd_set, exc_fd_set, max_fd);
 }
+#endif
 
 CURLMcode DllLibCurl::multi_timeout(CURLM* multi_handle, long* timeout)
 {

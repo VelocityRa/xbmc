@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "PosixMountProvider.h"
+#include "platform/linux/XHandle.h"
 #include "guilib/LocalizeStrings.h"
 #include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"

@@ -22,7 +22,7 @@
 #include <climits>
 #include <cassert>
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX
 #include <errno.h>
 #include <inttypes.h>
 #include "../linux/XFileUtils.h"
@@ -1558,6 +1558,11 @@ ssize_t CCurlFile::CReadState::Read(void* lpBuf, size_t uiBufSize)
 /* use to attempt to fill the read buffer up to requested number of bytes */
 int8_t CCurlFile::CReadState::FillBuffer(unsigned int want)
 {
+#if defined(TARGET_SWITCH)
+  // TODO(velocity)
+  CLog::Log(LOGERROR, "[Switch] CCurlFile::FillBuffer - Unimplemented");
+  return FILLBUFFER_FAIL;
+#else
   int retry = 0;
   fd_set fdread;
   fd_set fdwrite;
@@ -1727,6 +1732,8 @@ int8_t CCurlFile::CReadState::FillBuffer(unsigned int want)
              */
             Sleep(100);
             rc = 0;
+#elif TARGET_SWITCH
+            svcSleepThread(100000000);
 #else
             /* Portable sleep for platforms other than Windows. */
             struct timeval wait = { 0, 100 * 1000 }; /* 100ms */
@@ -1777,6 +1784,7 @@ int8_t CCurlFile::CReadState::FillBuffer(unsigned int want)
     }
   }
   return FILLBUFFER_OK;
+#endif
 }
 
 void CCurlFile::CReadState::SetReadBuffer(const void* lpBuf, int64_t uiBufSize)

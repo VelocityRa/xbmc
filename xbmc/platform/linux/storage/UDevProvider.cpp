@@ -8,7 +8,7 @@
 
 #include "UDevProvider.h"
 
-#include "platform/linux/PosixMountProvider.h"
+#include "PosixMountProvider.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 

@@ -181,3 +181,9 @@ if test "${ac_unique_file}" = "src/flac/main.c" || \
    test "${PACKAGE_NAME}" = "libssh2" ; then
      CFLAGS="$CFLAGS -fvisibility=default"
 fi
+
+if test "@platform_os@" = "switch" ; then
+  # Don't re-add $LDFLAGS because they're already included in platform_ldflags, resulting
+  # in linker errors from "-specs" argument duplication.
+  LDFLAGS="-L@prefix@/@deps_dir@/lib -L@prefix@/@deps_dir@/lib64 @platform_ldflags@"
+fi

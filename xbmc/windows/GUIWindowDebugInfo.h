@@ -9,7 +9,9 @@
 #pragma once
 
 #include "guilib/GUIDialog.h"
-#ifdef TARGET_POSIX
+#if defined(TARGET_SWITCH)
+#include "platform/ResourceCounter.h"
+#elif defined(TARGET_POSIX)
 #include "platform/linux/LinuxResourceCounter.h"
 #endif
 
@@ -28,7 +30,9 @@ protected:
   void UpdateVisibility() override;
 private:
   CGUITextLayout *m_layout;
-#ifdef TARGET_POSIX
+#if defined(TARGET_SWITCH)
+  CResourceCounter m_resourceCounter;
+#elif defined(TARGET_POSIX)
   CLinuxResourceCounter m_resourceCounter;
 #endif
 };

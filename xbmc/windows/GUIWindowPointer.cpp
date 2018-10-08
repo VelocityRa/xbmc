@@ -74,7 +74,7 @@ void CGUIWindowPointer::Process(unsigned int currentTime, CDirtyRegionList &dirt
     MarkDirtyRegion();
     m_active = active;
   }
-  MousePosition pos = CServiceBroker::GetInputManager().GetMousePosition();
+  MousePosition_ pos = CServiceBroker::GetInputManager().GetMousePosition();
   SetPosition((float)pos.x, (float)pos.y);
   SetPointer(CServiceBroker::GetInputManager().GetMouseState());
   return CGUIWindow::Process(currentTime, dirtyregions);

@@ -15,7 +15,9 @@
 #include <string>
 #include <string.h>
 
-#if defined(TARGET_DARWIN)
+#if defined(TARGET_SWITCH)
+#include "platform/ResourceCounter.h"
+#elif defined(TARGET_DARWIN)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #if defined(__ppc__) || defined (TARGET_DARWIN_IOS)
@@ -115,7 +117,9 @@ CCPUInfo::CCPUInfo(void)
   m_lastUsedPercentage = 0;
   m_cpuFeatures = 0;
 
-#if defined(TARGET_DARWIN)
+#if defined(TARGET_SWITCH)
+  m_pResourceCounter = new CResourceCounter();
+#elif defined(TARGET_DARWIN)
   m_pResourceCounter = new CLinuxResourceCounter();
 
   size_t len = 4;
@@ -624,7 +628,7 @@ bool CCPUInfo::getTemperature(CTemperature& temperature)
   int         value = 0;
   char        scale = 0;
 
-#ifdef TARGET_POSIX
+#if defined(TARGET_POSIX) && !defined(TARGET_SWITCH)
 #if defined(TARGET_DARWIN_OSX)
   value = SMCGetTemperature(SMC_KEY_CPU_TEMP);
   scale = 'c';

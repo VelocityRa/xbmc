@@ -21,14 +21,14 @@ find_path(CDIO_INCLUDE_DIR NAMES cdio/cdio.h
                            PATHS ${PC_CDIO_libcdio_INCLUDEDIR}
                                  ${PC_CDIO_libiso9660_INCLUDEDIR})
 find_library(CDIO_LIBRARY NAMES cdio libcdio
-                          PATHS ${CDIO_libcdio_LIBDIR} ${CDIO_libiso9660_LIBDIR})
+                          PATHS ${PC_CDIO_libcdio_LIBDIR} ${PC_CDIO_libiso9660_LIBDIR})
 
 if(NOT WIN32)
   find_path(ISO9660_INCLUDE_DIR NAMES cdio/iso9660.h
                                 PATHS ${PC_CDIO_libcdio_INCLUDEDIR}
                                       ${PC_CDIO_libiso9660_INCLUDEDIR})
   find_library(ISO9660_LIBRARY NAMES iso9660
-                               PATHS ${CDIO_libcdio_LIBDIR} ${CDIO_libiso9660_LIBDIR})
+                               PATHS ${PC_CDIO_libcdio_LIBDIR} ${PC_CDIO_libiso9660_LIBDIR})
   list(APPEND ISO9660_VARS ISO9660_INCLUDE_DIR ISO9660_LIBRARY)
 endif()
 

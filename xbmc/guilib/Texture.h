@@ -10,7 +10,7 @@
 
 #include "XBTF.h"
 #include "guilib/imagefactory.h"
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX
 #include "platform/linux/XMemUtils.h"
 #endif
 

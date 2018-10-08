@@ -8,7 +8,7 @@
 
 #if defined(TARGET_POSIX)
 
-#include "PosixDirectory.h"
+#include "platform/posix/filesystem/PosixDirectory.h"
 #include "utils/AliasShortcutUtils.h"
 #include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"

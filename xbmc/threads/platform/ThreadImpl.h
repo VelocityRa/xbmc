@@ -8,8 +8,11 @@
 
 #pragma once
 
-#if (defined TARGET_POSIX)
+#if (defined TARGET_SWITCH)
+#include "threads/platform/switch/ThreadImpl.h"
+#elif (defined TARGET_POSIX)
 #include "threads/platform/pthreads/ThreadImpl.h"
 #elif (defined TARGET_WINDOWS)
 #include "threads/platform/win/ThreadImpl.h"
 #endif
+

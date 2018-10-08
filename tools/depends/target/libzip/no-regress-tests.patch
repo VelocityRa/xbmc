@@ -1,0 +1,31 @@
+--- CMakeLists.txt
++++ CMakeLists.txt
+@@ -99,7 +99,6 @@ ADD_DEFINITIONS("-DHAVE_CONFIG_H")
+ ADD_SUBDIRECTORY(lib)
+ ADD_SUBDIRECTORY(man)
+ ADD_SUBDIRECTORY(src)
+-ADD_SUBDIRECTORY(regress)
+ ADD_SUBDIRECTORY(examples)
+ 
+ # TODO: pkgconfig file
+--- Makefile.am
++++ Makefile.am
+@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS=dist-xz foreign
+ 
+ ACLOCAL_AMFLAGS=	-I m4
+ 
+-SUBDIRS=lib man src regress examples
++SUBDIRS=lib man src examples
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libzip.pc
+--- configure.ac
++++ configure.ac
+@@ -116,6 +116,5 @@ AC_CONFIG_FILES([Makefile
+ 		 examples/Makefile
+ 		 man/Makefile
+ 		 lib/Makefile
+-		 regress/Makefile
+ 		 src/Makefile])
+ AC_OUTPUT
+ 

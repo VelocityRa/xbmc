@@ -10,7 +10,8 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "XMemUtils.h"
+#include "platform/linux/XMemUtils.h"
+#include "utils/log.h"
 #include "Util.h"
 
 #if defined(TARGET_DARWIN)
@@ -136,7 +137,7 @@ void GlobalMemoryStatusEx(LPMEMORYSTATUSEX lpBuffer)
 
   if (sysctlbyname("vm.stats.vm.v_swappgsout", &swap_free, &len, NULL, 0) == 0)
     lpBuffer->ullAvailPageFile = swap_free * pagesize;
-#else
+#elif !defined(TARGET_SWITCH)
   struct sysinfo info;
   char name[32];
   unsigned val;
@@ -174,6 +175,8 @@ void GlobalMemoryStatusEx(LPMEMORYSTATUSEX lpBuffer)
   lpBuffer->ullAvailVirtual  = ((info.freeram + info.bufferram) * info.mem_unit);
   lpBuffer->ullTotalPhys     = (info.totalram * info.mem_unit);
   lpBuffer->ullTotalVirtual  = (info.totalram * info.mem_unit);
+#else
+  CLog::Log(LOGWARNING, "%s unimplemented for platform", __FUNCTION__);
 #endif
 }
 

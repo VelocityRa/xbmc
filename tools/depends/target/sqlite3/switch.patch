@@ -1,0 +1,112 @@
+--- sqlite3.c
++++ sqlite3.c
+@@ -516,6 +516,7 @@ typedef struct sqlite3 sqlite3;
+ ** sqlite3_uint64 and sqlite_uint64 types can store integer values 
+ ** between 0 and +18446744073709551615 inclusive.
+ */
++#if !defined(__SWITCH__)
+ #ifdef SQLITE_INT64_TYPE
+   typedef SQLITE_INT64_TYPE sqlite_int64;
+   typedef unsigned SQLITE_INT64_TYPE sqlite_uint64;
+@@ -528,6 +529,30 @@ typedef struct sqlite3 sqlite3;
+ #endif
+ typedef sqlite_int64 sqlite3_int64;
+ typedef sqlite_uint64 sqlite3_uint64;
++#else
++#define sqlite3_uint64 uint64_t
++#define sqlite3_int64 int64_t
++#define sqlite3_uint32 uint32_t
++#define sqlite3_int32 int32_t
++#define sqlite3_uint16 uint16_t
++#define sqlite3_int16 int16_t
++#define sqlite3_uint8 uint8_t
++#define sqlite3_int8 int8_t
++
++#define sqlite_uint64 uint64_t
++#define sqlite_int64 int64_t
++#define sqlite_uint32 uint32_t
++#define sqlite_int32 int32_t
++#define sqlite_uint16 uint16_t
++#define sqlite_int16 int16_t
++#define sqlite_uint8 uint8_t
++#define sqlite_int8 int8_t
++
++#define i64 int64_t
++#define i32 int32_t
++#define i16 int16_t
++#define i8 int8_t
++#endif
+ 
+ /*
+ ** If compiling for a processor that lacks floating point support,
+@@ -11604,6 +11629,8 @@ SQLITE_PRIVATE void sqlite3HashClear(Hash*);
+ #ifndef LONGDOUBLE_TYPE
+ # define LONGDOUBLE_TYPE long double
+ #endif
++
++#if !defined(__SWITCH__)
+ typedef sqlite_int64 i64;          /* 8-byte signed integer */
+ typedef sqlite_uint64 u64;         /* 8-byte unsigned integer */
+ typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */
+@@ -11611,6 +11638,7 @@ typedef UINT16_TYPE u16;           /* 2-byte unsigned integer */
+ typedef INT16_TYPE i16;            /* 2-byte signed integer */
+ typedef UINT8_TYPE u8;             /* 1-byte unsigned integer */
+ typedef INT8_TYPE i8;              /* 1-byte signed integer */
++#endif
+ 
+ /*
+ ** SQLITE_MAX_U32 is a u64 constant that is the maximum u64 value
+@@ -11791,6 +11819,12 @@ typedef INT16_TYPE LogEst;
+ # define SQLITE_MAX_MMAP_SIZE_xc 1 /* exclude from ctime.c */
+ #endif
+ 
++#if defined(__SWITCH__)
++# undef SQLITE_MAX_MMAP_SIZE
++# define SQLITE_MAX_MMAP_SIZE 0
++# define SQLITE_OMIT_WAL 1
++# define HAVE_POSIX_FALLOCATE 0
++#endif
+ /*
+ ** The default MMAP_SIZE is zero on all platforms.  Or, even if a larger
+ ** default MMAP_SIZE is specified at compile-time, make sure that it does
+--- sqlite3.h
++++ sqlite3.h
+@@ -256,6 +256,7 @@ typedef struct sqlite3 sqlite3;
+ ** sqlite3_uint64 and sqlite_uint64 types can store integer values 
+ ** between 0 and +18446744073709551615 inclusive.
+ */
++#if !defined(__SWITCH__)
+ #ifdef SQLITE_INT64_TYPE
+   typedef SQLITE_INT64_TYPE sqlite_int64;
+   typedef unsigned SQLITE_INT64_TYPE sqlite_uint64;
+@@ -268,6 +269,30 @@ typedef struct sqlite3 sqlite3;
+ #endif
+ typedef sqlite_int64 sqlite3_int64;
+ typedef sqlite_uint64 sqlite3_uint64;
++#else
++#define sqlite3_uint64 uint64_t
++#define sqlite3_int64 int64_t
++#define sqlite3_uint32 uint32_t
++#define sqlite3_int32 int32_t
++#define sqlite3_uint16 uint16_t
++#define sqlite3_int16 int16_t
++#define sqlite3_uint8 uint8_t
++#define sqlite3_int8 int8_t
++
++#define sqlite_uint64 uint64_t
++#define sqlite_int64 int64_t
++#define sqlite_uint32 uint32_t
++#define sqlite_int32 int32_t
++#define sqlite_uint16 uint16_t
++#define sqlite_int16 int16_t
++#define sqlite_uint8 uint8_t
++#define sqlite_int8 int8_t
++
++#define i64 int64_t
++#define i32 int32_t
++#define i16 int16_t
++#define i8 int8_t
++#endif
+ 
+ /*
+ ** If compiling for a processor that lacks floating point support,

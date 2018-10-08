@@ -11,12 +11,15 @@
 #include "threads/SingleLock.h"
 #include "threads/SystemClock.h"
 
+#if !defined TARGET_SWITCH
 #include <condition_variable>
+#endif
 #include <chrono>
 
 namespace XbmcThreads
 {
 
+#if !defined TARGET_SWITCH
   /**
    * This is a thin wrapper around std::condition_variable_any. It is subject
    *  to "spurious returns" as it is built on boost which is built on posix
@@ -26,6 +29,7 @@ namespace XbmcThreads
   {
   private:
     std::condition_variable_any cond;
+
     ConditionVariable(const ConditionVariable&) = delete;
     ConditionVariable& operator=(const ConditionVariable&) = delete;
 
@@ -63,6 +67,62 @@ namespace XbmcThreads
     }
   };
 
+#else
+
+  class ConditionVariable
+  {
+  private:
+    static constexpr auto COND_TIMEOUT = 0xEA01;
+
+    CondVar cond;
+
+    ConditionVariable(const ConditionVariable&) = delete;
+    ConditionVariable& operator=(const ConditionVariable&) = delete;
+
+  public:
+    ConditionVariable()
+    {
+      condvarInit(&cond);
+    };
+
+    inline void wait(CCriticalSection& lock)
+    {
+      int count  = lock.count;
+      lock.count = 0;
+      condvarWait(&cond, (Mutex*)lock.get_underlying().native_handle());
+      lock.count = count;
+    }
+
+    inline bool wait(CCriticalSection& lock, unsigned long milliseconds)
+    {
+      int count  = lock.count;
+      lock.count = 0;
+      auto res = condvarWaitTimeout(&cond, (Mutex*)lock.get_underlying().native_handle(), milliseconds * 1000000);
+      lock.count = count;
+      return res != COND_TIMEOUT;
+    }
+
+    inline void wait(CSingleLock& lock)
+    {
+      condvarWait(&cond, (Mutex*)lock.get_underlying().get_underlying().native_handle());
+    }
+    
+    inline bool wait(CSingleLock& lock, unsigned long milliseconds)
+    {
+      return condvarWaitTimeout(&cond, (Mutex*)lock.get_underlying().get_underlying().native_handle(), milliseconds * 1000000) != COND_TIMEOUT;
+    }
+
+    inline void notifyAll()
+    {
+      condvarWakeAll(&cond);
+    }
+
+    inline void notify()
+    {
+      condvarWakeOne(&cond);
+    }
+  };
+#endif
   /**
    * This is a condition variable along with its predicate. This allows the use of a
    *  condition variable without the spurious returns since the state being monitored

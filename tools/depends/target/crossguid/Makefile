@@ -1,5 +1,5 @@
 -include ../../Makefile.include
-DEPS = Makefile
+DEPS = Makefile switch.patch
 
 # lib name, version
 LIBNAME=crossguid
@@ -33,6 +33,9 @@ endif
 ifeq ($(OS),ios)
 	GUID_PLATFORM_DEFINE=GUID_CFUUID
 endif
+ifeq ($(OS),switch)
+	GUID_PLATFORM_DEFINE=GUID_SWITCH
+endif
 
 LIBDYLIB=$(PLATFORM)/lib$(LIBNAME).a
 
@@ -54,6 +57,13 @@ endif
 
 $(LIBDYLIB): $(PLATFORM)
 	cd $(PLATFORM); $(CXX) -c guid.cpp -o guid.o $(CXXFLAGS) -D$(GUID_PLATFORM_DEFINE)
+ifeq ($(OS),switch)
+	# convert guid.cpp to LF endings first
+	cd $(PLATFORM); tr -d '\r' < guid.cpp > guid_tmp.cpp
+	cd $(PLATFORM); mv guid_tmp.cpp guid.cpp
+
+	cd $(PLATFORM); patch -l -p0 --binary < ../switch.patch
+endif
 	cd $(PLATFORM); $(AR) rvs lib$(LIBNAME).a guid.o
 
 .installed-$(PLATFORM): $(LIBDYLIB)

@@ -1,0 +1,20 @@
+--- Python/ast.c
++++ Python/ast.c
+@@ -3365,7 +3365,7 @@ parsenumber(struct compiling *c, const char *s)
+ }
+ 
+ static PyObject *
+-decode_utf8(struct compiling *c, const char **sPtr, const char *end, char* encoding)
++decode_utf8_(struct compiling *c, const char **sPtr, const char *end, char* encoding)
+ {
+ #ifndef Py_USING_UNICODE
+         Py_FatalError("decode_utf8 should not be called in this build.");
+@@ -3418,7 +3418,7 @@ decode_unicode(struct compiling *c, const char *s, size_t len, int rawmode, cons
+                                 PyObject *w;
+                                 char *r;
+                                 Py_ssize_t rn, i;
+-                                w = decode_utf8(c, &s, end, "utf-32-be");
++                                w = decode_utf8_(c, &s, end, "utf-32-be");
+                                 if (w == NULL) {
+                                         Py_DECREF(u);
+                                         return NULL;

@@ -8,6 +8,10 @@
 
 #pragma once
 
+#ifdef TARGET_SWITCH
+#include "platform/switch/PlatformDefs.h"
+#else
+
 #ifdef TARGET_POSIX
 
 #ifndef _LARGEFILE64_SOURCE
@@ -275,4 +279,4 @@ typedef struct _MEMORYSTATUSEX
 #define FILE_WRITE_DATA  ( 0x0002 )
 
 #endif
-
+#endif

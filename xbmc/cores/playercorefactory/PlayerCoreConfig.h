@@ -19,6 +19,9 @@
 #endif
 #include "system.h"
 #include "utils/log.h"
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 class CPlayerCoreConfig
 {

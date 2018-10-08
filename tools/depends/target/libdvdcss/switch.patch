@@ -1,0 +1,128 @@
+--- src/device.c
++++ src/device.c
+@@ -122,7 +122,7 @@ int dvdcss_use_ioctls( dvdcss_t dvdcss )
+         return 1;
+ 
+     return 0;
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+     return 0;
+ #else
+     struct stat fileinfo;
+--- src/device.h
++++ src/device.h
+@@ -31,7 +31,9 @@
+  * iovec structure: vectored data entry
+  *****************************************************************************/
+ #ifndef HAVE_SYS_UIO_H
++#ifndef __SWITCH__
+ #   include <io.h>                                                 /* read() */
++#endif
+ struct iovec
+ {
+     void *iov_base;     /* Pointer to data. */
+
+ struct iovec
+ {
+     void *iov_base;     /* Pointer to data. */
+--- src/ioctl.c
++++ src/ioctl.c
+@@ -219,7 +219,7 @@ int ioctl_ReadCopyright( int i_fd, int i_layer, int *pi_copyright )
+                         p_buffer, sizeof(p_buffer), &ulDataLen);
+ 
+     *pi_copyright = p_buffer[ 4 ];
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+     *pi_copyright = 0;
+     i_ret = 0;
+ #else
+@@ -354,7 +354,7 @@ int ioctl_ReadDiscKey( int i_fd, const int *pi_agid, uint8_t *p_key )
+     }
+ 
+     memcpy( p_key, p_buffer + 4, DVD_DISCKEY_SIZE );
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -487,7 +487,7 @@ int ioctl_ReadTitleKey( int i_fd, const int *pi_agid, int i_pos, uint8_t *p_key
+ 
+     memcpy( p_key, p_buffer + 5, DVD_KEY_SIZE );
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -587,7 +587,7 @@ int ioctl_ReportAgid( int i_fd, int *pi_agid )
+ 
+     *pi_agid = p_buffer[ 7 ] >> 6;
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -698,7 +698,7 @@ int ioctl_ReportChallenge( int i_fd, const int *pi_agid, uint8_t *p_challenge )
+ 
+     memcpy( p_challenge, p_buffer + 4, DVD_CHALLENGE_SIZE );
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -811,7 +811,7 @@ int ioctl_ReportASF( int i_fd, int *pi_asf )
+ 
+     *pi_asf = p_buffer[ 7 ] & 1;
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -917,7 +917,7 @@ int ioctl_ReportKey1( int i_fd, const int *pi_agid, uint8_t *p_key )
+ 
+     memcpy( p_key, p_buffer + 4, DVD_KEY_SIZE );
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -1004,7 +1004,7 @@ int ioctl_InvalidateAgid( int i_fd, int *pi_agid )
+                         &sdc, sizeof(sdc), &ulParamLen,
+                         NULL, 0, &ulDataLen);
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -1116,7 +1116,7 @@ int ioctl_SendChallenge( int i_fd, const int *pi_agid, const uint8_t *p_challeng
+                          &sdc, sizeof(sdc), &ulParamLen,
+                          p_buffer, sizeof(p_buffer), &ulDataLen );
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -1228,7 +1228,7 @@ int ioctl_SendKey2( int i_fd, const int *pi_agid, const uint8_t *p_key )
+                          &sdc, sizeof(sdc), &ulParamLen,
+                          p_buffer, sizeof(p_buffer), &ulDataLen );
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"
+@@ -1358,7 +1358,7 @@ int ioctl_ReportRPC( int i_fd, int *p_type, int *p_mask, int *p_scheme )
+     *p_mask = p_buffer[ 5 ];
+     *p_scheme = p_buffer[ 6 ];
+ 
+-#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__))
++#elif defined(__APPLE__) && (defined(__arm__) || defined(__aarch64__)) || defined(__SWITCH__)
+ // nothing
+ #else
+ #   error "DVD ioctls are unavailable on this system"

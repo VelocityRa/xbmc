@@ -9,6 +9,7 @@
 #include <limits.h>
 #if defined(TARGET_ANDROID)
 #include <unistd.h>
+#elif defined(TARGET_SWITCH)
 #else
 #include <sys/syscall.h>
 #endif

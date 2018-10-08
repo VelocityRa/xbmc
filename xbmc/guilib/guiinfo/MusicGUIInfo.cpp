@@ -353,7 +353,7 @@ bool CMusicGUIInfo::GetLabel(std::string& value, const CFileItem *item, int cont
       int iBitrate = m_audioInfo.bitrate;
       if (iBitrate > 0)
       {
-        value = StringUtils::Format("%li", std::lrint(static_cast<double>(iBitrate) / 1000.0));
+        value = StringUtils::Format("%li", lrint(static_cast<double>(iBitrate) / 1000.0));
         return true;
       }
       break;

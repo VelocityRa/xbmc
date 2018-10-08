@@ -167,11 +167,13 @@ public:
    */
    static std::string GetMaskByPrefixLength(uint8_t prefixLength);
 
-  std::unique_ptr<CNetworkServices> m_services;
+  std::unique_ptr<CNetworkServices> m_services; 
 };
 
 #if defined(TARGET_ANDROID)
 #include "platform/android/network/NetworkAndroid.h"
+#elif defined(TARGET_SWITCH)
+#include "platform/switch/network/NetworkSwitch.h"
 #elif defined(HAS_LINUX_NETWORK)
 #include "platform/linux/network/NetworkLinux.h"
 #elif defined(HAS_WIN32_NETWORK)

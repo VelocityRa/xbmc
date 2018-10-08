@@ -17,7 +17,7 @@
 #include <cassert>
 
 #ifdef TARGET_LINUX
-#include "XMemUtils.h"
+#include "platform/linux/XMemUtils.h"
 #endif
 
 //#define OMX_DEBUG_EVENTS

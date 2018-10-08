@@ -1,5 +1,5 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile tvos-bitcode-fix.patch jit_aarch64.patch ios-clear_cache.patch
+DEPS= ../../Makefile.include Makefile tvos-bitcode-fix.patch jit_aarch64.patch ios-clear_cache.patch switch.patch
 
 # lib name, version
 LIBNAME=pcre
@@ -11,7 +11,7 @@ ARCHIVE=$(SOURCE).tar.gz
 CONFIGURE=cp -f $(CONFIG_SUB) $(CONFIG_GUESS) .; ./configure --prefix=$(PREFIX) \
 	--disable-shared --disable-stack-for-recursion \
 	--enable-pcre8 --disable-pcre16 --disable-pcre32 \
-	--enable-jit --enable-utf --enable-unicode-properties \
+	--enable-utf --enable-unicode-properties \
 	--enable-newline-is-anycrlf
 
 
@@ -28,6 +28,9 @@ $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	cd $(PLATFORM); patch -p1 -i ../tvos-bitcode-fix.patch
 	cd $(PLATFORM); patch -p1 -i ../jit_aarch64.patch
 	cd $(PLATFORM); patch -p1 -i ../ios-clear_cache.patch
+ifeq ($(OS), switch)
+	cd $(PLATFORM); patch -p0 -i ../switch.patch
+endif
 	cd $(PLATFORM); $(CONFIGURE)
 
 $(LIBDYLIB): $(PLATFORM)

@@ -46,6 +46,18 @@ ifeq ($(OS),android)
   CROSSGUID_DEPS = libuuid
 endif
 
+ifeq ($(OS),switch)
+  EXCLUDED_DEPENDS = expat gettext libgpg-error \
+	libgcrypt bzip2 libzip freetype2 fontconfig \
+	gmp nettle gnutls curl liblzo2 \
+	libjpeg-turbo libpng fribidi libass \
+	libxml2 libmicrohttpd mariadb libffi \
+	python27 libshairplay \
+	libplist libcec libbluray libusb libnfs \
+	pythonmodule-pil pythonmodule-pycryptodome pythonmodule-setuptools \
+	libxslt platform p8-platform samba
+endif
+
 DEPENDS := $(filter-out $(EXCLUDED_DEPENDS),$(DEPENDS))
 
 ZLIB=

@@ -57,6 +57,9 @@
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 #include <inttypes.h>
+#if defined(TARGET_SWITCH)
+#include <strings.h>
+#endif
 
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
