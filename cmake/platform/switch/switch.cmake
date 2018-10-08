@@ -1,0 +1,3 @@
+set(SWITCH 1)
+set(PLATFORM_REQUIRED_DEPS LibNX OpenGlSwitch EGL)
+set(APP_RENDER_SYSTEM gl)

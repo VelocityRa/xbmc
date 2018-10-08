@@ -1,0 +1,20 @@
+--- configure
++++ configure
+@@ -13291,17 +13291,6 @@ _ACEOF
+ 
+ fi
+ 
+-for ac_func in feenableexcept
+-do :
+-  ac_fn_c_check_func "$LINENO" "feenableexcept" "ac_cv_func_feenableexcept"
+-if test "x$ac_cv_func_feenableexcept" = xyes; then :
+-  cat >>confdefs.h <<_ACEOF
+-#define HAVE_FEENABLEEXCEPT 1
+-_ACEOF
+-
+-fi
+-done
+-
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking if using Solaris linker" >&5
+ $as_echo_n "checking if using Solaris linker... " >&6; }

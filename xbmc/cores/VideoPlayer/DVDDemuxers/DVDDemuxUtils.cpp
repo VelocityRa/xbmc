@@ -10,7 +10,7 @@
 #include "cores/VideoPlayer/Interface/Addon/DemuxCrypto.h"
 #include "utils/log.h"
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 

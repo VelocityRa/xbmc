@@ -10,7 +10,7 @@
 #include "filesystem/SpecialProtocol.h"
 #include "utils/URIUtils.h"
 
-#if defined(TARGET_LINUX)
+#if defined(TARGET_LINUX) || defined(TARGET_SWITCH)
 #include <sys/statvfs.h>
 #elif defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
 #include <sys/param.h>
@@ -38,6 +38,9 @@ space_info space(const std::string& path, std::error_code& ec)
 #if defined(TARGET_LINUX)
   struct statvfs64 fsInfo;
   auto result = statvfs64(CSpecialProtocol::TranslatePath(path).c_str(), &fsInfo);
+#elif defined(TARGET_SWITCH)
+  struct statvfs fsInfo;
+  auto result = statvfs(CSpecialProtocol::TranslatePath(path).c_str(), &fsInfo);
 #else
   struct statfs fsInfo;
   // is 64-bit on android and darwin (10.6SDK + any iOS)

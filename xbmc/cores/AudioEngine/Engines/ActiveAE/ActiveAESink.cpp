@@ -20,7 +20,7 @@
 #include <new> // for std::bad_alloc
 #include <algorithm>
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 

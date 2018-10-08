@@ -10,8 +10,9 @@
 
 #include "threads/SystemClock.h"
 #include "SystemInfo.h"
-#ifndef TARGET_POSIX
+#if !defined(TARGET_POSIX)
 #include <conio.h>
+#elif defined(TARGET_SWITCH)
 #else
 #include <sys/utsname.h>
 #endif
@@ -535,6 +536,8 @@ std::string CSysInfo::GetKernelName(bool emptyIfUnknown /*= false*/)
     auto e = EasClientDeviceInformation();
     auto os = e.OperatingSystem();
     g_charsetConverter.wToUTF8(std::wstring(os.c_str()), kernelName);
+#elif defined(TARGET_SWITCH)
+      kernelName = "Horizon";
 #elif defined(TARGET_POSIX)
     struct utsname un;
     if (uname(&un) == 0)
@@ -570,8 +573,7 @@ std::string CSysInfo::GetKernelVersionFull(void)
   unsigned long long v2 = (v & 0x0000FFFF00000000L) >> 32;
   unsigned long long v3 = (v & 0x00000000FFFF0000L) >> 16;
   kernelVersionFull = StringUtils::Format("%lld.%lld.%lld", v1, v2, v3);
-
-#elif defined(TARGET_POSIX)
+#elif defined(TARGET_POSIX) && !defined(TARGET_SWITCH)
   struct utsname un;
   if (uname(&un) == 0)
     kernelVersionFull.assign(un.release);
@@ -932,6 +934,8 @@ int CSysInfo::GetKernelBitness(void)
     const NXArchInfo* archInfo = NXGetLocalArchInfo();
     if (archInfo)
       kernelBitness = ((archInfo->cputype & CPU_ARCH_ABI64) != 0) ? 64 : 32;
+#elif defined(TARGET_SWITCH)
+      kernelBitness = 64;
 #elif defined(TARGET_POSIX)
     struct utsname un;
     if (uname(&un) == 0)
@@ -980,6 +984,8 @@ const std::string& CSysInfo::GetKernelCpuFamily(void)
         kernelCpuFamily = "MIPS";
 #endif // CPU_TYPE_MIPS
     }
+#elif defined(TARGET_SWITCH)
+        kernelCpuFamily = "ARM";
 #elif defined(TARGET_POSIX)
     struct utsname un;
     if (uname(&un) == 0)
@@ -1149,6 +1155,8 @@ std::string CSysInfo::GetUserAgent()
 
   if (!deviceInfo.empty())
     result += "; " + deviceInfo;
+#elif defined(TARGET_SWITCH)
+  result += "Nintendo Switch";
 #elif defined(TARGET_POSIX)
   result += "X11; ";
   struct utsname un;
@@ -1265,6 +1273,8 @@ std::string CSysInfo::GetBuildTargetPlatformName(void)
   return "FreeBSD";
 #elif defined(TARGET_ANDROID)
   return "Android";
+#elif defined(TARGET_SWITCH)
+  return "Nintendo Switch";
 #elif defined(TARGET_LINUX)
   return "Linux";
 #elif defined(TARGET_WINDOWS)

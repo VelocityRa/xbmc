@@ -49,7 +49,7 @@ bool CRetroPlayerAudio::OpenStream(const StreamProperties& properties)
     return false;
   }
 
-  unsigned int iSampleRate = static_cast<unsigned int>(std::round(audioProperties.sampleRate));
+  unsigned int iSampleRate = static_cast<unsigned int>(round(audioProperties.sampleRate));
   if (iSampleRate == 0)
   {
     CLog::Log(LOGERROR, "RetroPlayer[AUDIO]: Invalid samplerate: %f", audioProperties.sampleRate);

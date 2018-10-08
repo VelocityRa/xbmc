@@ -9,7 +9,7 @@
 #include "Stopwatch.h"
 #if defined(TARGET_POSIX)
 #include "threads/SystemClock.h"
-#if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD)
+#if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && !defined(TARGET_SWITCH)
 #include <sys/sysinfo.h>
 #endif
 #endif

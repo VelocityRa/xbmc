@@ -19,7 +19,7 @@ message(STATUS "Build directory: ${CMAKE_BINARY_DIR}")
 if(CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
   message(WARNING "In-source build detected. It is recommended to build out-of-source.")
 endif()
-
+set(VERBOSE ON)
 # Hide messages from Check*.cmake (e.g. CheckCSourceCompiles)
 if(NOT VERBOSE)
   set(CMAKE_REQUIRED_QUIET ON)
@@ -52,7 +52,7 @@ option(ENABLE_OPTICAL     "Enable optical support?" ON)
 option(ENABLE_PYTHON      "Enable python support?" ON)
 # use ffmpeg from depends or system
 option(ENABLE_INTERNAL_FFMPEG "Enable internal ffmpeg?" OFF)
-if(UNIX)
+if(UNIX OR SWITCH)
   option(FFMPEG_PATH        "Path to external ffmpeg?" "")
   option(ENABLE_INTERNAL_CROSSGUID "Enable internal crossguid?" ON)
   option(ENABLE_INTERNAL_RapidJSON "Enable internal rapidjson?" OFF)
@@ -309,7 +309,14 @@ core_add_subdirs_from_filelist(${CMAKE_SOURCE_DIR}/cmake/treedata/common/*.txt
 core_add_optional_subdirs_from_filelist(${CMAKE_SOURCE_DIR}/cmake/treedata/optional/common/*.txt
                                         ${CMAKE_SOURCE_DIR}/cmake/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
 
-target_link_libraries(lib${APP_NAME_LC} PUBLIC ${core_DEPENDS} ${SYSTEM_LDFLAGS} ${DEPLIBS} ${CMAKE_DL_LIBS})
+if(NOT SWITCH)
+  set(DL_LIBS ${CMAKE_DL_LIBS})
+else()
+  # libnx doesn't support dynamic module loading
+  set(DL_LIBS "")
+endif()
+
+target_link_libraries(lib${APP_NAME_LC} PUBLIC ${core_DEPENDS} ${SYSTEM_LDFLAGS} ${DEPLIBS} ${DL_LIBS})
 set_target_properties(lib${APP_NAME_LC} PROPERTIES PROJECT_LABEL "xbmc")
 source_group_by_folder(lib${APP_NAME_LC} RELATIVE ${CMAKE_SOURCE_DIR}/xbmc)
 if(WIN32)

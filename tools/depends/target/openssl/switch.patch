@@ -1,0 +1,133 @@
+--- crypto/bio/bio_lcl.h
++++ crypto/bio/bio_lcl.h
+@@ -36,7 +36,7 @@
+ /*
+  * Undefine AF_UNIX on systems that define it but don't support it.
+  */
+-# if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_VMS)
++# if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_VMS) || defined(__SWITCH__)
+ #  undef AF_UNIX
+ # endif
+ 
+--- crypto/ui/ui_openssl.c
++++ crypto/ui/ui_openssl.c
+@@ -91,7 +91,8 @@
+  */
+ # elif !defined(OPENSSL_SYS_VMS) \
+ 	&& !defined(OPENSSL_SYS_MSDOS) \
+-	&& !defined(OPENSSL_SYS_VXWORKS)
++	&& !defined(OPENSSL_SYS_VXWORKS) \
++    && !defined(OPENSSL_SYS_SWITCH)
+ #  define TERMIOS
+ #  undef  TERMIO
+ #  undef  SGTTY
+@@ -165,7 +166,7 @@ static unsigned short channel = 0;
+ #elif defined(_WIN32) && !defined(_WIN32_WCE)
+ static DWORD tty_orig, tty_new;
+ #else
+-# if !defined(OPENSSL_SYS_MSDOS) || defined(__DJGPP__)
++# if (!defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_SWITCH)) || defined(__DJGPP__)
+ static TTY_STRUCT tty_orig, tty_new;
+ # endif
+ #endif
+--- crypto/whrlpool/wp_block.c
++++ crypto/whrlpool/wp_block.c
+@@ -52,6 +52,7 @@ typedef unsigned char u8;
+ typedef unsigned __int64 u64;
+ #elif defined(__arch64__)
+ typedef unsigned long u64;
++#elif defined(__SWITCH__)
+ #else
+ typedef unsigned long long u64;
+ #endif
+--- e_os.h
++++ e_os.h
+@@ -77,6 +77,14 @@ extern "C" {
+ #  define NO_SYSLOG
+ # endif
+ 
++# if defined(__SWITCH__)
++#  define OPENSSL_SYS_SWITCH
++#  define NO_SYS_UN_H
++#  define NO_SYSLOG
++#  undef DSO_DLFCN
++#  undef TERMIOS
++# endif
++
+ /********************************************************************
+  The Microsoft section
+  ********************************************************************/
+--- Configurations/10-main.conf
++++ Configurations/10-main.conf
+@@ -1881,4 +1881,26 @@ sub vms_info {
+         pointer_size     => sub { return vms_info(64)->{pointer_size} },
+     },
+ 
++#### Nintendo Switch
++    "nintendo-switch" => {
++        inherit_from     => [ "linux-BASE_unix", asm("aarch64_asm") ],
++        perlasm_scheme   => "linux64",
++        cc               => "$ENV{'CC'}",
++        cflags           => combine(picker(default => "-Wall",
++                                           debug   => "-O0 -g",
++                                           release => "-O3"),
++                                    threads("-pthread"),
++                                    "$ENV{'CFLAGS'}"),
++        lflags           => add("$ENV{'LDFLAGS'}"),
++        thread_scheme    => "pthreads",
++        ex_libs          => add(threads("-pthread")),
++#        cflags           => combine(threads("-D_REENTRANT")),
++#        ex_libs          => add("\$(LDLIBS)"),
++#        shared_target    => "linux-shared",
++#        shared_cflag     => "-fPIC",
++#        shared_ldflag    => "-shared",
++#        shared_extension => ".so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++        ranlib           => "$ENV{'RANLIB'}",
++        bn_ops           => "SIXTY_FOUR_BIT_LONG RC4_CHAR",
++    },
+ );
+--- crypto/modes/modes_lcl.h
++++ crypto/modes/modes_lcl.h
+@@ -17,6 +17,8 @@ typedef unsigned __int64 u64;
+ typedef long i64;
+ typedef unsigned long u64;
+ # define U64(C) C##UL
++#elif __SWITCH__
++# define U64(C) C##UL
+ #else
+ typedef long long i64;
+ typedef unsigned long long u64;
+--- crypto/uid.c
++++ crypto/uid.c
+@@ -19,7 +19,7 @@ int OPENSSL_issetugid(void)
+     return issetugid();
+ }
+ 
+-#elif defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS)
++#elif defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_SWITCH)
+ 
+ int OPENSSL_issetugid(void)
+ {
+--- include/openssl/e_os2.h
++++ include/openssl/e_os2.h
+@@ -24,6 +24,10 @@ extern "C" {
+ 
+ # define OPENSSL_SYS_UNIX
+ 
++# if defined(__SWITCH__)
++#   define OPENSSL_SYS_SWITCH
++# endif
++
+ /* --------------------- Microsoft operating systems ---------------------- */
+ 
+ /*
+--- ssl/ssl_locl.h
++++ ssl/ssl_locl.h
+@@ -47,7 +47,7 @@
+ # include <errno.h>
+ 
+ # include "e_os.h"
+-# if defined(__unix) || defined(__unix__)
++# if defined(__unix) || defined(__unix__) || defined(__SWITCH__)
+ #  include <sys/time.h>         /* struct timeval for DTLS */
+ # endif

@@ -1,0 +1,61 @@
+--- configure
++++ configure
+@@ -970,7 +970,7 @@ test_as(){
+     log test_as "$@"
+     cat > $TMPS
+     log_file $TMPS
+-    test_cmd $as $CPPFLAGS $ASFLAGS "$@" $AS_C $(as_o $TMPO) $TMPS
++    test_cmd $as $ASFLAGS "$@" $AS_C $(as_o $TMPO) $TMPS
+ }
+ 
+ x86asm_o(){
+@@ -2119,7 +2119,6 @@ SYSTEM_FUNCS="
+     MapViewOfFile
+     memalign
+     mkstemp
+-    mmap
+     mprotect
+     nanosleep
+     PeekNamedPipe
+--- ffbuild/common.mak
++++ ffbuild/common.mak
+@@ -35,7 +35,9 @@ CFLAGS     += $(ECFLAGS)
+ CCFLAGS     = $(CPPFLAGS) $(CFLAGS)
+ OBJCFLAGS  += $(EOBJCFLAGS)
+ OBJCCFLAGS  = $(CPPFLAGS) $(CFLAGS) $(OBJCFLAGS)
+-ASFLAGS    := $(CPPFLAGS) $(ASFLAGS)
++# HACK: Don't implicitly include header defined in CPPFLAGS (the assembler doesn't like it)
++ASFLAGS    := $(subst -include /opt/devkitpro/libnx/include/switch.h,,$(CPPFLAGS)) $(ASFLAGS)
++
+ CXXFLAGS   := $(CPPFLAGS) $(CFLAGS) $(CXXFLAGS)
+ X86ASMFLAGS += $(IFLAGS:%=%/) -I$(<D)/ -Pconfig.asm
+ NVCCFLAGS  += -ptx
+--- libavfilter/vf_drawtext.c
++++ libavfilter/vf_drawtext.c
+@@ -37,7 +37,9 @@
+ #if HAVE_UNISTD_H
+ #include <unistd.h>
+ #endif
++#ifndef __SWITCH__
+ #include <fenv.h>
++#endif
+ 
+ #if CONFIG_LIBFONTCONFIG
+ #include <fontconfig/fontconfig.h>
+@@ -1038,12 +1040,16 @@ static int func_eval_expr_int_format(AVFilterContext *ctx, AVBPrint *bp,
+         }
+     }
+ 
++#ifndef __SWITCH__
+     feclearexcept(FE_ALL_EXCEPT);
++#endif
+     intval = res;
++#ifndef __SWITCH__
+     if ((ret = fetestexcept(FE_INVALID|FE_OVERFLOW|FE_UNDERFLOW))) {
+         av_log(ctx, AV_LOG_ERROR, "Conversion of floating-point result to int failed. Control register: 0x%08x. Conversion result: %d\n", ret, intval);
+         return AVERROR(EINVAL);
+     }
++#endif
+ 
+     if (argc == 3)
+         av_strlcatf(fmt_str, sizeof(fmt_str), "0%u", positions);

@@ -201,7 +201,7 @@ bool CXBTFReader::Load(const CXBTFFrame& frame, unsigned char* buffer) const
   if (m_file == nullptr)
     return false;
 
-#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
+#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_SWITCH)
   if (fseeko(m_file, static_cast<off_t>(frame.GetOffset()), SEEK_SET) == -1)
 #elif defined(TARGET_ANDROID)
   if (fseek(m_file, static_cast<long>(frame.GetOffset()), SEEK_SET) == -1)  // No fseeko64 before N

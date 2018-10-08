@@ -81,6 +81,8 @@ CP_C_API const char *cp_get_host_type(void) {
 	return CP_HOST;
 }
 
+#if defined(CP_THREADS) || !defined(NDEBUG)
+
 CP_HIDDEN void cpi_lock_framework(void) {
 #if defined(CP_THREADS)
 	cpi_lock_mutex(framework_mutex);
@@ -97,6 +99,8 @@ CP_HIDDEN void cpi_unlock_framework(void) {
 	framework_locked--;
 #endif
 }
+
+#endif
 
 static void reset(void) {
 #ifdef CP_THREADS

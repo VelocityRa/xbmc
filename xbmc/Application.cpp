@@ -168,8 +168,8 @@
 #include "input/InputManager.h"
 
 #ifdef TARGET_POSIX
-#include "XHandle.h"
-#include "XTimeUtils.h"
+#include "platform/linux/XHandle.h"
+#include "platform/linux/XTimeUtils.h"
 #include "platform/posix/filesystem/PosixDirectory.h"
 #endif
 

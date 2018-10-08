@@ -17,7 +17,7 @@
 #include "messaging/ApplicationMessenger.h"
 #include "aojsonrpc.h"
 #ifndef TARGET_WINDOWS
-#include "XTimeUtils.h"
+#include "platform/linux/XTimeUtils.h"
 #endif
 #include "guilib/LocalizeStrings.h"
 #include "GUIInfoManager.h"
@@ -51,7 +51,7 @@
 using namespace KODI;
 using namespace KODI::MESSAGING;
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 

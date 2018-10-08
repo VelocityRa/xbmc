@@ -729,7 +729,7 @@ MOUSE_STATE CInputManager::GetMouseState()
   return m_Mouse.GetState();
 }
 
-MousePosition CInputManager::GetMousePosition()
+MousePosition_ CInputManager::GetMousePosition()
 {
   return m_Mouse.GetPosition();
 }

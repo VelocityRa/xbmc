@@ -13,7 +13,10 @@
 #include "UDisksProvider.h"
 #include "UDisks2Provider.h"
 #endif
-#include "PosixMountProvider.h"
+#include "platform/linux/XHandle.h"
+#if defined(TARGET_SWITCH)
+#include "platform/linux/PosixMountProvider.h"
+#endif
 
 IStorageProvider* IStorageProvider::CreateInstance()
 {
@@ -33,6 +36,11 @@ CLinuxStorageProvider::CLinuxStorageProvider()
 #ifdef HAVE_LIBUDEV
   if (m_instance == NULL)
     m_instance = new CUDevProvider();
+#endif
+#if defined(TARGET_SWITCH)
+  if (m_instance == NULL)
+    m_instance = new CPosixMountProvider();
+    return;
 #endif
 
   if (m_instance == NULL)

@@ -65,7 +65,11 @@ void CDAVDirectory::ParseResponse(const TiXmlElement *pElement, CFileItem &item)
               if (CDAVCommon::ValueWithoutNamespace(pPropChild, "getlastmodified") && !pPropChild->NoChildren())
               {
                 struct tm timeDate = {0};
+#if !defined TARGET_SWITCH // HACK
                 strptime(pPropChild->FirstChild()->Value(), "%a, %d %b %Y %T", &timeDate);
+#else
+                CLog::Log(LOGWARNING, "[SWITCH] strptime not working!!!");
+#endif
                 item.m_dateTime = mktime(&timeDate);
               }
               else
@@ -77,7 +81,11 @@ void CDAVDirectory::ParseResponse(const TiXmlElement *pElement, CFileItem &item)
               if (!item.m_dateTime.IsValid() && CDAVCommon::ValueWithoutNamespace(pPropChild, "creationdate") && !pPropChild->NoChildren())
               {
                 struct tm timeDate = {0};
+#if !defined TARGET_SWITCH // HACK
                 strptime(pPropChild->FirstChild()->Value(), "%Y-%m-%dT%T", &timeDate);
+#else
+                CLog::Log(LOGWARNING, "[SWITCH] strptime not working!!!");
+#endif
                 item.m_dateTime = mktime(&timeDate);
               }
               else

@@ -6,9 +6,11 @@
  *  See LICENSES/README.md for more information.
  */
 
+#include "PosixMountProvider.h"
+
 #include <cstdlib>
 
-#include "PosixMountProvider.h"
+#include "platform/linux/XHandle.h"
 #include "utils/RegExp.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"

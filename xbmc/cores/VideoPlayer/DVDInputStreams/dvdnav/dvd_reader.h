@@ -24,7 +24,7 @@
 /*****************************************************************************
 * iovec structure: vectored data entry
 *****************************************************************************/
-#ifdef TARGET_WINDOWS
+#if defined TARGET_WINDOWS || defined TARGET_SWITCH
 struct iovec
 {
   void *iov_base;     /* Pointer to data. */

@@ -17,6 +17,13 @@
     #include <GL/gl.h>
     #include <GL/glu.h>
     #include <GL/glext.h>
+  #elif defined(TARGET_SWITCH)
+    // devkitPro's glad portlib is generated with GL 4.3 core in mind, so these two 
+    // defines are missing. Ideally we'd generate our own, but this is ok for now.
+    #define GL_LUMINANCE  0x1909
+    #define GL_LUMINANCE_ALPHA  0x190A
+    #include <glad/glad.h> // glad includes GL headers for us
+    #include <GL/glext.h>
   #elif defined(TARGET_FREEBSD)
     #include <GL/gl.h>
     #include <GL/glu.h>

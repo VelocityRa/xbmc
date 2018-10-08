@@ -11,6 +11,9 @@
 #include "filesystem/File.h"
 #include "cores/FFmpeg.h"
 #include "utils/StringUtils.h"
+#if defined(TARGET_SWITCH)
+#include <strings.h>
+#endif
 
 using namespace MUSIC_INFO;
 using namespace XFILE;

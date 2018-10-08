@@ -1,0 +1,15 @@
+--- src/bswap.h
++++ src/bswap.h
+@@ -104,6 +104,12 @@
+       (((x) & 0x000000000000ff00ULL) << 40) | \
+       (((x) & 0x00000000000000ffULL) << 56))
+ 
++#elif defined(__SWITCH__)
++#include <machine/endian.h>
++#define B2N_16(x) x = __bswap16(x)
++#define B2N_32(x) x = __bswap32(x)
++#define B2N_64(x) x = __bswap64(x)
++
+ #else
+ 
+ /* If there isn't a header provided with your system with this functionality

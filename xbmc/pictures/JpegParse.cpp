@@ -18,7 +18,7 @@
 //--------------------------------------------------------------------------
 
 #include "filesystem/File.h"
-#ifndef _LINUX
+#ifdef TARGET_WINDOWS
 #include <windows.h>
 #else
 #include <memory.h>

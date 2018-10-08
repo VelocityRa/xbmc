@@ -44,17 +44,17 @@ CPlayerGUIInfo::~CPlayerGUIInfo()
 
 int CPlayerGUIInfo::GetTotalPlayTime() const
 {
-  return std::lrint(g_application.GetTotalTime());
+  return lrint(g_application.GetTotalTime());
 }
 
 int CPlayerGUIInfo::GetPlayTime() const
 {
-  return std::lrint(g_application.GetTime());
+  return lrint(g_application.GetTime());
 }
 
 int CPlayerGUIInfo::GetPlayTimeRemaining() const
 {
-  int iReverse = GetTotalPlayTime() - std::lrint(g_application.GetTime());
+  int iReverse = GetTotalPlayTime() - lrint(g_application.GetTime());
   return iReverse > 0 ? iReverse : 0;
 }
 
@@ -76,7 +76,7 @@ std::string CPlayerGUIInfo::GetCurrentPlayTime(TIME_FORMAT format) const
   if (format == TIME_FORMAT_GUESS && GetTotalPlayTime() >= 3600)
     format = TIME_FORMAT_HH_MM_SS;
 
-  return StringUtils::SecondsToTimeString(std::lrint(GetPlayTime()), format);
+  return StringUtils::SecondsToTimeString(lrint(GetPlayTime()), format);
 }
 
 std::string CPlayerGUIInfo::GetCurrentPlayTimeRemaining(TIME_FORMAT format) const
@@ -362,10 +362,10 @@ bool CPlayerGUIInfo::GetInt(int& value, const CGUIListItem *gitem, int contextWi
       value = g_application.GetAudioDelay();
       return true;
     case PLAYER_PROGRESS:
-      value = std::lrintf(g_application.GetPercentage());
+      value = lrintf(g_application.GetPercentage());
       return true;
     case PLAYER_PROGRESS_CACHE:
-      value = std::lrintf(g_application.GetCachePercentage());
+      value = lrintf(g_application.GetCachePercentage());
       return true;
     case PLAYER_CACHELEVEL:
       value = g_application.GetAppPlayer().GetCacheLevel();
@@ -377,7 +377,7 @@ bool CPlayerGUIInfo::GetInt(int& value, const CGUIListItem *gitem, int contextWi
       value = g_application.GetAppPlayer().GetChapterCount();
       return true;
     case PLAYER_SEEKBAR:
-      value = std::lrintf(GetSeekPercent());
+      value = lrintf(GetSeekPercent());
       return true;
   }
 

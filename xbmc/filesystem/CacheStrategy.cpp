@@ -9,9 +9,9 @@
 #include "threads/SystemClock.h"
 #include "CacheStrategy.h"
 #include "IFile.h"
-#ifdef TARGET_POSIX
+#if defined(TARGET_POSIX)
 #include "PlatformDefs.h"
-#include "ConvUtils.h"
+#include "platform/linux/ConvUtils.h"
 #endif
 #include "Util.h"
 #include "utils/log.h"

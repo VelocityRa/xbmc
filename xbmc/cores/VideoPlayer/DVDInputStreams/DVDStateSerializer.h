@@ -8,6 +8,10 @@
 
 #pragma once
 
+#if defined(TARGET_SWITCH)
+#include "cores/VideoPlayer/DVDInputStreams/dvdnav/dvdnav_internal.h"
+#endif
+
 class CDVDStateSerializer
 {
 public:

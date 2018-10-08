@@ -6,7 +6,9 @@
  *  See LICENSES/README.md for more information.
  */
 
+#if !defined(TARGET_SWITCH)
 #include "DllDvdNav.h"
+#endif
 #include "utils/XBMCTinyXML.h"
 #include "DVDStateSerializer.h"
 #include <sstream>

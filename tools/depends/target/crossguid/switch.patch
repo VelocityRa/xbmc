@@ -1,0 +1,14 @@
+--- guid.cpp
++++ guid.cpp
+@@ -276,3 +276,11 @@ Guid GuidGenerator::newGuid()
+   return bytes;
+ }
+ #endif
++
++// Switch version (stub/unimplemented)
++#ifdef GUID_SWITCH
++Guid GuidGenerator::newGuid()
++{
++  return {0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37};
++}
++#endif

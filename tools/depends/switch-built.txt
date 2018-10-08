@@ -1,0 +1,17 @@
+pcre
+flatbuffers
+libiconv
+crossguid
+libfmt
+libfstrcmp
+liblzo2
+rapidjson
+sqlite3
+taglib
+tinyxml
+libcdio
+libcdio-gplv3
+openssl
+libdvdread
+libdvdnav
+libdvdcss

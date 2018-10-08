@@ -13,7 +13,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "PosixMountProvider.h"
+#include "platform/linux/XHandle.h"
 
 CUDiskDevice::CUDiskDevice(const char *DeviceKitUDI):
   m_DeviceKitUDI(DeviceKitUDI)

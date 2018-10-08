@@ -48,8 +48,8 @@
 #include "cdioSupport.h"
 #include "MediaManager.h"
 #ifdef TARGET_POSIX
-#include "XHandle.h"
-#include "XFileUtils.h"
+#include "platform/linux/XHandle.h"
+#include "platform/linux/XFileUtils.h"
 #endif
 
 #ifdef HAS_DVD_DRIVE

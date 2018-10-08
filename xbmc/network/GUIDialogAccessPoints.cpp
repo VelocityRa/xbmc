@@ -11,7 +11,7 @@
 #include "guilib/GUIKeyboardFactory.h"
 #if defined(TARGET_ANDROID)
 #include "platform/android/network/NetworkAndroid.h"
-#elif defined(TARGET_POSIX)
+#elif defined(TARGET_LINUX)
 #include "platform/linux/network/NetworkLinux.h"
 #endif
 #include "ServiceBroker.h"

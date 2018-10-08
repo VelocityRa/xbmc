@@ -1,5 +1,5 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile fix-32bits-on-64bits.patch sqlite3.c.patch
+DEPS= ../../Makefile.include Makefile fix-32bits-on-64bits.patch sqlite3.c.patch switch.patch
 
 # lib name, version
 LIBNAME=sqlite
@@ -13,7 +13,7 @@ export CFLAGS+=-DSQLITE_TEMP_STORE=3 -DSQLITE_DEFAULT_MMAP_SIZE=0x10000000
 export TCLLIBDIR=/dev/null
 CONFIGURE=cp -f $(CONFIG_SUB) $(CONFIG_GUESS) .; \
           ./configure --prefix=$(PREFIX) --disable-shared \
-  --enable-threadsafe --disable-tcl --disable-readline \
+  --disable-threadsafe --disable-tcl --disable-readline --disable-dynamic-extensions \
 
 LIBDYLIB=$(PLATFORM)/.libs/lib$(LIBNAME)3.a
 
@@ -32,6 +32,7 @@ endif
 ifneq ($(OS),android)
 	cd $(PLATFORM); patch -p1 < ../sqlite3.c.patch
 endif
+	cd $(PLATFORM); patch -p0 < ../switch.patch
 	# do not build the program sqlite3
 	sed -ie "s|bin_PROGRAMS = sqlite3||" "$(PLATFORM)/Makefile.am";
 	cd $(PLATFORM); $(AUTORECONF) -vif

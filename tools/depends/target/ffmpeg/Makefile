@@ -1,6 +1,6 @@
 include ../../Makefile.include
 include FFMPEG-VERSION
-DEPS= ../../Makefile.include FFMPEG-VERSION Makefile
+DEPS= ../../Makefile.include FFMPEG-VERSION Makefile switch.patch
 
 # set to "yes" to enable patching
 # we don't apply patches until we move to a vanilla ffmpeg tarball
@@ -58,6 +58,24 @@ ifeq ($(OS), osx)
   ffmpg_config += --target-os=darwin
   ffmpg_config += --disable-securetransport
 endif
+ifeq ($(OS), switch)
+  ffmpg_config += --arch=aarch64 --cpu=cortex-a57 --target-os=none --enable-pic --enable-asm
+  ffmpg_config += --disable-shared --enable-static --as=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc
+  ffmpg_config += --extra-cxxflags="-D__SWITCH__ -O2 -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec"
+  ffmpg_config += --extra-cxxflags="-D__SWITCH__ -O2 -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec"
+  ffmpg_config += --extra-ldflags="-fPIE -L${DEVKITPRO}/portlibs/switch/lib -L${DEVKITPRO}/libnx/lib"
+  ffmpg_config += --disable-runtime-cpudetect --disable-programs --disable-debug --disable-doc
+  ffmpg_config += --disable-network --disable-hwaccels --disable-encoders
+  ffmpg_config += --disable-avdevice --enable-swscale --enable-swresample
+  ffmpg_config += --enable-libass --enable-libfreetype --enable-libfribidi --enable-libtheora
+  ffmpg_config += --enable-filter='rotate,transpose'
+  ffmpg_config += --disable-protocols --enable-protocol=file
+  ffmpg_config += --disable-demuxers --enable-demuxer=h264,matroska,mov,ogg
+  ffmpg_config += --disable-decoders --enable-decoder=h264,aac,ac3,mp3,theora,ogg,vorbis
+  ffmpg_config += --disable-parsers --enable-parser=h264,aac
+
+  ffmpg_config += --disable-gnutls --disable-pthreads --enable-logging
+endif
 ifeq ($(findstring arm, $(CPU)), arm)
   ffmpg_config += --enable-pic --disable-armv5te --disable-armv6t2
 endif
@@ -76,6 +94,9 @@ $(TARBALLS_LOCATION)/$(ARCHIVE):
 $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	rm -rf $(PLATFORM); mkdir -p $(PLATFORM)
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
+ifeq ($(OS), switch)
+	cd $(PLATFORM); patch -p0 < ../switch.patch
+endif
 	cd $(PLATFORM); sed -i".bak" -e "s%pkg_config_default=pkg-config%export PKG_CONFIG_LIBDIR=$(PREFIX)/lib/pkgconfig \&\& pkg_config_default=$(NATIVEPREFIX)/bin/pkg-config%" configure
 	cd $(PLATFORM);\
 	CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" \

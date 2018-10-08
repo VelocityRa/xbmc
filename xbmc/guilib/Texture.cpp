@@ -23,7 +23,7 @@
 #include "URL.h"
 #include "platform/android/filesystem/AndroidAppFile.h"
 #endif
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 #include "rendering/RenderSystem.h"

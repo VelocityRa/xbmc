@@ -1,0 +1,18 @@
+if(OPENGL_FOUND)
+  set(USE_OPENGL 1)
+else()
+  set(USE_OPENGL 0)
+endif()
+if(OPENGLES_FOUND)
+  set(USE_OPENGLES 1)
+else()
+  set(USE_OPENGLES 0)
+endif()
+
+# CMake config
+set(APP_BINARY ${APP_NAME_LC}${APP_BINARY_SUFFIX})
+set(APP_PREFIX ${prefix})
+set(APP_LIB_DIR ${libdir}/${APP_NAME_LC})
+set(APP_DATA_DIR ${datarootdir}/${APP_NAME_LC})
+set(APP_INCLUDE_DIR ${includedir}/${APP_NAME_LC})
+set(CXX11_SWITCH "-std=c++11")

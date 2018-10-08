@@ -108,7 +108,7 @@ CInputProcessorPointer::CInputProcessorPointer(wayland::pointer_t const& pointer
 
 std::uint16_t CInputProcessorPointer::ConvertMouseCoordinate(double coord) const
 {
-  return static_cast<std::uint16_t> (std::round(coord * m_coordinateScale));
+  return static_cast<std::uint16_t> (round(coord * m_coordinateScale));
 }
 
 void CInputProcessorPointer::SetMousePosFromSurface(CPointGen<double> position)

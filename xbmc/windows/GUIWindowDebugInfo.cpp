@@ -26,7 +26,7 @@
 #include "utils/Variant.h"
 #include "utils/StringUtils.h"
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 

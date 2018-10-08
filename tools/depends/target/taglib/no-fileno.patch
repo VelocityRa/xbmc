@@ -1,0 +1,14 @@
+--- taglib/toolkit/tfilestream.cpp
++++ taglib/toolkit/tfilestream.cpp
+@@ -480,8 +480,10 @@ void FileStream::truncate(long length)
+ 
+   seek(currentPos);
+ 
+-#else
++#elif __SWITCH__
++    debug("FileStream::truncate() -- Unimplemented for Switch.");
+ 
++#else
+   const int error = ftruncate(fileno(d->file), length);
+   if(error != 0) {
+     debug("FileStream::truncate() -- Coundn't truncate the file.");

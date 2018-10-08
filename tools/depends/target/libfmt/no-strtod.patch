@@ -1,0 +1,18 @@
+--- include/fmt/posix.h
++++ include/fmt/posix.h
+@@ -394,6 +394,7 @@ class Locale {
+ 
+   Type get() const { return locale_; }
+ 
++# ifndef __SWITCH__
+   // Converts string to floating-point number and advances str past the end
+   // of the parsed input.
+   double strtod(const char *&str) const {
+@@ -402,6 +403,7 @@ class Locale {
+     str = end;
+     return result;
+   }
++# endif
+ };
+ #endif  // FMT_LOCALE
+ FMT_END_NAMESPACE

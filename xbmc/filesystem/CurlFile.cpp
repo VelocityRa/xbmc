@@ -22,7 +22,7 @@
 #include <climits>
 #include <cassert>
 
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include <errno.h>
 #include <inttypes.h>
 #include "../linux/XFileUtils.h"
@@ -1727,6 +1727,8 @@ int8_t CCurlFile::CReadState::FillBuffer(unsigned int want)
              */
             Sleep(100);
             rc = 0;
+#elif TARGET_SWITCH
+            svcSleepThread(100000000);
 #else
             /* Portable sleep for platforms other than Windows. */
             struct timeval wait = { 0, 100 * 1000 }; /* 100ms */

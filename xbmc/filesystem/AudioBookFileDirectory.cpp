@@ -14,6 +14,9 @@
 #include "guilib/LocalizeStrings.h"
 #include "URL.h"
 #include "Util.h"
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 using namespace XFILE;
 

@@ -16,6 +16,7 @@
 #include "filesystem/IFileTypes.h"
 #include "PlatformDefs.h"
 #endif
+#include <string.h>
 
 namespace kodi { namespace addon { class CInstanceVFS; }}
 

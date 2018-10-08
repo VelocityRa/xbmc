@@ -19,6 +19,7 @@
 /target/*/arm*-linux-androideabi-*/*
 /target/*/arm*-linux-gnueabi-*/*
 /target/*/aarch64-linux-*/*
+/target/*/aarch64-none-*/*
 /target/*/macosx*.*_x86_64-target-*/
 /target/*/macosx*.*_x86_64-target-*/*
 /target/*/macosx*.*_i386-target-*/

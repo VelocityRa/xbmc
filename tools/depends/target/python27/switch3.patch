@@ -1,0 +1,60 @@
+--- Modules/_ctypes/_ctypes.c
++++ Modules/_ctypes/_ctypes.c
+@@ -124,7 +124,7 @@ bytes(cdata)
+ #  define GetProcAddress GetProcAddressA
+ # endif
+ #else
+-#include "ctypes_dlfcn.h"
++//#include "ctypes_dlfcn.h"
+ #endif
+ #include "ctypes.h"
+ 
+--- Modules/_ctypes/callproc.c
++++ Modules/_ctypes/callproc.c
+@@ -67,7 +67,7 @@
+ #include <windows.h>
+ #include <tchar.h>
+ #else
+-#include "ctypes_dlfcn.h"
++//#include "ctypes_dlfcn.h"
+ #endif
+ 
+ #ifdef MS_WIN32
+@@ -1416,7 +1416,7 @@ copy_com_pointer(PyObject *self, PyObject *args)
+     Py_XDECREF(b.keep);
+     return r;
+ }
+-#else
++#elif 0
+ 
+ static PyObject *py_dl_open(PyObject *self, PyObject *args)
+ {
+@@ -1936,7 +1936,7 @@ PyMethodDef _ctypes_module_methods[] = {
+     {"FreeLibrary", free_library, METH_VARARGS, free_library_doc},
+     {"call_commethod", call_commethod, METH_VARARGS },
+     {"_check_HRESULT", check_hresult, METH_VARARGS},
+-#else
++#elif 0
+     {"dlopen", py_dl_open, METH_VARARGS,
+      "dlopen(name, flag={RTLD_GLOBAL|RTLD_LOCAL}) open a shared library"},
+     {"dlclose", py_dl_close, METH_VARARGS, "dlclose a library"},
+--- Python/thread_pthread.h
++++ Python/thread_pthread.h
+@@ -210,7 +210,7 @@ PyThread_start_new_thread(void (*func)(void *), void *arg)
+     pthread_detach(th);
+ 
+ #if SIZEOF_PTHREAD_T <= SIZEOF_LONG
+-    return (long) th;
++    return (long) *(long *) &th;
+ #else
+     return (long) *(long *) &th;
+ #endif
+@@ -232,7 +232,7 @@ PyThread_get_thread_ident(void)
+     /* Jump through some hoops for Alpha OSF/1 */
+     threadid = pthread_self();
+ #if SIZEOF_PTHREAD_T <= SIZEOF_LONG
+-    return (long) threadid;
++    return (long) *(long *) &threadid;
+ #else
+     return (long) *(long *) &threadid;
+ #endif

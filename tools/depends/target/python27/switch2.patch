@@ -1,0 +1,33 @@
+--- Modules/socketmodule.h
++++ Modules/socketmodule.h
+@@ -32,6 +32,10 @@ typedef int socklen_t;
+ # endif /* IPPROTO_IPV6 */
+ #endif /* MS_WINDOWS */
+ 
++#ifdef __SWITCH__
++#undef HAVE_SYS_UN_H
++#endif
++
+ #ifdef HAVE_SYS_UN_H
+ # include <sys/un.h>
+ #else
+--- Modules/timemodule.c
++++ Modules/timemodule.c
+@@ -803,7 +803,7 @@ inittimezone(PyObject *m) {
+ 
+     And I'm lazy and hate C so nyer.
+      */
+-#if defined(HAVE_TZNAME) && !defined(__GLIBC__) && !defined(__CYGWIN__)
++#if defined(HAVE_TZNAME) && !defined(__GLIBC__) && !defined(__CYGWIN__) && !defined(__SWITCH__)
+     tzset();
+ #ifdef PYOS_OS2
+     PyModule_AddIntConstant(m, "timezone", _timezone);
+@@ -862,7 +862,7 @@ inittimezone(PyObject *m) {
+     }
+ #else
+ #endif /* HAVE_STRUCT_TM_TM_ZONE */
+-#ifdef __CYGWIN__
++#if defined(__CYGWIN__) || defined(__SWITCH__)
+     tzset();
+     PyModule_AddIntConstant(m, "timezone", _timezone);
+     PyModule_AddIntConstant(m, "altzone", _timezone-3600);

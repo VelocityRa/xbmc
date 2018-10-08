@@ -15,8 +15,8 @@
 #include "utils/StringUtils.h"
 #include "utils/Archive.h"
 #ifdef TARGET_POSIX
-#include "XTimeUtils.h"
-#include "XFileUtils.h"
+#include "platform/linux/XTimeUtils.h"
+#include "platform/linux/XFileUtils.h"
 #else
 #include <Windows.h>
 #endif

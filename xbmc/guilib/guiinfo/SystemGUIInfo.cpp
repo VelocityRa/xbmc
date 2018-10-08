@@ -20,7 +20,7 @@
 #if defined(TARGET_DARWIN_OSX)
 #include "platform/darwin/osx/smc.h"
 #endif
-#ifdef TARGET_POSIX
+#if defined TARGET_POSIX || defined TARGET_SWITCH
 #include "platform/linux/XMemUtils.h"
 #endif
 #include "powermanagement/PowerManager.h"
@@ -600,7 +600,7 @@ bool CSystemGUIInfo::GetBool(bool& value, const CGUIListItem *gitem, int context
     }
     case SYSTEM_ALARM_LESS_OR_EQUAL:
     {
-      int time = std::lrint(g_alarmClock.GetRemaining(info.GetData3()));
+      int time = lrint(g_alarmClock.GetRemaining(info.GetData3()));
       int timeCompare = info.GetData2();
       if (time > 0)
         value = timeCompare >= time;

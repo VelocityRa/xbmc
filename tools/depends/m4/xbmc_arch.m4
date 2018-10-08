@@ -69,6 +69,9 @@ case $host in
   *-*linux-android*)
      AC_SUBST(ARCH_DEFINES, "-DTARGET_POSIX -DTARGET_LINUX -D_LINUX -DTARGET_ANDROID")
      ;;
+  aarch64-none-elf)
+     AC_SUBST(ARCH_DEFINES, "-DTARGET_SWITCH -D__SWITCH__")
+  ;;
   *)
      AC_MSG_ERROR(unsupported build target: $host)
 esac

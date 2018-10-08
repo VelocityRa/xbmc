@@ -190,7 +190,7 @@ _bisect _bisectmodule.c	# Bisection algorithms
 unicodedata unicodedata.c    # static Unicode character database
 
 # access to ISO C locale support
-_locale _localemodule.c   -lintl
+#_locale _localemodule.c   -lintl
 
 
 # Modules with some UNIX dependencies -- on by default:
@@ -203,7 +203,7 @@ fcntl fcntlmodule.c	# fcntl(2) and ioctl(2)
 select selectmodule.c	# select(2); not on ancient System V
 
 # Memory-mapped files (also works on Win32).
-mmap mmapmodule.c
+#mmap mmapmodule.c
 
 # CSV file helper
 _csv _csv.c
@@ -213,14 +213,14 @@ _socket socketmodule.c
 
 # Socket module helper for SSL support; you must comment out the other
 # socket line above, and possibly edit the SSL variable:
-SSLDEFINES='-DUSE_SSL'
-_ssl _ssl.c \
-	$(SSLDEFINES) -I$(prefix)/include -I$(prefix)/include/openssl \
-	-L$(prefix)/lib -lssl -lcrypto
+#SSLDEFINES='-DUSE_SSL'
+#_ssl _ssl.c \
+#	$(SSLDEFINES) -I$(prefix)/include -I$(prefix)/include/openssl \
+#	-L$(prefix)/lib -lssl -lcrypto
 
-_hashlib _hashopenssl.c \
-        $(SSLDEFINES) -I$(prefix)/include -I$(prefix)/include/openssl \
-        -L$(prefix)/lib -lssl -lcrypto
+#_hashlib _hashopenssl.c \
+#        $(SSLDEFINES) -I$(prefix)/include -I$(prefix)/include/openssl \
+#        -L$(prefix)/lib -lssl -lcrypto
 
 # The crypt module is now disabled by default because it breaks builds
 # on many systems (where -lcrypt is needed), e.g. Linux (I believe).
@@ -233,8 +233,8 @@ _hashlib _hashopenssl.c \
 # are not supported by all UNIX systems:
 
 #nis nismodule.c -lnsl	# Sun yellow pages -- not everywhere
-termios termios.c	# Steen Lumholt's termios module
-resource resource.c	# Jeremy Hylton's rlimit interface
+#termios termios.c	# Steen Lumholt's termios module
+#resource resource.c	# Jeremy Hylton's rlimit interface
 
 
 # Multimedia modules -- off by default.
@@ -359,7 +359,7 @@ timing timingmodule.c
 #	-lX11
 
 # Lance Ellinghaus's syslog module
-syslog syslogmodule.c		# syslog daemon interface
+#syslog syslogmodule.c		# syslog daemon interface
 
 
 # Curses support, requring the System V version of curses, often
@@ -514,7 +514,7 @@ _sqlite3 _sqlite/connection.c  \
 	-I$(prefix)/include -L$(prefix)/lib -lsqlite3 $(SQLITEDEFINES)
 
 _ctypes _ctypes/callbacks.c  _ctypes/callproc.c  _ctypes/cfield.c  _ctypes/_ctypes.c  \
-        _ctypes/malloc_closure.c  _ctypes/stgdict.c \
+        _ctypes/stgdict.c \
         -I$(prefix)/include/ffi -L$(prefix)/lib -lffi
 
 #bz2 bz2module.c -I$(prefix)/include -L$(prefix)/lib -lbz2

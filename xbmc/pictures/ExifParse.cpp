@@ -16,7 +16,7 @@
 
 // Note: Jhead supports TAG_MAKER_NOTE exif field,
 //       but that is ommited for now - to make porting easier and addition smaller
-#ifndef _LINUX
+#ifdef TARGET_WINDOWS
 #include <windows.h>
 #else
 #include <memory.h>

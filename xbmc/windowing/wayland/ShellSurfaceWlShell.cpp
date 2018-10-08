@@ -52,7 +52,7 @@ void CShellSurfaceWlShell::Initialize()
 
 void CShellSurfaceWlShell::SetFullScreen(const wayland::output_t& output, float refreshRate)
 {
-  m_shellSurface.set_fullscreen(wayland::shell_surface_fullscreen_method::driver, std::round(refreshRate * 1000.0f), output);
+  m_shellSurface.set_fullscreen(wayland::shell_surface_fullscreen_method::driver, round(refreshRate * 1000.0f), output);
   m_surfaceState.set(STATE_FULLSCREEN);
 }
 

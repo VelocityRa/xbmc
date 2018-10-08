@@ -1,0 +1,11 @@
+--- Makefile.am
++++ Makefile.am
+@@ -15,7 +15,7 @@ noinst_PROGRAMS=testSchemas testRelax testSAX testHTML testXPath testURI \
+                 testReader testapi testModule runtest runsuite testchar \
+ 		testdict runxmlconf testrecurse testlimits
+ 
+-bin_PROGRAMS = xmllint xmlcatalog
++bin_PROGRAMS = xmlcatalog
+ 
+ bin_SCRIPTS=xml2-config
+ 

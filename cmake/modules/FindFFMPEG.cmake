@@ -90,7 +90,6 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
             NO_DEFAULT_PATH)
   find_path(FFMPEG_INCLUDE_DIRS libavcodec/avcodec.h libavfilter/avfilter.h libavformat/avformat.h
                                 libavutil/avutil.h libswscale/swscale.h libpostproc/postprocess.h)
-
   find_library(FFMPEG_LIBAVCODEC
                NAMES avcodec libavcodec
                PATH_SUFFIXES ffmpeg/libavcodec
@@ -98,12 +97,12 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
                NO_DEFAULT_PATH)
   find_library(FFMPEG_LIBAVCODEC NAMES avcodec libavcodec PATH_SUFFIXES ffmpeg/libavcodec)
 
-  find_library(FFMPEG_LIBAVFILTER
-               NAMES avfilter libavfilter
-               PATH_SUFFIXES ffmpeg/libavfilter
-               PATHS ${PC_FFMPEG_libavfilter_LIBDIR}
-               NO_DEFAULT_PATH)
-  find_library(FFMPEG_LIBAVFILTER NAMES avfilter libavfilter PATH_SUFFIXES ffmpeg/libavfilter)
+  # find_library(FFMPEG_LIBAVFILTER
+  #              NAMES avfilter libavfilter
+  #              PATH_SUFFIXES ffmpeg/libavfilter
+  #              PATHS ${PC_FFMPEG_libavfilter_LIBDIR}
+  #              NO_DEFAULT_PATH)
+  # find_library(FFMPEG_LIBAVFILTER NAMES avfilter libavfilter PATH_SUFFIXES ffmpeg/libavfilter)
 
   find_library(FFMPEG_LIBAVFORMAT
                NAMES avformat libavformat
@@ -133,13 +132,13 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
                NO_DEFAULT_PATH)
   find_library(FFMPEG_LIBSWRESAMPLE NAMES NAMES swresample libswresample PATH_SUFFIXES ffmpeg/libswresample)
 
-  find_library(FFMPEG_LIBPOSTPROC
-               NAMES postproc libpostproc
-               PATH_SUFFIXES ffmpeg/libpostproc
-               PATHS ${PC_FFMPEG_libpostproc_LIBDIR}
-               NO_DEFAULT_PATH)
-  find_library(FFMPEG_LIBPOSTPROC NAMES postproc libpostproc PATH_SUFFIXES ffmpeg/libpostproc)
-
+  # find_library(FFMPEG_LIBPOSTPROC
+  #              NAMES postproc libpostproc
+  #              PATH_SUFFIXES ffmpeg/libpostproc
+  #              PATHS ${PC_FFMPEG_libpostproc_LIBDIR}
+  #              NO_DEFAULT_PATH)
+  # find_library(FFMPEG_LIBPOSTPROC NAMES postproc libpostproc PATH_SUFFIXES ffmpeg/libpostproc)
+  message("FFMPEG_VERSIONS:  ${PC_FFMPEG_FOUND} | ${FFMPEG_LIBAVCODEC} | ${FFMPEG_LIBAVFILTER} | ${FFMPEG_LIBAVFORMAT} | ${FFMPEG_LIBAVUTIL} | ${FFMPEG_LIBSWSCALE} | ${FFMPEG_LIBSWRESAMPLE} | ${FFMPEG_LIBPOSTPROC}")
   if((PC_FFMPEG_FOUND
       AND PC_FFMPEG_libavcodec_VERSION
       AND PC_FFMPEG_libavfilter_VERSION
@@ -148,21 +147,20 @@ if(NOT ENABLE_INTERNAL_FFMPEG OR KODI_DEPENDSBUILD)
       AND PC_FFMPEG_libswscale_VERSION
       AND PC_FFMPEG_libswresample_VERSION
       AND PC_FFMPEG_libpostproc_VERSION)
-     OR WIN32)
+     OR WIN32 OR SWITCH)
     set(FFMPEG_VERSION ${REQUIRED_FFMPEG_VERSION})
-
 
     include(FindPackageHandleStandardArgs)
     find_package_handle_standard_args(FFMPEG
                                       VERSION_VAR FFMPEG_VERSION
                                       REQUIRED_VARS FFMPEG_INCLUDE_DIRS
                                                     FFMPEG_LIBAVCODEC
-                                                    FFMPEG_LIBAVFILTER
+#                                                    FFMPEG_LIBAVFILTER
                                                     FFMPEG_LIBAVFORMAT
                                                     FFMPEG_LIBAVUTIL
                                                     FFMPEG_LIBSWSCALE
                                                     FFMPEG_LIBSWRESAMPLE
-                                                    FFMPEG_LIBPOSTPROC
+#                                                    FFMPEG_LIBPOSTPROC
                                                     FFMPEG_VERSION
                                       FAIL_MESSAGE "FFmpeg ${REQUIRED_FFMPEG_VERSION} not found, please consider using -DENABLE_INTERNAL_FFMPEG=ON")
 
@@ -209,6 +207,8 @@ endif()
 
 # Internal FFMPEG
 if(NOT FFMPEG_FOUND)
+  message(FATAL_ERROR "FFMPEG NOT FOUND")
+
   include(ExternalProject)
   file(STRINGS ${CMAKE_SOURCE_DIR}/tools/depends/target/ffmpeg/FFMPEG-VERSION VER)
   string(REGEX MATCH "VERSION=[^ ]*$.*" FFMPEG_VER "${VER}")

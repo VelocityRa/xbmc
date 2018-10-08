@@ -44,8 +44,9 @@ private:
   std::string m_script;
   std::vector<std::string> m_args;
 
-  std::mutex m_mutex;
-  std::condition_variable m_condition;
+  // TODO(velocity)
+  // std::mutex m_mutex;
+  // std::condition_variable m_condition;
   bool m_restart = false;
   bool m_reusable = false;
 };

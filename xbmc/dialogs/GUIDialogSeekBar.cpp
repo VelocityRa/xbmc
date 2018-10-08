@@ -104,7 +104,7 @@ int CGUIDialogSeekBar::GetEpgEventProgress() const
     float percentPerSecond = 100.0f / totalTime;
     float percent = progress + percentPerSecond * seekSize;
     percent = std::max(0.0f, std::min(percent, 100.0f));
-    return std::lrintf(percent);
+    return lrintf(percent);
   }
 
   return progress;
@@ -130,7 +130,7 @@ int CGUIDialogSeekBar::GetTimeshiftProgress() const
     float percentPerSecond = 100.0f / totalTime;
     float percent = progress + percentPerSecond * seekSize;
     percent = std::max(0.0f, std::min(percent, 100.0f));
-    return std::lrintf(percent);
+    return lrintf(percent);
   }
 
   return progress;

@@ -1,6 +1,7 @@
 include ../../Makefile.include
 DEPS= ../../Makefile.include Makefile crosscompile.patch android.patch no-export-path.patch android-nl_langinfo.patch \
-       setup.patch fix-datetime.patch fix-ffi.patch android-binmodule.patch no-abort.patch urllib.patch modules.setup make-fork-optional.patch
+       setup.patch fix-datetime.patch fix-ffi.patch android-binmodule.patch no-abort.patch urllib.patch modules.setup make-fork-optional.patch \
+       def-ll-format.patch no-define-posix-source.patch asdl-bool-fix.patch ast-utf-fix.patch switch.patch switch2.patch switch3.patch
 
 # lib name, version
 LIBNAME=Python
@@ -20,7 +21,7 @@ endif
 CONFIGURE=OPT="$(CFLAGS)" \
   LIBS=-lm \
   ./configure --prefix=$(PREFIX) --host=$(HOST) \
-  --disable-toolbox-glue --disable-framework --with-system-expat --with-system-ffi --without-pymalloc --enable-ipv6
+  --disable-toolbox-glue --disable-framework --with-system-expat --with-system-ffi --without-pymalloc --enable-ipv6 --disable-ssl
 
 LIBDYLIB=$(PLATFORM)/libpython2.7.a
 
@@ -47,6 +48,14 @@ ifeq ($(OS),ios)
 	cd $(PLATFORM); patch -p1 < ../urllib.patch
 	cd $(PLATFORM); sed -ie 's|MACHDEP="unknown"|MACHDEP="darwin"|' configure.ac
 endif
+	cd $(PLATFORM); patch -p0 < ../def-ll-format.patch
+	cd $(PLATFORM); patch -p0 < ../no-define-posix-source.patch
+	cd $(PLATFORM); patch -p0 < ../asdl-bool-fix.patch
+	cd $(PLATFORM); patch -p0 < ../ast-utf-fix.patch
+	#cd $(PLATFORM); patch -p0 < ../no-pty-funcs.patch
+	cd $(PLATFORM); patch -p0 < ../switch.patch
+	cd $(PLATFORM); patch -p0 < ../switch2.patch
+	cd $(PLATFORM); patch -p0 < ../switch3.patch
 	cp modules.setup $(PLATFORM)/Modules/Setup.dist
 
 #Add -liconv as needed, and add the _scproxy module for darwin

@@ -16,7 +16,7 @@ struct threadOpaque
   pid_t LwpId;
 };
 
-typedef pthread_t ThreadIdentifier;
+typedef Handle ThreadIdentifier;
 typedef threadOpaque ThreadOpaque;
 typedef int THREADFUNC;
 

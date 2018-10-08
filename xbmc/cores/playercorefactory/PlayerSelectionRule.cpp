@@ -18,6 +18,9 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 #include <algorithm>
+#if defined(TARGET_SWITCH)
+#include "strings.h"
+#endif
 
 CPlayerSelectionRule::CPlayerSelectionRule(TiXmlElement* pRule)
 {

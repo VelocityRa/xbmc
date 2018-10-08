@@ -8,10 +8,13 @@
 
 #pragma once
 
+#if !defined(TARGET_SWITCH)
 #include <mutex>
+#endif
 
-#if (defined TARGET_POSIX)
+#if (defined TARGET_POSIX || defined TARGET_SWITCH)
 #include <pthread.h>
+
 namespace XbmcThreads
 {
   // forward declare in preparation for the friend declaration
@@ -19,8 +22,12 @@ namespace XbmcThreads
   {
     pthread_mutex_t m_mutex;
 
+#if !defined TARGET_SWITCH
     // implementation is in threads/platform/pthreads/ThreadImpl.cpp
     static pthread_mutexattr_t* getRecursiveAttr();
+#else
+#define getRecursiveAttr() 0
+#endif
 
   public:
 
@@ -36,11 +43,17 @@ namespace XbmcThreads
     inline void unlock() { pthread_mutex_unlock(&m_mutex); }
 
     inline bool try_lock() { return (pthread_mutex_trylock(&m_mutex) == 0); }
-
-    inline std::recursive_mutex::native_handle_type  native_handle()
+#if !defined TARGET_SWITCH
+    inline std::recursive_mutex::native_handle_type native_handle()
     {
       return &m_mutex;
     }
+#else
+    inline pthread_mutex_t native_handle()
+    {
+      return m_mutex;
+    }
+#endif
   };
 }
 #elif (defined TARGET_WINDOWS)

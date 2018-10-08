@@ -12,15 +12,17 @@
 #include "utils/StringUtils.h"
 
 #ifdef TARGET_POSIX
-#include "XHandle.h"
+#include "platform/linux/XHandle.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
-#if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && !defined(TARGET_ANDROID)
+#if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && !defined(TARGET_ANDROID) && !defined(TARGET_SWITCH)
 #include <sys/vfs.h>
 #else
 #include <sys/param.h>
+#if !defined(TARGET_SWITCH)
 #include <sys/mount.h>
+#endif
 #endif
 #include <dirent.h>
 #include <errno.h>
@@ -97,7 +99,7 @@ uint32_t SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
     nMode = SEEK_END;
 
   off64_t currOff;
-#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
+#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_SWITCH)
   currOff = lseek(hFile->fd, offset, nMode);
 #else
   currOff = lseek64(hFile->fd, offset, nMode);
@@ -120,8 +122,10 @@ uint32_t GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
 
   struct tm t;
   time_t tt = time(NULL);
+#if !defined(TARGET_SWITCH)
   if(localtime_r(&tt, &t))
     lpTimeZoneInformation->Bias = -t.tm_gmtoff / 60;
+#endif
 
   swprintf(lpTimeZoneInformation->StandardName, 31, L"%s", tzname[0]);
   swprintf(lpTimeZoneInformation->DaylightName, 31, L"%s", tzname[1]);
@@ -143,7 +147,7 @@ int SetFilePointerEx(  HANDLE hFile,
 
   off64_t toMove = liDistanceToMove.QuadPart;
 
-#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
+#if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_SWITCH)
   off64_t currOff = lseek(hFile->fd, toMove, nMode);
 #else
   off64_t currOff = lseek64(hFile->fd, toMove, nMode);

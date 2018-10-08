@@ -81,6 +81,9 @@
 #ifdef HAVE_LIBCAP
   #include <sys/capability.h>
 #endif
+#if defined(TARGET_SWITCH)
+  #include "alloca.h"
+#endif
 
 #include "cores/VideoPlayer/DVDDemuxers/DVDDemux.h"
 

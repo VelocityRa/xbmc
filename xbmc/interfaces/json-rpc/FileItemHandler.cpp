@@ -31,6 +31,9 @@
 #include "pvr/epg/Epg.h"
 #include "pvr/recordings/PVRRecording.h"
 #include "pvr/timers/PVRTimerInfoTag.h"
+#if defined(TARGET_SWITCH)
+#include <strings.h>
+#endif
 
 using namespace MUSIC_INFO;
 using namespace JSONRPC;

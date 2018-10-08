@@ -42,7 +42,7 @@ int CVideoGUIInfo::GetPercentPlayed(const CVideoInfoTag* tag) const
 {
   CBookmark bookmark = tag->GetResumePoint();
   if (bookmark.IsPartWay())
-    return std::lrintf(static_cast<float>(bookmark.timeInSeconds) / bookmark.totalTimeInSeconds * 100.0f);
+    return lrintf(static_cast<float>(bookmark.timeInSeconds) / bookmark.totalTimeInSeconds * 100.0f);
   else
     return 0;
 }
@@ -554,7 +554,7 @@ bool CVideoGUIInfo::GetLabel(std::string& value, const CFileItem *item, int cont
       int iBitrate = m_audioInfo.bitrate;
       if (iBitrate > 0)
       {
-        value = StringUtils::Format("%li", std::lrint(static_cast<double>(iBitrate) / 1000.0));
+        value = StringUtils::Format("%li", lrint(static_cast<double>(iBitrate) / 1000.0));
         return true;
       }
       break;
@@ -564,7 +564,7 @@ bool CVideoGUIInfo::GetLabel(std::string& value, const CFileItem *item, int cont
       int iBitrate = m_videoInfo.bitrate;
       if (iBitrate > 0)
       {
-        value = StringUtils::Format("%li", std::lrint(static_cast<double>(iBitrate) / 1000.0));
+        value = StringUtils::Format("%li", lrint(static_cast<double>(iBitrate) / 1000.0));
         return true;
       }
       break;

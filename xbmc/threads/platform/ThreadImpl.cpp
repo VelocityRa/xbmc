@@ -6,14 +6,16 @@
  *  See LICENSES/README.md for more information.
  */
 
-#if (defined TARGET_POSIX)
-#include "threads/platform/pthreads/ThreadImpl.cpp"
-#if defined(TARGET_DARWIN_IOS)
-#include "threads/platform/darwin/ThreadSchedImpl.cpp"
-#else
-#include "threads/platform/linux/ThreadSchedImpl.cpp"
-#endif
+#if defined(TARGET_SWITCH)
+  #include "threads/platform/switch/ThreadImpl.cpp"
+#elif defined(TARGET_POSIX)
+  #include "threads/platform/pthreads/ThreadImpl.cpp"
+  #if defined(TARGET_DARWIN_IOS)
+    #include "threads/platform/darwin/ThreadSchedImpl.cpp"
+  #else
+    #include "threads/platform/linux/ThreadSchedImpl.cpp"
+  #endif
 #elif (defined TARGET_WINDOWS)
-#include "threads/platform/win/ThreadImpl.cpp"
+  #include "threads/platform/win/ThreadImpl.cpp"
 #endif
 
