@@ -25,6 +25,10 @@
 #include "utils/EGLUtils.h"
 #endif
 
+#if defined(TARGET_LINUX)
+#include "utils/EGLUtils.h"
+#endif
+
 CRenderSystemGLES::CRenderSystemGLES()
  : CRenderSystemBase()
 {
