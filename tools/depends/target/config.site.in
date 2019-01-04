@@ -35,7 +35,7 @@ PATH=@prefix@/@tool_dir@/bin:@use_toolchain@/usr/bin:@use_toolchain@/bin:$PATH
 LD_LIBRARY_PATH=@prefix@/@tool_dir@/lib:$LD_LIBRARY_PATH
 
 PYTHON_VERSION=2.7
-PYTHON_LDFLAGS="-L@prefix@/@deps_dir@/lib -L@prefix@/@deps_dir@/lib64 -lpython${PYTHON_VERSION} -lc -ldl -lm -lexpat -lffi -lintl -lutil -lssl -lcrypto"
+PYTHON_LDFLAGS="-L@prefix@/@deps_dir@/lib -L@prefix@/@deps_dir@/lib64 -lpython${PYTHON_VERSION} -lc -lm -lexpat -lffi -lintl -lssl -lcrypto"
 PYTHON_CPPFLAGS=-I@prefix@/@deps_dir@/include/python${PYTHON_VERSION}
 PYTHON_SITE_PKG=@prefix@/@deps_dir@/lib/python${PYTHON_VERSION}/site-packages
 PYTHON_NOVERSIONCHECK=no-check
@@ -52,7 +52,7 @@ ac_cv_lib_ssl_SSL_connect=yes
 gl_cv_header_working_stdint_h=yes
 
 #libcec
-ac_cv_search_dlopen=-ldl
+ac_cv_search_dlopen=
 
 #libgcrypt
 if test "${PACKAGE_NAME}" = "libgcrypt"; then

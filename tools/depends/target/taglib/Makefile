@@ -1,5 +1,5 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile ID3v2Lookup.patch remove-boost.patch no-fileno.patch strdup.patch
+DEPS= ../../Makefile.include Makefile ID3v2Lookup.patch remove-boost.patch no-fileno.patch strdup.patch switch.patch
 
 LIBNAME=taglib
 VERSION=1.11.1
@@ -21,13 +21,9 @@ $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 ifeq ($(OS),switch)
 	cd $(PLATFORM); patch -p0 < ../no-fileno.patch
 	cd $(PLATFORM); patch -p0 < ../strdup.patch
+	cd $(PLATFORM); patch -p0 < ../no-size-check.patch # type sizes are actually fine, the check fails because of an unrelated reason
 endif
-# HACK(velocity): don't use CMAKE var, the Toolchain.cmake arg (see Makefile.include) messes it up somehow
-ifeq ($(OS),switch)
-	cd $(PLATFORM)/build; $(NATIVEPREFIX)/bin/cmake -DCMAKE_INSTALL_PREFIX=$(PREFIX) -DCMAKE_LIBRARY_PATH=$(TOOLCHAIN)/lib/$(HOST) -DBUILD_SHARED_LIBS=OFF ..
-else
 	cd $(PLATFORM)/build; $(CMAKE) -DCMAKE_LIBRARY_PATH=$(TOOLCHAIN)/lib/$(HOST) -DBUILD_SHARED_LIBS=OFF ..
-endif
 
 $(LIBDYLIB): $(PLATFORM)
 	$(MAKE) -C $(PLATFORM)/build

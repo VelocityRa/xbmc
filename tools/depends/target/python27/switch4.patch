@@ -1,0 +1,28 @@
+
+
+--- Demo/embed/Makefile
++++ Demo/embed/Makefile
+@@ -22,7 +22,7 @@ CPPFLAGS=	$(INCLUDES)
+ LIBPYTHON=	$(blddir)/libpython$(VERSION).a
+ 
+ # XXX edit LIBS (in particular) to match $(blddir)/Makefile
+-LIBS=		-lnsl -ldl -lreadline -ltermcap -lieee -lpthread -lutil
++LIBS=		-lnsl -lreadline -ltermcap -lieee -lpthread
+ LDFLAGS=	-Xlinker -export-dynamic
+ SYSLIBS=	-lm
+ MODLIBS=	
+
+
+--- Demo/pysvr/Makefile
++++ Demo/pysvr/Makefile
+@@ -31,7 +31,7 @@ PYLIBS=../../$(PLAT)/lib$(PYVER).a
+ # Libraries to link with -- very installation dependent
+ # (See LIBS= in Modules/Makefile in build tree)
+ RLLIBS=-lreadline -ltermcap
+-OTHERLIBS=-lnsl -lpthread -ldl -lm -ldb -lutil
++OTHERLIBS=-lnsl -lpthread -lm -ldb
+ 
+ # Compilation and link flags -- no need to change normally
+ CFLAGS=$(OPT)
+
+deleted file mode 100644

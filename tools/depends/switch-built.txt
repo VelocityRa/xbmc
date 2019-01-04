@@ -3,6 +3,7 @@ flatbuffers
 libiconv
 crossguid
 libfmt
+gmp
 libfstrcmp
 libdvdread
 libdvdnav
@@ -15,3 +16,4 @@ taglib
 tinyxml
 libcdio
 libcdio-gplv3
+python27

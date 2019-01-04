@@ -15,12 +15,14 @@ ${CMAKE_EXECUTABLE} -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=/programming/kodi
                           -DWITH_FFMPEG=ON \
                           -DENABLE_INTERNAL_FFMPEG=OFF \
                           -DFFMPEG_PATH=${DEVKITPRO}/portlibs/switch \
-                          -DENABLE_PYTHON=OFF \
                           -DENABLE_AIRTUNES=OFF \
+                          -DENABLE_PYTHON=ON \
                           -DENABLE_X=OFF \
                           -DENABLE_UPNP=OFF \
                           -DENABLE_OPTICAL=OFF \
-                          -DVERBOSE=TRUE \
+                          -DVERBOSE=1 \
+                          -DCMAKE_RULE_MESSAGES:BOOL=OFF \
+                          -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
                           ../kodi
 popd
 

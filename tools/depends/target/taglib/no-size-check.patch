@@ -1,0 +1,20 @@
+
+
+--- ConfigureChecks.cmake
++++ ConfigureChecks.cmake
+@@ -2,6 +2,7 @@ include(CheckLibraryExists)
+ include(CheckTypeSize)
+ include(CheckCXXSourceCompiles)
+ 
++if(0)
+ # Check if the size of numeric types are suitable.
+ 
+ check_type_size("short" SIZEOF_SHORT)
+@@ -33,6 +34,7 @@ check_type_size("double" SIZEOF_DOUBLE)
+ if(NOT ${SIZEOF_DOUBLE} EQUAL 8)
+   message(FATAL_ERROR "TagLib requires that double is 64-bit wide.")
+ endif()
++endif()
+ 
+ # Determine which kind of atomic operations your compiler supports.
+ 

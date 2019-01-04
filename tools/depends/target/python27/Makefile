@@ -1,7 +1,7 @@
 include ../../Makefile.include
 DEPS= ../../Makefile.include Makefile crosscompile.patch android.patch no-export-path.patch android-nl_langinfo.patch \
        setup.patch fix-datetime.patch fix-ffi.patch android-binmodule.patch no-abort.patch urllib.patch modules.setup make-fork-optional.patch \
-       def-ll-format.patch no-define-posix-source.patch asdl-bool-fix.patch ast-utf-fix.patch switch.patch switch2.patch switch3.patch
+       def-ll-format.patch no-define-posix-source.patch asdl-bool-fix.patch ast-utf-fix.patch switch.patch switch2.patch switch3.patch switch4.patch
 
 # lib name, version
 LIBNAME=Python
@@ -56,6 +56,7 @@ endif
 	cd $(PLATFORM); patch -p0 < ../switch.patch
 	cd $(PLATFORM); patch -p0 < ../switch2.patch
 	cd $(PLATFORM); patch -p0 < ../switch3.patch
+	cd $(PLATFORM); patch -p0 < ../switch4.patch
 	cp modules.setup $(PLATFORM)/Modules/Setup.dist
 
 #Add -liconv as needed, and add the _scproxy module for darwin

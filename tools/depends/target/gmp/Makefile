@@ -1,5 +1,5 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile
+DEPS= ../../Makefile.include Makefile switch.patch
 
 # lib name, version
 LIBNAME=gmp
@@ -27,6 +27,9 @@ endif
 ifeq ($(OS), android)
 CONFIGURE_FLAGS=--with-pic
 endif
+ifeq ($(OS), switch)
+CONFIGURE_FLAGS=--with-pic
+endif
 ifeq ($(NATIVE_OS), osx)
 CONFIGURE_FLAGS+= CC_FOR_BUILD="$(CC_FOR_BUILD)" CPP_FOR_BUILD="$(CC_FOR_BUILD) -E"
 endif
@@ -47,6 +50,7 @@ $(PLATFORM)/config.status: $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	rm -rf $(PLATFORM)/*; mkdir -p $(PLATFORM)
 	cd $(PLATFORM); $(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	cd $(PLATFORM); $(CONFIGURE)
+	cd $(PLATFORM); patch -p0 < ../switch.patch
 
 $(LIBDYLIB): $(PLATFORM)/config.status
 	@echo "DYLIB: $(LIBDYLIB)"

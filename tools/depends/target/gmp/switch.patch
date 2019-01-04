@@ -1,0 +1,13 @@
+
+
+--- config.h
++++ config.h
+@@ -359,7 +359,7 @@ see https://www.gnu.org/licenses/.
+ /* #undef HAVE_NL_TYPES_H */
+ 
+ /* Define to 1 if you have the `obstack_vprintf' function. */
+-#define HAVE_OBSTACK_VPRINTF 1
++#define HAVE_OBSTACK_VPRINTF 0
+ 
+ /* Define to 1 if you have the `popen' function. */
+ #define HAVE_POPEN 1

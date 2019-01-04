@@ -23,9 +23,9 @@
 
 # List of deps that are required and NOT available as a portlib
 declare -a targets=(
-    "pcre" "flatbuffers" "libiconv" "crossguid" "libfmt"
+    "pcre" "flatbuffers" "libiconv" "crossguid" "libfmt" "gmp"
     "libfstrcmp" "libdvdread" "libdvdnav" "libdvdcss" "liblzo2" "openssl"
-    "rapidjson" "sqlite3" "taglib" "tinyxml" "libcdio" "libcdio-gplv3")
+    "rapidjson" "sqlite3" "taglib" "tinyxml" "libcdio" "libcdio-gplv3" "python27")
 
 # required targets for which we can use a portlib:
 # - ffmpeg
@@ -43,7 +43,7 @@ touch switch-not-built.txt
 
 for t in "${targets[@]}"
 do
-    make "$@" -C "target/$t"
+    make VERBOSE=1 --no-print-directory "$@" -C "target/$t"
     if [ -f target/$t/.installed-aarch64-none-elf-release ]; then
         echo "$t" >> switch-built.txt
     else

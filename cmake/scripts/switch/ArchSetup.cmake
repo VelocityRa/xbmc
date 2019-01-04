@@ -24,6 +24,8 @@ set(CORE_MAIN_SOURCE ${CMAKE_SOURCE_DIR}/xbmc/platform/switch/main.cpp)
 set(GCC_SWITCH_CXX_COMPILE_FLAGS "-include strings.h")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_SWITCH_CXX_COMPILE_FLAGS}")
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # TODO: These don't work, changing all header inclusions to absolute paths for now
 # include_directories(${CMAKE_SOURCE_DIR}/xbmc/platform/posix)
 # include_directories(${CMAKE_SOURCE_DIR}/xbmc/platform/linux)
