@@ -11,9 +11,15 @@
 #include "CompileInfo.h"
 #include "utils/log.h"
 
+// TODO
+#ifdef WIN32
+#define VK_USE_PLATFORM_WIN32_KHR
+#include <vulkan/vulkan_win32.h>
+#else
 #define VK_USE_PLATFORM_WAYLAND_KHR
 #include <vulkan/vulkan_wayland.h>
 #include <wayland-client.hpp>
+#endif
 
 using namespace KODI::RENDERING::VULKAN;
 

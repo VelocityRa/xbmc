@@ -14,5 +14,6 @@ xbmc/platform/win32/powermanagement    platform/win32/powermanagement
 xbmc/platform/win32/storage            platform/win32/storage
 xbmc/platform/win32/utils              platform/win32/utils
 xbmc/rendering/dx                      rendering/dx
+xbmc/rendering/vulkan/windows          rendering/vulkan/windows
 xbmc/threads/platform/win              threads/win
 xbmc/windowing/windows                 windowing/windows
